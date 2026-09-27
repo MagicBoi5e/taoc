@@ -6,6 +6,36 @@
   src: url('assets/Work_Sans/WorkSans-ExtraLight.woff2') format('woff2');
 }
 
+body {
+  margin: 0;
+  padding: 58px 12px 24px;
+}
+
+.talent-tree-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 12px;
+  color: #eee;
+  background: #2c2c2c;
+  border: 1px solid #555;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font: 600 14px/1 'Roboto', Arial, sans-serif;
+  text-decoration: none;
+}
+
+.talent-tree-link:hover,
+.talent-tree-link:focus-visible {
+  color: #fff;
+  border-color: #c0392b;
+  outline: none;
+}
+
 .red {
   background: red;
 }
@@ -1022,4 +1052,10 @@ form.charsheet section.feats-boons .feats-boons-title {
 
 input[type="checkbox"]:checked:after {
   background-color: black;
+}
+
+@media (max-width: 840px) {
+  body {
+    min-width: 824px;
+  }
 }
