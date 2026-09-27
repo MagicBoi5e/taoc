@@ -1,0 +1,776 @@
+
+$(function () {
+	var savedClass = localStorage.getItem("page1_characterclass");
+	var savedClassLevel = localStorage.getItem("page1_classlevel");
+
+	if (savedClass === null && savedClassLevel !== null) {
+		var legacyClassLevel = JSON.parse(savedClassLevel);
+
+		if (typeof legacyClassLevel === "string") {
+			var legacyMatch = legacyClassLevel.trim().match(/^(.*?)\s+(\d{1,2})$/);
+			var className = legacyMatch ? legacyMatch[1].trim() : legacyClassLevel;
+			var level = legacyMatch ? legacyMatch[2] : "";
+
+			localStorage.setItem("page1_characterclass", JSON.stringify(className));
+			localStorage.setItem("page1_classlevel", JSON.stringify(level));
+		}
+	}
+	var savedClassList = localStorage.getItem("page1_characterclass");
+	if (savedClassList !== null) {
+		var savedClasses = JSON.parse(savedClassList);
+		if (typeof savedClasses === "string" && /[\/\r\n]/.test(savedClasses)) {
+			var splitClasses = savedClasses.split(/[\/\r\n]+/).map(function (className) {
+				return className.trim();
+			}).filter(function (className) {
+				return className !== "";
+			});
+			if (splitClasses.length > 0) {
+				localStorage.setItem("page1_characterclass", JSON.stringify(splitClasses[0]));
+				for (var classIndex = 1; classIndex < splitClasses.length && classIndex < 13; classIndex++) {
+					var classKey = "page1_characterclass-" + (classIndex + 1);
+					if (localStorage.getItem(classKey) === null) {
+						localStorage.setItem(classKey, JSON.stringify(splitClasses[classIndex]));
+					}
+				}
+			}
+		}
+	}
+	var savedLevelList = localStorage.getItem("page1_classlevel");
+	if (savedLevelList !== null) {
+		var savedLevels = JSON.parse(savedLevelList);
+		if (typeof savedLevels === "string" && /[\/\r\n]/.test(savedLevels)) {
+			var splitLevels = savedLevels.split(/[\/\r\n]+/).map(function (level) {
+				return level.trim();
+			});
+			localStorage.setItem("page1_classlevel", JSON.stringify(splitLevels[0]));
+			for (var levelIndex = 1; levelIndex < splitLevels.length && levelIndex < 13; levelIndex++) {
+				localStorage.setItem("page1_classlevel-" + (levelIndex + 1), JSON.stringify(splitLevels[levelIndex]));
+			}
+		}
+	}
+
+	$("#page1").saveMyForm(
+		{
+			loadInputs: true,
+		}
+	);
+	$("#reset-character").on("click", function () {
+		if (!window.confirm("Reset this character sheet and delete all saved character data?")) {
+			return;
+		}
+
+		$("#page1").saveMyForm("clearStorage");
+		localStorage.removeItem("page1_baseSpeed");
+		window.location.reload();
+	});
+
+	var storedBaseSpeed = localStorage.getItem("page1_baseSpeed");
+	var baseSpeedValue = storedBaseSpeed === null
+		? $("#page1 [name='speed']").val().trim()
+		: JSON.parse(storedBaseSpeed);
+	var armorTypes = {
+		unarmored: { baseAC: 10, usesDexterity: true },
+		padded: { baseAC: 11, usesDexterity: true, stealthDisadvantage: true },
+		leather: { baseAC: 11, usesDexterity: true },
+		"studded-leather": { baseAC: 12, usesDexterity: true },
+		hide: { baseAC: 12, usesDexterity: true, dexterityCap: 2 },
+		"chain-shirt": { baseAC: 13, usesDexterity: true, dexterityCap: 2 },
+		"scale-mail": { baseAC: 14, usesDexterity: true, dexterityCap: 2, stealthDisadvantage: true },
+		breastplate: { baseAC: 14, usesDexterity: true, dexterityCap: 2 },
+		"half-plate": { baseAC: 15, usesDexterity: true, dexterityCap: 2, stealthDisadvantage: true },
+		"ring-mail": { baseAC: 14, stealthDisadvantage: true },
+		"chain-mail": { baseAC: 16, strengthRequirement: 13, stealthDisadvantage: true },
+		splint: { baseAC: 17, strengthRequirement: 15, stealthDisadvantage: true },
+		plate: { baseAC: 18, strengthRequirement: 15, stealthDisadvantage: true },
+		"mage-armor": { baseAC: 13, usesDexterity: true },
+		"unarmored-barbarian": { baseAC: 10, usesDexterity: true, secondaryAbility: "Constitution" },
+		"unarmored-monk": { baseAC: 10, usesDexterity: true, secondaryAbility: "Wisdom" },
+	};
+
+	function updateModifier(scoreInput) {
+		var ability = $(scoreInput).closest("li");
+		var scoreValue = ability.find(".score input").val().trim();
+		var modifierInput = ability.find(".modifier input");
+
+		if (scoreValue === "" || !Number.isFinite(Number(scoreValue))) {
+			modifierInput.val("");
+			return;
+		}
+
+		var modifier = Math.floor((Number(scoreValue) - 10) / 2);
+		modifierInput.val(modifier >= 0 ? "+" + modifier : modifier);
+	}
+
+	function updateInitiative() {
+		var modifierValue = $("#page1 [name='Dexteritymod']").val().trim();
+		var initiativeInput = $("#page1 [name='initiative']");
+
+		if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
+			initiativeInput.val("");
+			return;
+		}
+
+		initiativeInput.val(modifierValue);
+	}
+
+	function getTotalClassLevels(excludedLevelInput) {
+		var totalLevel = 0;
+
+		$("#page1 .class-pair").each(function () {
+			if ($(this).find(".class-name-input").val().trim() === "") {
+				return;
+			}
+
+			var levelInput = $(this).find(".class-level-input");
+			if (levelInput[0] === excludedLevelInput) {
+				return;
+			}
+
+			var levelValue = levelInput.val().trim();
+			var level = Number(levelValue);
+			if (levelValue !== "" && Number.isInteger(level) && level >= 1 && level <= 20) {
+				totalLevel += level;
+			}
+		});
+
+		return totalLevel;
+	}
+
+	function updateTotalHitDice() {
+		var hitDieByClass = {
+			barbarian: 12,
+			bard: 8,
+			cleric: 8,
+			druid: 8,
+			fighter: 10,
+			monk: 8,
+			paladin: 10,
+			ranger: 10,
+			rogue: 8,
+			sorcerer: 6,
+			warlock: 8,
+			wizard: 6,
+			artificer: 8,
+		};
+		var levelsByDie = {};
+		var checkedStates = {};
+
+		$("#page1 .hit-die-checks input[type='checkbox']").each(function () {
+			checkedStates[this.name] = this.checked;
+		});
+
+		$("#page1 .class-pair").each(function () {
+			var className = $(this).find(".class-name-input").val().trim().toLowerCase();
+			var levelValue = $(this).find(".class-level-input").val().trim();
+			var level = Number(levelValue);
+			var hitDie = hitDieByClass[className];
+
+			if (!hitDie || levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
+				return;
+			}
+
+			levelsByDie[hitDie] = (levelsByDie[hitDie] || 0) + level;
+		});
+
+		$("#page1 .hit-die-row").each(function () {
+			var row = $(this);
+			var hitDie = Number(row.attr("data-die"));
+			var count = levelsByDie[hitDie] || 0;
+			var checks = row.find(".hit-die-checks");
+			checks.empty();
+			row.find(".hit-die-total").text(count + "d" + hitDie);
+			row.prop("hidden", count === 0);
+
+			for (var index = 1; index <= count; index++) {
+				var checkboxName = "hitdie-d" + hitDie + "-" + index;
+				var storageKey = "page1_" + checkboxName;
+				var checkbox = $("<input type='checkbox' />").attr({
+					name: checkboxName,
+					"aria-label": "Spent d" + hitDie + " hit die " + index,
+				});
+				var isChecked = Object.prototype.hasOwnProperty.call(checkedStates, checkboxName)
+					? checkedStates[checkboxName]
+					: localStorage.getItem(storageKey) === "true";
+
+				checkbox.prop("checked", isChecked);
+				checks.append(checkbox);
+			}
+		});
+	}
+
+	function storeHitDieCheckbox(checkbox) {
+		var storageKey = "page1_" + checkbox.name;
+		localStorage.setItem(storageKey, JSON.stringify(checkbox.checked));
+
+		var elementListKey = "elementList_page1";
+		var elementList = JSON.parse(localStorage.getItem(elementListKey)) || [];
+		if (elementList.indexOf(storageKey) === -1) {
+			elementList.push(storageKey);
+			localStorage.setItem(elementListKey, JSON.stringify(elementList));
+		}
+	}
+
+	function updateProficiencyBonus(event) {
+		var populatedPairs = $("#page1 .class-pair").filter(function () {
+			return $(this).find(".class-name-input").val().trim() !== "";
+		});
+		var changedLevelInput = event && $(event.target).hasClass("class-level-input")
+			? event.target
+			: null;
+
+		if (changedLevelInput) {
+			var remainingLevel = Math.max(0, 20 - getTotalClassLevels(changedLevelInput));
+			var changedLevel = Number($(changedLevelInput).val());
+			if ($(changedLevelInput).val().trim() !== "" && changedLevel > remainingLevel) {
+				$(changedLevelInput).val(remainingLevel >= 1 ? remainingLevel : "");
+			}
+		}
+
+		var validLevels = populatedPairs.length > 0;
+		var totalLevel = 0;
+
+		$("#page1 .class-pair").each(function () {
+			var levelInput = $(this).find(".class-level-input");
+			var maxLevel = Math.max(0, 20 - getTotalClassLevels(levelInput[0]));
+			levelInput.attr("max", maxLevel);
+
+			if ($(this).find(".class-name-input").val().trim() === "") {
+				return;
+			}
+
+			var levelValue = levelInput.val().trim();
+			var level = Number(levelValue);
+
+			if (levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
+				validLevels = false;
+				return;
+			}
+
+			totalLevel += level;
+		});
+		if (totalLevel > 20) {
+			validLevels = false;
+		}
+		var proficiencyInput = $("#page1 [name='proficiencybonus']");
+
+		if (!validLevels) {
+			proficiencyInput.val("");
+			updateSavingThrows();
+			updateSkills();
+			updateTotalHitDice();
+			return;
+		}
+
+		var proficiencyBonus = 2 + Math.floor((totalLevel - 1) / 4);
+		proficiencyInput.val("+" + proficiencyBonus);
+		updateSavingThrows();
+		updateSkills();
+		updateTotalHitDice();
+	}
+
+	function updateClassLevelFields() {
+		var pairs = $("#page1 .class-pair");
+		var lastPopulatedPair = -1;
+
+		pairs.each(function (index) {
+			if ($(this).find(".class-name-input").val().trim() !== "") {
+				lastPopulatedPair = index;
+			}
+		});
+
+		var totalLevel = getTotalClassLevels();
+		var extraPairCount = totalLevel < 20 ? 1 : 0;
+		var visiblePairCount = Math.min(pairs.length, Math.max(1, lastPopulatedPair + 1 + extraPairCount));
+		var focusedPair = $(document.activeElement).closest(".class-pair");
+		if (focusedPair.length > 0) {
+			visiblePairCount = Math.max(visiblePairCount, pairs.index(focusedPair) + 1);
+		}
+
+		pairs.each(function (index) {
+			this.hidden = index >= visiblePairCount;
+		});
+
+		updateProficiencyBonus();
+	}
+
+	function updateSelectedClass(input) {
+		var pair = $(input).closest(".class-pair");
+		var selectedClass = $(input).val().trim();
+		var isValidClass = $("#class-options option").filter(function () {
+			return $(this).val() === selectedClass;
+		}).length > 0;
+		var levelInput = pair.find(".class-level-input");
+
+		if (isValidClass && levelInput.val().trim() === "") {
+			if (getTotalClassLevels() >= 20) {
+				$(input).val("");
+				updateClassLevelFields();
+				return;
+			}
+
+			levelInput.val("1").trigger("input").trigger("change");
+		}
+
+		updateClassLevelFields();
+	}
+
+	function updateSavingThrows() {
+		var proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
+		var proficiencyBonus = Number(proficiencyValue);
+
+		if (!Number.isFinite(proficiencyBonus)) {
+			proficiencyBonus = 0;
+		}
+
+		$("#page1 .saves input[type='text']").each(function () {
+			var saveName = $(this).attr("name");
+			var abilityName = saveName.replace("-save", "");
+			var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+			var proficient = $("#page1 [name='" + saveName + "-prof']").is(":checked");
+
+			if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
+				$(this).val("");
+				return;
+			}
+
+			var save = Number(modifierValue) + (proficient ? proficiencyBonus : 0);
+			$(this).val(save >= 0 ? "+" + save : save);
+		});
+	}
+
+	function updateSkills() {
+		var abilityNames = {
+			str: "Strength",
+			dex: "Dexterity",
+			con: "Constitution",
+			int: "Intelligence",
+			wis: "Wisdom",
+			cha: "Charisma",
+		};
+		var proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
+		var proficiencyBonus = Number(proficiencyValue);
+
+		if (!Number.isFinite(proficiencyBonus)) {
+			proficiencyBonus = 0;
+		}
+
+		$("#page1 .skills ul li").each(function () {
+			var abilityCode = $(this).find("label .skill").text().replace(/[()]/g, "").trim().toLowerCase();
+			var abilityName = abilityNames[abilityCode];
+			var skillInput = $(this).find("input[type='text']").first();
+
+			if (!abilityName) {
+				skillInput.val("");
+				return;
+			}
+
+			var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+			var proficient = $(this).find("input[type='checkbox']").is(":checked");
+
+			if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
+				skillInput.val("");
+				return;
+			}
+
+			var skill = Number(modifierValue) + (proficient ? proficiencyBonus : 0);
+			skillInput.val(skill >= 0 ? "+" + skill : skill);
+		});
+
+		updatePassivePerception();
+	}
+
+	function updatePassivePerception() {
+		var perceptionValue = $("#page1 [name='Perception']").val().trim();
+		var passivePerception = $("#page1 [name='passiveperception']");
+
+		if (perceptionValue === "" || !Number.isFinite(Number(perceptionValue))) {
+			passivePerception.val("");
+			return;
+		}
+
+		passivePerception.val(10 + Number(perceptionValue));
+	}
+
+	function getModifierValue(abilityName) {
+		var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+
+		if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
+			return null;
+		}
+
+		return Number(modifierValue);
+	}
+
+	function updateArmorCalculations() {
+		var armorType = $("#page1 [name='armor-type']").val();
+		var armor = armorTypes[armorType] || armorTypes.unarmored;
+		var armorClass = armor.baseAC;
+		var armorClassValid = true;
+		var dexterityModifier = getModifierValue("Dexterity");
+		var miscBonusValue = $("#page1 [name='armor-ac-bonus']").val().trim();
+		var miscBonus = miscBonusValue === "" ? 0 : Number(miscBonusValue);
+
+		if (armor.usesDexterity) {
+			if (dexterityModifier === null) {
+				armorClassValid = false;
+			} else {
+				armorClass += armor.dexterityCap === undefined
+					? dexterityModifier
+					: Math.min(dexterityModifier, armor.dexterityCap);
+			}
+		}
+
+		if (armor.secondaryAbility) {
+			var secondaryModifier = getModifierValue(armor.secondaryAbility);
+
+			if (secondaryModifier === null) {
+				armorClassValid = false;
+			} else {
+				armorClass += secondaryModifier;
+			}
+		}
+
+		if (Number.isFinite(miscBonus)) {
+			armorClass += miscBonus;
+		}
+
+		if ($("#page1 [name='armor-shield']").is(":checked")) {
+			armorClass += 2;
+		}
+
+		$("#page1 [name='ac']").val(armorClassValid ? armorClass : "");
+		$("#page1 [name='Stealth']").closest("li").toggleClass("stealth-disadvantage", !!armor.stealthDisadvantage);
+		updateArmorSpeed(armor);
+	}
+
+	function updateArmorSpeed(armor) {
+		var speedInput = $("#page1 [name='speed']");
+		var speedValue = String(baseSpeedValue).trim();
+		var speed = Number(speedValue);
+		var strengthValue = $("#page1 [name='Strengthscore']").val().trim();
+		var strength = Number(strengthValue);
+		var strengthRequirementNotMet = armor.strengthRequirement !== undefined
+			&& strengthValue !== ""
+			&& Number.isFinite(strength)
+			&& strength < armor.strengthRequirement;
+
+		localStorage.setItem("page1_baseSpeed", JSON.stringify(speedValue));
+
+		if (speedValue === "" || !Number.isFinite(speed)) {
+			speedInput.val(speedValue);
+			return;
+		}
+
+		speedInput.val(speed - (strengthRequirementNotMet ? 10 : 0));
+	}
+
+	function updateAttunementSlots() {
+		var slotCountInput = $("#page1 [name='attunement-slots']");
+		var slotCount = Number(slotCountInput.val());
+
+		if (!Number.isInteger(slotCount)) {
+			slotCount = 3;
+		}
+
+		slotCount = Math.max(3, Math.min(6, slotCount));
+		slotCountInput.val(slotCount);
+
+		$("#page1 .attunement-slots-grid input[type='checkbox']").each(function (index) {
+			var enabled = index < slotCount;
+			$(this).prop("disabled", !enabled);
+
+			if (!enabled) {
+				$(this).prop("checked", false);
+			}
+		});
+	}
+
+	var backgroundFeatRules = {
+		"astral drifter": { feat: "Magic Initiate (Cleric)" },
+		"giant foundling": { feat: "Strike of the Giants" },
+		"knight of solamnia": { feat: "Squire of Solamnia" },
+		"squire of solamnia": { feat: "Squire of Solamnia" },
+		wildspacer: { feat: "Tough" },
+		"mage of high sorcery": { feat: "Initiate of High Sorcery" },
+		"rune carver": { feat: "Rune Shaper" },
+		custom: { list: "feat-options" },
+		"silverquill student": { feat: "Strixhaven Initiate: Silverquill" },
+		"witherbloom student": { feat: "Strixhaven Initiate: Witherbloom" },
+		"quandrix student": { feat: "Strixhaven Initiate: Quandrix" },
+		"prismari student": { feat: "Strixhaven Initiate: Prismari" },
+		"lorehold student": { feat: "Strixhaven Initiate: Lorehold" },
+		"gate warden": { feat: "Scion of the Outer Planes" },
+		"planar philosopher": { feat: "Scion of the Outer Planes" },
+		rewarded: { list: "rewarded-feat-options" },
+		ruined: { list: "ruined-feat-options" },
+		"random feat": { list: "feat-options" },
+	};
+	var backgroundFeatMode = "choice";
+	var backgroundFeatValue = "";
+
+	function updateBackgroundFeat() {
+		var backgroundName = $("#page1 [name='background']").val().trim().toLowerCase();
+		var rule = backgroundFeatRules[backgroundName];
+		var firstFeat = $("#page1 [name='feat-slot-01']");
+
+		if (rule && rule.feat) {
+			backgroundFeatMode = "fixed";
+			backgroundFeatValue = rule.feat;
+			firstFeat.prop("readOnly", true).removeAttr("data-suggestion-list").attr("aria-readonly", "true");
+			if (firstFeat.val() !== rule.feat) {
+				firstFeat.val(rule.feat).trigger("change");
+			}
+			if (magicItemInput === firstFeat[0]) {
+				closeMagicItemSuggestions();
+			}
+			return;
+		}
+
+		backgroundFeatMode = "choice";
+		var listId = rule ? rule.list : "feat-options";
+		firstFeat.prop("readOnly", false).attr("data-suggestion-list", listId).removeAttr("aria-readonly");
+		var allowedFeats = $("#" + listId + " option").map(function () {
+			return $(this).val();
+		}).get();
+		var currentFeat = firstFeat.val().trim();
+		var nextFeat = allowedFeats.indexOf(currentFeat) === -1 ? "" : currentFeat;
+		backgroundFeatValue = nextFeat;
+
+		if (currentFeat !== nextFeat) {
+			firstFeat.val(nextFeat).trigger("change");
+		}
+	}
+
+	var magicItemInput = null;
+	var magicItemSuggestionIndex = -1;
+	var magicItemSuggestions = $("<div class='magic-item-suggestions' role='listbox'></div>").appendTo("body");
+
+	function positionMagicItemSuggestions() {
+		if (!magicItemInput) {
+			return;
+		}
+
+		var inputBounds = magicItemInput.getBoundingClientRect();
+		var menuWidth = Math.min(Math.max(inputBounds.width, 240), 360);
+		var left = Math.max(8, Math.min(inputBounds.left, window.innerWidth - menuWidth - 8));
+		var maxHeight = Math.max(80, Math.min(240, window.innerHeight - inputBounds.bottom - 8));
+
+		magicItemSuggestions.css({
+			left: left + "px",
+			top: inputBounds.bottom + 2 + "px",
+			width: menuWidth + "px",
+			maxHeight: maxHeight + "px",
+		});
+	}
+
+	function showMagicItemSuggestions(input) {
+		var listId = $(input).attr("data-suggestion-list");
+		var inputValue = $(input).val().trim();
+		var query = inputValue.toLowerCase();
+		var list = $("#" + listId);
+		var groups = list.children("optgroup");
+		var suggestionCount = 0;
+		var selectedClasses = [];
+
+		if ($(input).hasClass("class-name-input")) {
+			var classOptions = list.find("option").map(function () {
+				return $(this).val();
+			}).get();
+			selectedClasses = $("#page1 .class-name-input").not(input).map(function () {
+				return $(this).val().trim();
+			}).get().filter(function (className) {
+				return classOptions.indexOf(className) !== -1;
+			});
+		}
+
+		magicItemInput = input;
+		magicItemSuggestionIndex = -1;
+		magicItemSuggestions.empty();
+
+		function appendSuggestion(option) {
+			var suggestion = $("<button type='button' class='magic-item-suggestion' role='option'></button>")
+				.text(option.val());
+			magicItemSuggestions.append(suggestion);
+			suggestionCount++;
+		}
+
+		if (groups.length > 0) {
+			groups.each(function () {
+				var group = $(this);
+				var options = group.children("option").filter(function () {
+					return $(this).val().toLowerCase().indexOf(query) !== -1;
+				});
+
+				if (options.length > 0 || query === "") {
+					magicItemSuggestions.append(
+						$("<div class='magic-item-suggestion-group' role='presentation'></div>").text(group.attr("label"))
+					);
+					options.each(function () {
+						appendSuggestion($(this));
+					});
+				}
+			});
+		} else {
+			list.find("option").filter(function () {
+				var optionValue = $(this).val();
+				return optionValue.toLowerCase().indexOf(query) !== -1
+					&& selectedClasses.indexOf(optionValue) === -1;
+			}).each(function () {
+				appendSuggestion($(this));
+			});
+		}
+
+		if (suggestionCount === 0 && magicItemSuggestions.children().length === 0) {
+			closeMagicItemSuggestions();
+			return;
+		}
+
+		$(input).attr("aria-expanded", "true");
+		positionMagicItemSuggestions();
+		magicItemSuggestions.show();
+	}
+
+	function selectMagicItemSuggestion(value) {
+		if (!magicItemInput) {
+			return;
+		}
+
+		var input = $(magicItemInput);
+		if (input.hasClass("class-name-input")) {
+			input.val(value);
+		} else {
+			input.val(value);
+		}
+
+		input.trigger("input").trigger("change");
+		closeMagicItemSuggestions();
+		input.trigger("blur");
+	}
+
+	function closeMagicItemSuggestions() {
+		if (magicItemInput) {
+			$(magicItemInput).attr("aria-expanded", "false");
+		}
+
+		magicItemInput = null;
+		magicItemSuggestionIndex = -1;
+		magicItemSuggestions.hide().empty();
+	}
+
+	function highlightMagicItemSuggestion(index) {
+		var suggestions = magicItemSuggestions.children("button");
+		magicItemSuggestionIndex = Math.max(0, Math.min(index, suggestions.length - 1));
+		suggestions.removeClass("highlighted").attr("aria-selected", "false");
+		suggestions.eq(magicItemSuggestionIndex).addClass("highlighted").attr("aria-selected", "true");
+	}
+
+	$("#page1 [name='background']").on("input change", updateBackgroundFeat);
+	$("#page1 [name='feat-slot-01']").on("change", function () {
+		if (backgroundFeatMode !== "choice") {
+			return;
+		}
+
+		var selectedFeat = $(this).val().trim();
+		var listId = $(this).attr("data-suggestion-list");
+		var isValidChoice = $("#" + listId + " option").filter(function () {
+			return $(this).val() === selectedFeat;
+		}).length > 0;
+
+		if (isValidChoice) {
+			backgroundFeatValue = selectedFeat;
+		} else if (selectedFeat !== backgroundFeatValue) {
+			$(this).val(backgroundFeatValue).trigger("change");
+		}
+	});
+
+	var suggestionFieldSelector = "input[data-suggestion-list], textarea[data-suggestion-list]";
+	$("#page1").on("focus", suggestionFieldSelector, function () {
+		showMagicItemSuggestions(this);
+	});
+	$("#page1").on("input", suggestionFieldSelector, function () {
+		showMagicItemSuggestions(this);
+	});
+	$("#page1").on("keydown", suggestionFieldSelector, function (event) {
+		var suggestions = magicItemSuggestions.children("button");
+
+		if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+			if (magicItemInput !== this || suggestions.length === 0) {
+				showMagicItemSuggestions(this);
+				suggestions = magicItemSuggestions.children("button");
+			}
+
+			if (suggestions.length === 0) {
+				event.preventDefault();
+				return;
+			}
+
+			highlightMagicItemSuggestion(magicItemSuggestionIndex + (event.key === "ArrowDown" ? 1 : -1));
+			event.preventDefault();
+		} else if (event.key === "Enter" && magicItemSuggestionIndex >= 0) {
+			selectMagicItemSuggestion(suggestions.eq(magicItemSuggestionIndex).text());
+			event.preventDefault();
+		} else if (event.key === "Enter" && $(this).hasClass("class-name-input")) {
+			event.preventDefault();
+		} else if (event.key === "Escape") {
+			closeMagicItemSuggestions();
+		}
+	});
+	magicItemSuggestions.on("mousedown", "button", function (event) {
+		event.preventDefault();
+	});
+	magicItemSuggestions.on("click", "button", function () {
+		selectMagicItemSuggestion($(this).text());
+	});
+	magicItemSuggestions.on("mousemove", "button", function () {
+		highlightMagicItemSuggestion(magicItemSuggestions.children("button").index(this));
+	});
+	$(document).on("mousedown", function (event) {
+		if (magicItemInput && !$(event.target).closest(".magic-item-suggestions, " + suggestionFieldSelector).length) {
+			closeMagicItemSuggestions();
+		}
+	});
+	$(window).on("scroll resize", positionMagicItemSuggestions);
+
+	$("#page1 .scores").on("input", ".score input", function () {
+		updateModifier(this);
+		updateInitiative();
+		updateSavingThrows();
+		updateSkills();
+		updateArmorCalculations();
+	});
+
+	$("#page1 .scores .score input").each(function () {
+		updateModifier(this);
+	});
+	updateInitiative();
+
+	$("#page1 .saves").on("change", "input[type='checkbox']", updateSavingThrows);
+	$("#page1 .skills").on("change", "input[type='checkbox']", updateSkills);
+	$("#page1 .class-level-pairs").on("input change", ".class-name-input", function () {
+		updateSelectedClass(this);
+	});
+	$("#page1 .class-level-pairs").on("input change", ".class-level-input", updateProficiencyBonus);
+	$("#page1 .hitdice").on("change", ".hit-die-checks input[type='checkbox']", function () {
+		storeHitDieCheckbox(this);
+	});
+	$("#page1 [name='armor-type'], #page1 [name='armor-shield']").on("change", updateArmorCalculations);
+	$("#page1 [name='armor-ac-bonus']").on("input", updateArmorCalculations);
+	$("#page1 [name='speed']").on("input", function () {
+		baseSpeedValue = $(this).val().trim();
+		localStorage.setItem("page1_baseSpeed", JSON.stringify(baseSpeedValue));
+	});
+	$("#page1 [name='speed']").on("change", updateArmorCalculations);
+	$("#page1 [name='attunement-slots']").on("input change", updateAttunementSlots);
+	updateBackgroundFeat();
+	updateClassLevelFields();
+	updateArmorCalculations();
+	updateAttunementSlots();
+});
+
+$ (function() {
+	$("#ins1").on("click",function() {  
+		//$(this).css('background-color', 'black');
+		//console.log('!works!');
+		$(this).toggleClass("active");
+		});
+});

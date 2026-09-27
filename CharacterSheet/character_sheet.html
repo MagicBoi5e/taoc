@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="character_sheet_style.css">
+  <!--
+	Jquery to make form data persist across browser restarts.
+  -->
+  
+  <script src="jquery/jquery.js"></script>
+  <script type="text/javascript" src="jquery/saveMyForm.jquery.js"></script>
+  <script type="text/javascript" src="char.js"></script>
+  
+</head>
+ <meta charset="utf-8"/>
+<form id="page1" class="charsheet">
+  <header>
+    <section class="charname">
+      <button id="reset-character" type="button">Reset Character</button>
+      <label for="charname">Character Name</label><input name="charname" placeholder="Name here" />
+    </section>
+    <section class="misc">
+      <ul>
+        <li class="class-level">
+          <div class="class-level-pairs">
+            <div class="class-pair">
+              <input id="characterclass" class="class-name-input" name="characterclass" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 1" />
+              <input id="classlevel" class="class-level-input" name="classlevel" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 1" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-2" class="class-name-input" name="characterclass-2" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 2" />
+              <input id="classlevel-2" class="class-level-input" name="classlevel-2" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 2" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-3" class="class-name-input" name="characterclass-3" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 3" />
+              <input id="classlevel-3" class="class-level-input" name="classlevel-3" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 3" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-4" class="class-name-input" name="characterclass-4" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 4" />
+              <input id="classlevel-4" class="class-level-input" name="classlevel-4" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 4" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-5" class="class-name-input" name="characterclass-5" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 5" />
+              <input id="classlevel-5" class="class-level-input" name="classlevel-5" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 5" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-6" class="class-name-input" name="characterclass-6" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 6" />
+              <input id="classlevel-6" class="class-level-input" name="classlevel-6" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 6" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-7" class="class-name-input" name="characterclass-7" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 7" />
+              <input id="classlevel-7" class="class-level-input" name="classlevel-7" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 7" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-8" class="class-name-input" name="characterclass-8" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 8" />
+              <input id="classlevel-8" class="class-level-input" name="classlevel-8" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 8" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-9" class="class-name-input" name="characterclass-9" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 9" />
+              <input id="classlevel-9" class="class-level-input" name="classlevel-9" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 9" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-10" class="class-name-input" name="characterclass-10" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 10" />
+              <input id="classlevel-10" class="class-level-input" name="classlevel-10" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 10" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-11" class="class-name-input" name="characterclass-11" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 11" />
+              <input id="classlevel-11" class="class-level-input" name="classlevel-11" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 11" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-12" class="class-name-input" name="characterclass-12" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 12" />
+              <input id="classlevel-12" class="class-level-input" name="classlevel-12" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 12" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+            <div class="class-pair" hidden>
+              <input id="characterclass-13" class="class-name-input" name="characterclass-13" data-suggestion-list="class-options" autocomplete="off" placeholder="Class" aria-label="Class 13" />
+              <input id="classlevel-13" class="class-level-input" name="classlevel-13" type="number" min="1" max="20" step="1" placeholder="1" aria-label="Level for class 13" />
+              <div class="class-pair-captions"><span>Class</span><span>Level</span></div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <label for="race">Race</label><input id="race" name="race" data-suggestion-list="race-options" autocomplete="off" placeholder="Human" />
+        </li>
+        <li>
+          <label for="alignment">Alignment</label><input id="alignment" name="alignment" data-suggestion-list="alignment-options" autocomplete="off" placeholder="Neutral" />
+        </li>
+        <li>
+          <label for="background">Background</label><input id="background" name="background" data-suggestion-list="background-options" autocomplete="off" placeholder="Custom" />
+        </li>
+      </ul>
+    </section>
+  </header>
+  <main>
+    <section>
+      <section class="attributes">
+        <div class="scores">
+          <ul>
+            <li>
+              <div class="score">
+                <label for="Strengthscore">Strength</label><input name="Strengthscore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Strengthmod" placeholder="+0" />
+              </div>
+            </li>
+            <li>
+              <div class="score">
+                <label for="Dexterityscore">Dexterity</label><input name="Dexterityscore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Dexteritymod" placeholder="+0" />
+              </div>
+            </li>
+            <li>
+              <div class="score">
+                <label for="Constitutionscore">Constitution</label><input name="Constitutionscore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Constitutionmod" placeholder="+0" />
+              </div>
+            </li>
+            <li>
+              <div class="score">
+                <label for="Wisdomscore">Wisdom</label><input name="Wisdomscore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Wisdommod" placeholder="+0" />
+              </div>
+            </li>
+            <li>
+              <div class="score">
+                <label for="Intelligencescore">Intelligence</label><input name="Intelligencescore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Intelligencemod" placeholder="+0" />
+              </div>
+            </li>
+            <li>
+              <div class="score">
+                <label for="Charismascore">Charisma</label><input name="Charismascore" placeholder="10" />
+              </div>
+              <div class="modifier">
+                <input name="Charismamod" placeholder="+0" />
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="attr-applications" style="margin-right: -10px;">
+          <div class="inspiration box">
+            <div class="label-container">
+              <label for="inspiration">Inspiration</label>
+            </div>
+            <input id="ins1" name="inspiration" type="button" value="wow" style="font-size : 1px;" />
+          </div>
+          <div class="proficiencybonus box">
+            <div class="label-container">
+              <label for="proficiencybonus">Proficiency Bonus</label>
+            </div>
+            <input name="proficiencybonus" placeholder="+2" />
+          </div>
+          <div class="saves list-section box">
+            <ul>
+              <li>
+                <label for="Strength-save">Strength</label><input name="Strength-save" placeholder="+0" type="text" /><input name="Strength-save-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Dexterity-save">Dexterity</label><input name="Dexterity-save" placeholder="+0" type="text" /><input name="Dexterity-save-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Constitution-save">Constitution</label><input name="Constitution-save" placeholder="+0" type="text" /><input name="Constitution-save-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Wisdom-save">Wisdom</label><input name="Wisdom-save" placeholder="+0" type="text" /><input name="Wisdom-save-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Intelligence-save">Intelligence</label><input name="Intelligence-save" placeholder="+0" type="text" /><input name="Intelligence-save-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Charisma-save">Charisma</label><input name="Charisma-save" placeholder="+0" type="text" /><input name="Charisma-save-prof" type="checkbox" />
+              </li>
+            </ul>
+            <div class="label">
+              Saving Throws
+            </div>
+          </div>
+          <div class="skills list-section box">
+            <ul>
+              <li>
+                <label for="Acrobatics">Acrobatics <span class="skill">(Dex)</span></label><input name="Acrobatics" placeholder="+0" type="text" /><input name="Acrobatics-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Animal Handling">Animal Handling <span class="skill">(Wis)</span></label><input name="Animal Handling" placeholder="+0" type="text" /><input name="Animal Handling-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Arcana">Arcana <span class="skill">(Int)</span></label><input name="Arcana" placeholder="+0" type="text" /><input name="Arcana-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Athletics">Athletics <span class="skill">(Str)</span></label><input name="Athletics" placeholder="+0" type="text" /><input name="Athletics-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Deception">Deception <span class="skill">(Cha)</span></label><input name="Deception" placeholder="+0" type="text" /><input name="Deception-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="History">History <span class="skill">(Int)</span></label><input name="History" placeholder="+0" type="text" /><input name="History-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Insight">Insight <span class="skill">(Wis)</span></label><input name="Insight" placeholder="+0" type="text" /><input name="Insight-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Intimidation">Intimidation <span class="skill">(Cha)</span></label><input name="Intimidation" placeholder="+0" type="text" /><input name="Intimidation-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Investigation">Investigation <span class="skill">(Int)</span></label><input name="Investigation" placeholder="+0" type="text" /><input name="Investigation-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Medicine">Medicine <span class="skill">(Wis)</span></label><input name="Medicine" placeholder="+0" type="text" /><input name="Medicine-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Nature">Nature <span class="skill">(Int)</span></label><input name="Nature" placeholder="+0" type="text" /><input name="Nature-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Perception">Perception <span class="skill">(Wis)</span></label><input name="Perception" placeholder="+0" type="text" /><input name="Perception-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Performance">Performance <span class="skill">(Cha)</span></label><input name="Performance" placeholder="+0" type="text" /><input name="Performance-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Persuasion">Persuasion <span class="skill">(Cha)</span></label><input name="Persuasion" placeholder="+0" type="text" /><input name="Persuasion-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Religion">Religion <span class="skill">(Int)</span></label><input name="Religion" placeholder="+0" type="text" /><input name="Religion-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Sleight of Hand">Sleight of Hand <span class="skill">(Dex)</span></label><input name="Sleight of Hand" placeholder="+0" type="text" /><input name="Sleight of Hand-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Stealth">Stealth <span class="skill">(Dex)</span></label><input name="Stealth" placeholder="+0" type="text" /><input name="Stealth-prof" type="checkbox" />
+              </li>
+              <li>
+                <label for="Survival">Survival <span class="skill">(Wis)</span></label><input name="Survival" placeholder="+0" type="text" /><input name="Survival-prof" type="checkbox" />
+              </li>
+            </ul>
+            <div class="label">
+              Skills
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="passive-perception box">
+        <div class="label-container">
+          <label for="passiveperception">Passive Perception (Wisdom)</label>
+        </div>
+        <input name="passiveperception" placeholder="10" />
+      </div>
+      <div class="otherprofs box textblock">
+        <label for="otherprofs">Other Proficiencies and Languages</label><textarea name="otherprofs"></textarea>
+      </div>
+      <div class="armor-options box">
+        <label for="armor-type">Armor Type</label>
+        <select id="armor-type" name="armor-type">
+          <option value="unarmored">No Armor</option>
+          <optgroup label="Light Armor">
+            <option value="padded">Padded Armor</option>
+            <option value="leather">Leather Armor</option>
+            <option value="studded-leather">Studded Leather Armor</option>
+          </optgroup>
+          <optgroup label="Medium Armor">
+            <option value="hide">Hide Armor</option>
+            <option value="chain-shirt">Chain Shirt</option>
+            <option value="scale-mail">Scale Mail</option>
+            <option value="breastplate">Breastplate</option>
+            <option value="half-plate">Half Plate Armor</option>
+          </optgroup>
+          <optgroup label="Heavy Armor">
+            <option value="ring-mail">Ring Mail</option>
+            <option value="chain-mail">Chain Mail</option>
+            <option value="splint">Splint Armor</option>
+            <option value="plate">Plate Armor</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="mage-armor">Mage Armor</option>
+            <option value="unarmored-barbarian">Unarmored Defense (Barbarian)</option>
+            <option value="unarmored-monk">Unarmored Defense (Monk)</option>
+          </optgroup>
+        </select>
+        <div class="armor-option-bonuses">
+          <label class="armor-shield-option" for="armor-shield">
+            <input id="armor-shield" name="armor-shield" type="checkbox" /> Shield (+2 AC)
+          </label>
+          <label class="armor-misc-label" for="armor-ac-bonus">Misc. AC bonus</label>
+          <input id="armor-ac-bonus" name="armor-ac-bonus" type="number" step="1" placeholder="0" />
+        </div>
+      </div>
+    </section>
+    <section>
+      <section class="combat">
+        <div class="armorclass">
+          <div>
+            <label for="ac">Armor Class</label><input name="ac" placeholder="10" type="text" />
+          </div>
+        </div>
+        <div class="initiative">
+          <div>
+            <label for="initiative">Initiative</label><input name="initiative" placeholder="+0" type="text" />
+          </div>
+        </div>
+        <div class="speed">
+          <div>
+            <label for="speed">Speed</label><input name="speed" placeholder="30" type="text" />
+          </div>
+        </div>
+        <div class="hp">
+          <div class="regular">
+            <div class="max">
+              <label for="maxhp">HP Max</label><input name="maxhp" placeholder="10" type="text" />
+            </div>
+            <div class="current">
+              <label for="currenthp">Current Hit Points</label><input name="currenthp" type="text" />
+            </div>
+          </div>
+          <div class="temporary">
+            <label for="temphp">Temporary Hit Points</label><input name="temphp" type="text" />
+          </div>
+        </div>
+        <div class="hitdice">
+          <div>
+            <div class="hit-dice-rows">
+              <div class="hit-die-row" data-die="12" hidden>
+                <span class="hit-die-total">0d12</span><div class="hit-die-checks"></div>
+              </div>
+              <div class="hit-die-row" data-die="10" hidden>
+                <span class="hit-die-total">0d10</span><div class="hit-die-checks"></div>
+              </div>
+              <div class="hit-die-row" data-die="8" hidden>
+                <span class="hit-die-total">0d8</span><div class="hit-die-checks"></div>
+              </div>
+              <div class="hit-die-row" data-die="6" hidden>
+                <span class="hit-die-total">0d6</span><div class="hit-die-checks"></div>
+              </div>
+            </div>
+            <div class="hit-dice-title">Hit Dice</div>
+          </div>
+        </div>
+        <div class="deathsaves">
+          <div>
+            <div class="label">
+              <label class="death-saves-title"><span>DEATH</span><span>SAVES</span></label>
+            </div>
+            <div class="marks">
+              <div class="deathsuccesses">
+                <label>Successes</label>
+                <div class="bubbles">
+                  <input name="deathsuccess1" type="checkbox" />
+                  <input name="deathsuccess2" type="checkbox" />
+                  <input name="deathsuccess3" type="checkbox" />
+                </div>
+              </div>
+              <div class="deathfails">
+                <label>Failures</label>
+                <div class="bubbles">
+                  <input name="deathfail1" type="checkbox" />
+                  <input name="deathfail2" type="checkbox" />
+                  <input name="deathfail3" type="checkbox" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="attacksandspellcasting">
+        <div>
+          <label>Attacks, Actions and Cantrips</label>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Weapon/Cantrip
+                </th>
+                <th>
+                  Hit
+                </th>
+                <th>
+                  Damage/Type
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input name="atkname1" type="text" />
+                </td>
+                <td>
+                  <input name="atkbonus1" type="text" />
+                </td>
+                <td>
+                  <input name="atkdamage1" type="text" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input name="atkname2" type="text" />
+                </td>
+                <td>
+                  <input name="atkbonus2" type="text" />
+                </td>
+                <td>
+                  <input name="atkdamage2" type="text" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input name="atkname3" type="text" />
+                </td>
+                <td>
+                  <input name="atkbonus3" type="text" />
+                </td>
+                <td>
+                  <input name="atkdamage3" type="text" />
+                </td>
+              </tr>
+               <tr>
+                <td>
+                  <input name="atkname4" type="text" />
+                </td>
+                <td>
+                  <input name="atkbonus4" type="text" />
+                </td>
+                <td>
+                  <input name="atkdamage4" type="text" />
+                </td>
+              </tr>
+               <tr>
+                <td>
+                  <input name="atkname5" type="text" />
+                </td>
+                <td>
+                  <input name="atkbonus5" type="text" />
+                </td>
+                <td>
+                  <input name="atkdamage5" type="text" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <textarea></textarea>
+        </div>
+      </section>
+      <section class="equipment">
+        <div>
+          <label>Equipment</label>
+          <div class="money">
+            <ul>
+              <li>
+                <label for="cp">cp</label><input name="cp" />
+              </li>
+              <li>
+                <label for="sp">sp</label><input name="sp" />
+              </li>
+              <li>
+                <label for="ep">ep</label><input name="ep" />
+              </li>
+              <li>
+                <label for="gp">gp</label><input name="gp" />
+              </li>
+              <li>
+                <label for="pp">pp</label><input name="pp" />
+              </li>
+            </ul>
+          </div>
+          <div style="width: 44%; margin-left: 5px">
+            <table class="items" id="equipment1">
+              <thead>
+                <tr>
+                  <th style="font-size: 12px; color: #bbb ">
+                    Name
+                  </th>
+                  <th style="font-size: 12px; color: #bbb ">
+                    Qty
+                  </th>
+                  <th style="font-size: 12px; color: #bbb ">
+                    Weight
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="en">
+                    <input name="e1" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq1" type="text" />
+                  </td>
+                  <td class="ew">
+                    <input name="ew1" type="text" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e2" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq2" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew2" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e3" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq3" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew3" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e4" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq4" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew4" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e5" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq5" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew5" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e6" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq6" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew6" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e7" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq7" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew7" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e8" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq8" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew8" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e9" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq9" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew9" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e10" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq10" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew10" type="text"/>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="width: 44%; margin-left: 5px">
+            <table class="items" id="equipment2">
+            <thead>
+              <tr>
+                <th style="font-size: 12px; color: #bbb ">
+                  Name
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Quantity
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Weight
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td class="en">
+                    <input name="e1" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq1" type="text" />
+                  </td>
+                  <td class="ew">
+                    <input name="ew1" type="text" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e2" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq2" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew2" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e3" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq3" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew3" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e4" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq4" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew4" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e5" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq5" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew5" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e6" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq6" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew6" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e7" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq7" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew7" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e8" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq8" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew8" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e9" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq9" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew9" type="text"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="en">
+                    <input name="e10" type="text" />
+                  </td>
+                  <td class="eq">
+                    <input name="eq10" type="text"/>
+                  </td>
+                  <td class="ew">
+                    <input name="ew10" type="text"/>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+
+          </div>
+        </div>
+      </section>
+      <section class="magic-items">
+        <div>
+          <div class="attunement-panel">
+            <label for="attunement-slots">Attunement<br>Slots</label>
+            <input id="attunement-slots" name="attunement-slots" type="number" min="3" max="6" step="1" value="3" />
+            <div class="attunement-slots-grid">
+              <label class="attunement-slot"><input name="attunement-slot-1" type="checkbox" aria-label="Attunement slot 1" /></label>
+              <label class="attunement-slot"><input name="attunement-slot-2" type="checkbox" aria-label="Attunement slot 2" /></label>
+              <label class="attunement-slot"><input name="attunement-slot-3" type="checkbox" aria-label="Attunement slot 3" /></label>
+              <label class="attunement-slot"><input name="attunement-slot-4" type="checkbox" aria-label="Attunement slot 4" /></label>
+              <label class="attunement-slot"><input name="attunement-slot-5" type="checkbox" aria-label="Attunement slot 5" /></label>
+              <label class="attunement-slot"><input name="attunement-slot-6" type="checkbox" aria-label="Attunement slot 6" /></label>
+            </div>
+          </div>
+          <div class="magic-item-groups">
+            <div class="magic-item-category">
+              <label>Uncommon</label>
+              <div class="magic-item-slots">
+                <input name="magic-uncommon-1" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 1" />
+                <input name="magic-uncommon-2" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 2" />
+                <input name="magic-uncommon-3" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 3" />
+                <input name="magic-uncommon-4" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 4" />
+                <input name="magic-uncommon-5" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 5" />
+                <input name="magic-uncommon-6" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 6" />
+              </div>
+            </div>
+            <div class="magic-item-category">
+              <label>Rare</label>
+              <div class="magic-item-slots">
+                <input name="magic-rare-1" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 1" />
+                <input name="magic-rare-2" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 2" />
+                <input name="magic-rare-3" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 3" />
+                <input name="magic-rare-4" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 4" />
+                <input name="magic-rare-5" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 5" />
+                <input name="magic-rare-6" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 6" />
+              </div>
+            </div>
+            <div class="magic-item-category">
+              <label>Very Rare</label>
+              <div class="magic-item-slots">
+                <input name="magic-very-rare-1" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 1" />
+                <input name="magic-very-rare-2" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 2" />
+                <input name="magic-very-rare-3" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 3" />
+                <input name="magic-very-rare-4" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 4" />
+                <input name="magic-very-rare-5" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 5" />
+                <input name="magic-very-rare-6" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 6" />
+              </div>
+            </div>
+            <div class="magic-item-category">
+              <label>Legendary</label>
+              <div class="magic-item-slots">
+                <input name="magic-legendary-1" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 1" />
+                <input name="magic-legendary-2" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 2" />
+              </div>
+            </div>
+            <div class="magic-item-category">
+              <label>Artifact</label>
+              <div class="magic-item-slots">
+                <input name="magic-artifact-1" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 1" />
+                <input name="magic-artifact-2" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 2" />
+              </div>
+            </div>
+            <div class="magic-item-category">
+              <label>Infusions</label>
+              <div class="magic-item-slots">
+                <input name="magic-infusion-1" aria-label="Infusion 1" />
+                <input name="magic-infusion-2" aria-label="Infusion 2" />
+              </div>
+            </div>
+          </div>
+          <label class="magic-items-title">MAGIC ITEMS</label>
+        </div>
+        <datalist id="magic-uncommon-options">
+          <option value="Adamantine Armor"></option>
+          <option value="Ammunition, +1"></option>
+          <option value="Bag of Tricks"></option>
+          <option value="Blood Spear"></option>
+          <option value="Boomerang, +1"></option>
+          <option value="Boots of the Winterlands"></option>
+          <option value="Bracers of Archery"></option>
+          <option value="Brooch of Shielding"></option>
+          <option value="Circlet of Blasting"></option>
+          <option value="Cloak of Protection"></option>
+          <option value="Coiling Grasp Tattoo"></option>
+          <option value="Crusader's Shortsword"></option>
+          <option value="Dragon's Wrath Weapon"></option>
+          <option value="Eldritch Claw Tattoo"></option>
+          <option value="Elemental Gem"></option>
+          <option value="Eversmoking Bottle"></option>
+          <option value="Gauntlets of Ogre Power"></option>
+          <option value="Gem of Brightness"></option>
+          <option value="Gloves of Missile Snaring"></option>
+          <option value="Headband of Intellect"></option>
+          <option value="Hew"></option>
+          <option value="Insignia of Claws"></option>
+          <option value="Javelin of Lightning"></option>
+          <option value="Keoghtom's Ointment"></option>
+          <option value="Lantern of Revealing"></option>
+          <option value="Lightbringer"></option>
+          <option value="Mind Carapace Armor"></option>
+          <option value="Mithral Armor"></option>
+          <option value="Necklace of Adaptation"></option>
+          <option value="Pearl of Power"></option>
+          <option value="Periapt of Health"></option>
+          <option value="Periapt of Wound Closure"></option>
+          <option value="Pipes of Haunting"></option>
+          <option value="Ring of Warmth"></option>
+          <option value="Saddle of the Cavalier"></option>
+          <option value="Sentinel Shield"></option>
+          <option value="Serpent Scale Armor"></option>
+          <option value="Shield, +1"></option>
+          <option value="Spell Gem (Lapis Lazuli)"></option>
+          <option value="Staff of the Adder"></option>
+          <option value="Staff of the Python"></option>
+          <option value="Stone of Good Luck"></option>
+          <option value="Sword of Vengeance"></option>
+          <option value="Wand of Magic Missiles"></option>
+          <option value="Wand of the War Mage"></option>
+          <option value="Wand of Web"></option>
+          <option value="Weapon of Warning"></option>
+          <option value="Weapon, +1"></option>
+          <option value="Wind Fan"></option>
+          <option value="Class Specific Item"></option>
+        </datalist>
+        <datalist id="magic-rare-options">
+          <option value="Ammunition, +2"></option>
+          <option value="Amulet of Health"></option>
+          <option value="Armor of Resistance"></option>
+          <option value="Armor, +1"></option>
+          <option value="Arrow-Catching Shield"></option>
+          <option value="Bead of Force"></option>
+          <option value="Belt of Dwarvenkind"></option>
+          <option value="Belt of Giant Strength"></option>
+          <option value="Berserker Axe"></option>
+          <option value="Boomerang, +2"></option>
+          <option value="Boots of Speed"></option>
+          <option value="Bowl of Commanding Water Elementals"></option>
+          <option value="Bracers of Defense"></option>
+          <option value="Brazier of Commanding Fire Elementals"></option>
+          <option value="Censer of Controlling Air Elementals"></option>
+          <option value="Cloak of Displacement"></option>
+          <option value="Crystal Blade"></option>
+          <option value="Dagger of Venom"></option>
+          <option value="Dragon Slayer"></option>
+          <option value="Dragon Wing Bow"></option>
+          <option value="Dragonguard"></option>
+          <option value="Elven Chain"></option>
+          <option value="Flame Tongue"></option>
+          <option value="Gem of Seeing"></option>
+          <option value="Giant Slayer"></option>
+          <option value="Glamoured Studded Leather"></option>
+          <option value="Horn of Blasting"></option>
+          <option value="Horn of Valhalla"></option>
+          <option value="Horseshoes of Speed"></option>
+          <option value="Ioun Stone"></option>
+          <option value="Iron Bands of Bilarro"></option>
+          <option value="Mace of Disruption"></option>
+          <option value="Mace of Smiting"></option>
+          <option value="Mace of Terror"></option>
+          <option value="Mantle of Spell Resistance"></option>
+          <option value="Master's Amulet"></option>
+          <option value="Mind Blade"></option>
+          <option value="Mind Lash"></option>
+          <option value="Necklace of Fireballs"></option>
+          <option value="Necklace of Prayer Beads"></option>
+          <option value="Periapt of Proof Against Poison"></option>
+          <option value="Ring of Evasion"></option>
+          <option value="Ring of Free Action"></option>
+          <option value="Ring of Protection"></option>
+          <option value="Ring of Resistance"></option>
+          <option value="Ring of Spell Storing"></option>
+          <option value="Ring of the Ram"></option>
+          <option value="Robe of Eyes"></option>
+          <option value="Rod of Rulership"></option>
+          <option value="Rope of Entanglement"></option>
+          <option value="Shield of Missile Attraction"></option>
+          <option value="Shield, +2"></option>
+          <option value="Spell Gem (Bloodstone)"></option>
+          <option value="Spider Staff"></option>
+          <option value="Staff of Charming"></option>
+          <option value="Staff of Defense"></option>
+          <option value="Staff of Healing"></option>
+          <option value="Staff of Withering"></option>
+          <option value="Stone of Controlling Earth Elementals"></option>
+          <option value="Sun Blade"></option>
+          <option value="Sword of Life Stealing"></option>
+          <option value="Sword of Wounding"></option>
+          <option value="Tentacle Rod"></option>
+          <option value="Vicious Weapon"></option>
+          <option value="Wand of Binding"></option>
+          <option value="Wand of Fear"></option>
+          <option value="Wand of Fireballs"></option>
+          <option value="Wand of Lightning Bolts"></option>
+          <option value="Wand of Paralysis"></option>
+          <option value="Wand of Wonder"></option>
+          <option value="Weapon, +2"></option>
+          <option value="Class Specific Item"></option>
+        </datalist>
+        <datalist id="magic-very-rare-options">
+          <option value="Ammunition, +3"></option>
+          <option value="Animated Shield"></option>
+          <option value="Armor, +2"></option>
+          <option value="Belt of Giant Strength"></option>
+          <option value="Boomerang, +3"></option>
+          <option value="Cloak of the Arachnida"></option>
+          <option value="Dancing Sword"></option>
+          <option value="Dragon Scale Mail"></option>
+          <option value="Dwarven Plate"></option>
+          <option value="Dwarven Thrower"></option>
+          <option value="Frost Brand"></option>
+          <option value="Helm of Brilliance"></option>
+          <option value="Ioun Stone"></option>
+          <option value="Lifewell Tattoo"></option>
+          <option value="Manual of Bodily Health"></option>
+          <option value="Manual of Gainful Excercise"></option>
+          <option value="Manual of Quickness of Action"></option>
+          <option value="Nine Lives Stealer"></option>
+          <option value="Oathbow"></option>
+          <option value="Ring of Shooting Stars"></option>
+          <option value="Ring of Telekinesis"></option>
+          <option value="Robe of Scintillating Colors"></option>
+          <option value="Robe of Stars"></option>
+          <option value="Rod of Absorbtion"></option>
+          <option value="Rod of Alertness"></option>
+          <option value="Sapphire Buckler"></option>
+          <option value="Scimitar of Speed"></option>
+          <option value="Shield, +3"></option>
+          <option value="Spell Gem (Topaz)"></option>
+          <option value="Spellguard Shield"></option>
+          <option value="Staff of Fate"></option>
+          <option value="Staff of Fire"></option>
+          <option value="Staff of Frost"></option>
+          <option value="Staff of Power"></option>
+          <option value="Staff of Striking"></option>
+          <option value="Staff of Thunder and Lightning"></option>
+          <option value="Sword of Sharpness"></option>
+          <option value="Tome of Clear Thought"></option>
+          <option value="Tome of Leadership and Influence"></option>
+          <option value="Tome of Understanding"></option>
+          <option value="Weapon, +3"></option>
+          <option value="Class Specific Item"></option>
+        </datalist>
+        <datalist id="magic-legendary-options">
+          <option value="Armor of Invulnerability"></option>
+          <option value="Armor, +3"></option>
+          <option value="Belt of Giant Strength"></option>
+          <option value="Belashyrra's Beholder Crown"></option>
+          <option value="Blackrazor"></option>
+          <option value="Cloak of Invisibility"></option>
+          <option value="Deck of Many Things"></option>
+          <option value="Defender"></option>
+          <option value="Efreeti Chain"></option>
+          <option value="Greater Silver Sword"></option>
+          <option value="Hammer of Thunderbolts"></option>
+          <option value="Holy Avenger"></option>
+          <option value="Infernal Tack"></option>
+          <option value="Ioun Stone"></option>
+          <option value="Iron Flask"></option>
+          <option value="Luck Blade"></option>
+          <option value="Lost Crown of Besilmer"></option>
+          <option value="Moonblade"></option>
+          <option value="Ring of Djinni Summoning"></option>
+          <option value="Ring of Elemental Command (Bonus fight vs. Elemental)"></option>
+          <option value="Ring of Spell Turning"></option>
+          <option value="Ring of Three Wishes"></option>
+          <option value="Robe of the Archmagi"></option>
+          <option value="Rod of Lordly Might"></option>
+          <option value="Rod of Resurrection"></option>
+          <option value="Ruby Weave Gem"></option>
+          <option value="Scarab of Protection"></option>
+          <option value="Spell Gem (Diamond)"></option>
+          <option value="Staff of the Magi"></option>
+          <option value="Sword of Answering"></option>
+          <option value="Talisman of Pure Good"></option>
+          <option value="Talisman of Ultimate Evil"></option>
+          <option value="Tome of The Stilled Tongue"></option>
+          <option value="Vorpal Sword"></option>
+          <option value="Wave"></option>
+          <option value="Whelm"></option>
+        </datalist>
+        <datalist id="magic-artifact-options">
+          <option value="Axe of the Dwarvish Lords"></option>
+          <option value="Book of Exalted Deeds"></option>
+          <option value="Hand and Eye of Vecna"></option>
+          <option value="Orb of Dragonkind"></option>
+          <option value="Sword of Kas"></option>
+          <option value="Teeth of Dahlver-Nar"></option>
+          <option value="Wand of Orcus"></option>
+        </datalist>
+      </section>
+           
+    </section>
+    <section>
+      <section class="features">
+        <div>
+          <label for="features">Features & Traits</label><textarea name="features"></textarea>
+        </div>
+      </section>
+    </section>  
+  </main>
+    <section class="feats-boons">
+      <div class="feat-boon-layout">
+        <div class="feat-boon-category feats-category">
+          <label>Feats</label>
+          <div class="feat-boon-slots feat-slots">
+            <input name="feat-slot-01" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 1" />
+            <input name="feat-slot-02" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 2" />
+            <input name="feat-slot-03" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 3" />
+            <input name="feat-slot-04" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 4" />
+            <input name="feat-slot-05" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 5" />
+            <input name="feat-slot-06" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 6" />
+            <input name="feat-slot-07" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 7" />
+            <input name="feat-slot-08" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 8" />
+            <input name="feat-slot-09" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 9" />
+            <input name="feat-slot-10" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 10" />
+            <input name="feat-slot-11" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 11" />
+            <input name="feat-slot-12" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 12" />
+            <input name="feat-slot-13" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 13" />
+            <input name="feat-slot-14" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 14" />
+            <input name="feat-slot-15" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 15" />
+            <input name="feat-slot-16" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 16" />
+            <input name="feat-slot-17" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 17" />
+            <input name="feat-slot-18" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 18" />
+            <input name="feat-slot-19" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 19" />
+            <input name="feat-slot-20" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 20" />
+            <input name="feat-slot-21" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 21" />
+          </div>
+        </div>
+        <div class="feat-boon-category boons-category">
+          <label>Boons</label>
+          <div class="feat-boon-slots boon-slots">
+            <input name="boon-slot-01" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 1" />
+            <input name="boon-slot-02" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 2" />
+            <input name="boon-slot-03" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 3" />
+            <input name="boon-slot-04" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 4" />
+            <input name="boon-slot-05" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 5" />
+            <input name="boon-slot-06" data-suggestion-list="boon-options" autocomplete="off" aria-label="Boon slot 6" />
+          </div>
+        </div>
+      </div>
+      <label class="feats-boons-title">FEATS AND BOONS</label>
+      <datalist id="feat-options">
+        <option value="Sharpshooter"></option>
+        <option value="Spell Sniper"></option>
+        <option value="Dual Wielder"></option>
+        <option value="Medium Armor Master"></option>
+        <option value="Artificer Initiate"></option>
+        <option value="Fighting Initiate"></option>
+        <option value="Piercer"></option>
+        <option value="Strike of the Giants"></option>
+        <option value="Crusher"></option>
+        <option value="Great Weapon Master"></option>
+        <option value="Crossbow Expert"></option>
+        <option value="Polearm Master"></option>
+        <option value="Martial Adept"></option>
+        <option value="Magic Initiate"></option>
+        <option value="Inspiring Leader"></option>
+        <option value="Chef"></option>
+        <option value="Healer"></option>
+        <option value="Grappler"></option>
+        <option value="Durable"></option>
+        <option value="Divinely Favored"></option>
+        <option value="Lucky"></option>
+        <option value="Gift of the Chromatic Dragon"></option>
+        <option value="Gift of the Gem Dragon"></option>
+        <option value="Gift of the Metallic Dragon"></option>
+        <option value="Shadow Touched"></option>
+        <option value="Fey Touched"></option>
+        <option value="Telekinetic"></option>
+        <option value="Cartomancer"></option>
+        <option value="Alert"></option>
+        <option value="Defensive Duelist"></option>
+        <option value="Sentinel"></option>
+        <option value="Shield Master"></option>
+        <option value="Savage Attacker"></option>
+        <option value="Resilient"></option>
+        <option value="Gunner"></option>
+        <option value="Mobile"></option>
+        <option value="Charger"></option>
+        <option value="Mounted Combatant"></option>
+        <option value="Mage Slayer"></option>
+        <option value="Elemental Adept"></option>
+        <option value="Metamagic Adept"></option>
+        <option value="Eldritch Adept"></option>
+        <option value="Aberrant Dragonmark"></option>
+        <option value="Vigor of the Hill Giant"></option>
+        <option value="Tavern Brawler"></option>
+        <option value="Fury of the Frost Giant"></option>
+        <option value="Poisoner"></option>
+        <option value="Guile of the Cloud Giant"></option>
+        <option value="Rune Shaper"></option>
+        <option value="Keenness of the Stone Giant"></option>
+        <option value="Ember of the Fire Giant"></option>
+        <option value="Soul of the Storm Giant"></option>
+        <option value="Athlete"></option>
+        <option value="Slasher"></option>
+        <option value="Armored"></option>
+        <option value="Tough"></option>
+      </datalist>
+      <datalist id="boon-options">
+        <option value="Boon of Luck"></option>
+        <option value="Boon of High Magic"></option>
+        <option value="Boon of Spell Mastery"></option>
+        <option value="Boon of Perfect Health"></option>
+        <option value="Boon of Invincibility"></option>
+        <option value="Boon of Spell Recall"></option>
+        <option value="Boon of Peerless Aim"></option>
+        <option value="Boon of Speed"></option>
+        <option value="Boon of Fortitude"></option>
+        <option value="Boon of Dimensional Travel"></option>
+        <option value="Boon of Fate"></option>
+        <option value="Boon of Truesight"></option>
+        <option value="Boon of Recovery"></option>
+        <option value="Boon of Resilience"></option>
+        <option value="Boon of the Unfettered"></option>
+        <option value="Boon of Irresistible Offense"></option>
+        <option value="Boon of the Stormborn"></option>
+        <option value="Boon of Quick Casting"></option>
+        <option value="Boon of the Night Spirit"></option>
+        <option value="Boon of the Fire Soul"></option>
+        <option value="Boon of Magic Resistance"></option>
+        <option value="Boon of Combat Prowess"></option>
+      </datalist>
+      <datalist id="background-options">
+        <option value="Astral Drifter"></option>
+        <option value="Giant Foundling"></option>
+        <option value="Knight of Solamnia"></option>
+        <option value="Squire of Solamnia"></option>
+        <option value="Wildspacer"></option>
+        <option value="Mage of High Sorcery"></option>
+        <option value="Rune Carver"></option>
+        <option value="Custom"></option>
+        <option value="Silverquill Student"></option>
+        <option value="Witherbloom Student"></option>
+        <option value="Quandrix Student"></option>
+        <option value="Prismari Student"></option>
+        <option value="Lorehold Student"></option>
+        <option value="Gate Warden"></option>
+        <option value="Planar Philosopher"></option>
+        <option value="Rewarded"></option>
+        <option value="Ruined"></option>
+        <option value="Random Feat"></option>
+      </datalist>
+      <datalist id="alignment-options">
+        <option value="Lawful Good"></option>
+        <option value="Lawful Neutral"></option>
+        <option value="Lawful Evil"></option>
+        <option value="Neutral Good"></option>
+        <option value="Neutral"></option>
+        <option value="Neutral Evil"></option>
+        <option value="Chaotic Good"></option>
+        <option value="Chaotic Neutral"></option>
+        <option value="Chaotic Evil"></option>
+      </datalist>
+      <datalist id="class-options">
+        <option value="Barbarian"></option>
+        <option value="Bard"></option>
+        <option value="Cleric"></option>
+        <option value="Druid"></option>
+        <option value="Fighter"></option>
+        <option value="Monk"></option>
+        <option value="Paladin"></option>
+        <option value="Ranger"></option>
+        <option value="Rogue"></option>
+        <option value="Sorcerer"></option>
+        <option value="Warlock"></option>
+        <option value="Wizard"></option>
+        <option value="Artificer"></option>
+      </datalist>
+      <datalist id="race-options">
+        <optgroup label="Dwarf">
+          <option value="Hill Dwarf"></option>
+          <option value="Mountain Dwarf"></option>
+          <option value="Duergar"></option>
+          <option value="Mark of Warding Dwarf"></option>
+        </optgroup>
+        <optgroup label="Elf">
+          <option value="High Elf"></option>
+          <option value="Wood Elf"></option>
+          <option value="Drow"></option>
+          <option value="Sea Elf"></option>
+          <option value="Eladrin"></option>
+          <option value="Shadar-Kai"></option>
+          <option value="Astral Elf"></option>
+          <option value="Mark of Shadow Elf"></option>
+        </optgroup>
+        <optgroup label="Halfling">
+          <option value="Lightfoot Halfling"></option>
+          <option value="Stout Halfling"></option>
+          <option value="Ghostwise Halfling"></option>
+          <option value="Mark of Healing Halfling"></option>
+          <option value="Mark of Hospitality Halfling"></option>
+        </optgroup>
+        <optgroup label="Human">
+          <option value="Human"></option>
+          <option value="Variant Human"></option>
+          <option value="Mark of Finding Human"></option>
+          <option value="Mark of Handling Human"></option>
+          <option value="Mark of Making Human"></option>
+          <option value="Mark of Passage Human"></option>
+          <option value="Mark of Sentinel Human"></option>
+        </optgroup>
+        <optgroup label="Dragonborn">
+          <option value="Chromatic Dragonborn"></option>
+          <option value="Metallic Dragonborn"></option>
+          <option value="Gem Dragonborn"></option>
+        </optgroup>
+        <optgroup label="Gnome">
+          <option value="Forest Gnome"></option>
+          <option value="Rock Gnome"></option>
+          <option value="Deep Gnome"></option>
+          <option value="Mark of Scribing Gnome"></option>
+        </optgroup>
+        <optgroup label="Half-Elf">
+          <option value="High Half-Elf"></option>
+          <option value="Wood Half-Elf"></option>
+          <option value="Drow Half-Elf"></option>
+          <option value="Aquatic Half-Elf"></option>
+          <option value="Mark of Detection Half-Elf"></option>
+          <option value="Mark of Storm Half-Elf"></option>
+        </optgroup>
+        <optgroup label="Half-Orc">
+          <option value="Half-Orc"></option>
+          <option value="Mark of Finding Half-Orc"></option>
+        </optgroup>
+        <optgroup label="Tiefling">
+          <option value="Variant Tiefling"></option>
+          <option value="Baalzebul Tiefling"></option>
+          <option value="Dispater Tiefling"></option>
+          <option value="Fierna Tiefling"></option>
+          <option value="Glasya Tiefling"></option>
+          <option value="Levistus Tiefling"></option>
+          <option value="Mammon Tiefling"></option>
+          <option value="Mephistopheles Tiefling"></option>
+          <option value="Zariel Tiefling"></option>
+        </optgroup>
+        <optgroup label="Lineages">
+          <option value="Dhampir"></option>
+          <option value="Hexblood"></option>
+          <option value="Reborn"></option>
+        </optgroup>
+        <optgroup label="Other">
+          <option value="Aarakocra"></option>
+          <option value="Aasimar"></option>
+          <option value="Autognome"></option>
+          <option value="Bugbear"></option>
+          <option value="Centaur"></option>
+          <option value="Custom Lineage"></option>
+          <option value="Fairy"></option>
+          <option value="Firbolg"></option>
+          <option value="Air Genasi"></option>
+          <option value="Earth Genasi"></option>
+          <option value="Fire Genasi"></option>
+          <option value="Water Genasi"></option>
+          <option value="Giff"></option>
+          <option value="Githyanki"></option>
+          <option value="Githzerai"></option>
+          <option value="Goblin"></option>
+          <option value="Goliath"></option>
+          <option value="Grung"></option>
+          <option value="Hadozee"></option>
+          <option value="Harengon"></option>
+          <option value="Hobgoblin"></option>
+          <option value="Kalashtar"></option>
+          <option value="Kender"></option>
+          <option value="Kenku"></option>
+          <option value="Kobold"></option>
+          <option value="Leonin"></option>
+          <option value="Lizardfolk"></option>
+          <option value="Locathah"></option>
+          <option value="Loxodon"></option>
+          <option value="Minotaur"></option>
+          <option value="Orc"></option>
+          <option value="Owlin"></option>
+          <option value="Plasmoid"></option>
+          <option value="Satyr"></option>
+          <option value="Shifter"></option>
+          <option value="Tabaxi"></option>
+          <option value="Thri-kreen"></option>
+          <option value="Tortle"></option>
+          <option value="Triton"></option>
+          <option value="Vedalken"></option>
+          <option value="Warforged"></option>
+          <option value="Yuan-ti"></option>
+        </optgroup>
+      </datalist>
+      <datalist id="rewarded-feat-options">
+        <option value="Lucky"></option>
+        <option value="Skilled"></option>
+        <option value="Magic Initiate"></option>
+      </datalist>
+      <datalist id="ruined-feat-options">
+        <option value="Skilled"></option>
+        <option value="Tough"></option>
+        <option value="Alert"></option>
+      </datalist>
+    </section>
+
+
+      <!-- This is the spellcasting section-->
+<!--      
+      <section class="spellcasting">
+        <label for="spellcasting">Spellcasting</label>
+        <div>
+          <label for="spells-lvl0">===Cantrips===</label><label>(At Will)</label>
+            <table class="spells-lvl0" id="spell-list">
+            <thead>
+              <tr>
+                <th style="font-size: 12px; color: #bbb ">
+                  Prep
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Spell Name
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Source
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Save/Atk
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Time
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Range
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Comp
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Duration
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Effect
+                </th>
+                <th style="font-size: 12px; color: #bbb ">
+                  Notes
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td class="prep">
+                    <input  type="checkbox" class="spellcheck" />
+                  </td>
+                  <td class="s-name">
+                    <input name="s-name1" type="text" />
+                  </td>
+                  <td class="source">
+                    <input name="source1" type="text" />
+                  </td>
+                  <td class="save">
+                    <input name="save1" type="text" />
+                  </td>
+                  <td class="time">
+                    <input name="time1" type="text" />
+                  </td>
+                  <td class="range">
+                    <input name="range1" type="text" />
+                  </td>
+                  <td class="comp">
+                    <input name="compe1" type="text" />
+                  </td>
+                  <td class="duration">
+                    <input name="duration1" type="text" />
+                  </td>
+                  <td class="effect">
+                    <input name="effect1" type="text" />
+                  </td>
+                  <td class="notes">
+                    <input name="notes1" type="text" />
+                  </td>
+                </tr>
+ 
+    </section>
+    -->
+
+</form>
