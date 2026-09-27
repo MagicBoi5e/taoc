@@ -137,12 +137,14 @@
         }
 
         /*
-            Popups live inside rows. Without lifting the hovered
-            row, later rows and the z-index:10 panels/buttons
-            paint on top of them.
+            Popups live inside rows. Later rows and the z-index:10
+            panels/buttons would otherwise paint on top of them.
+            .row has pointer-events:none, so :hover on the row is
+            unreliable — JS adds .popup-front while a popup is open.
         */
         .row:hover,
-        .row:focus-within {
+        .row:focus-within,
+        .row.popup-front {
             z-index: 20;
         }
 
@@ -2155,7 +2157,51 @@
         }
 
 
+        function liftPopupRow(node) {
+
+            const row =
+                node.closest(".row");
+
+            document
+                .querySelectorAll(".row.popup-front")
+                .forEach(openRow => {
+
+                    if (openRow !== row) {
+                        openRow.classList.remove("popup-front");
+                    }
+
+                });
+
+            if (row) {
+                row.classList.add("popup-front");
+            }
+
+        }
+
+
+        function unliftPopupRow(node) {
+
+            if (
+                node.matches(":hover") ||
+                document.activeElement === node ||
+                node.classList.contains("popup-held")
+            ) {
+                return;
+            }
+
+            const row =
+                node.closest(".row");
+
+            if (row) {
+                row.classList.remove("popup-front");
+            }
+
+        }
+
+
         function placePopup(node, popup) {
+
+            liftPopupRow(node);
 
             popup.classList.remove("below");
             popup.style.transform = "translateX(-50%)";
@@ -2260,6 +2306,12 @@
 
                     node.addEventListener("mouseenter", show);
                     node.addEventListener("focus", show);
+                    node.addEventListener("mouseleave", () => {
+                        unliftPopupRow(node);
+                    });
+                    node.addEventListener("blur", () => {
+                        unliftPopupRow(node);
+                    });
 
                     /*
                         Touch long-press: hold a finger on a node
@@ -2312,7 +2364,10 @@
                             /* Brief delay so the popup doesn't
                                vanish before the click is swallowed */
                             setTimeout(
-                                () => node.classList.remove("popup-held"),
+                                () => {
+                                    node.classList.remove("popup-held");
+                                    unliftPopupRow(node);
+                                },
                                 150
                             );
 
