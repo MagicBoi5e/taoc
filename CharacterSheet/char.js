@@ -54,6 +54,41 @@ $(function () {
 			loadInputs: true,
 		}
 	);
+
+	var talentStorageKey = "taoc_selected_talents";
+
+	function readSelectedTalents() {
+		try {
+			var savedState = JSON.parse(localStorage.getItem(talentStorageKey));
+			var talents = Array.isArray(savedState)
+				? savedState
+				: savedState && Array.isArray(savedState.talents)
+					? savedState.talents
+					: [];
+
+			return talents.filter(function (talent) {
+				return typeof talent === "string" && talent.trim() !== "";
+			}).slice(0, 21);
+		} catch (error) {
+			return [];
+		}
+	}
+
+	function syncTalentSlots() {
+		var talents = readSelectedTalents();
+
+		$("#page1 .talent-slot").each(function (index) {
+			$(this).val(talents[index] || "");
+		});
+	}
+
+	syncTalentSlots();
+	$(window).on("focus pageshow", syncTalentSlots);
+	window.addEventListener("storage", function (event) {
+		if (event.key === talentStorageKey) {
+			syncTalentSlots();
+		}
+	});
 	$("#reset-character").on("click", function () {
 		if (!window.confirm("Reset this character sheet and delete all saved character data?")) {
 			return;

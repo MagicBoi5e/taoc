@@ -2710,6 +2710,59 @@
         let expertMode = false;
 
         const selectedNodes = new Set();
+        const TALENT_STORAGE_KEY = "taoc_selected_talents";
+
+        function getTalentName(node) {
+            const heading = node.querySelector(".popup h1");
+            return heading ? heading.textContent.trim() : "";
+        }
+
+        function readSavedTalentState() {
+            try {
+                const saved = JSON.parse(
+                    localStorage.getItem(TALENT_STORAGE_KEY)
+                );
+                if (Array.isArray(saved)) {
+                    return { talents: saved };
+                }
+                return saved && Array.isArray(saved.talents)
+                    ? saved
+                    : { talents: [] };
+            } catch (error) {
+                return { talents: [] };
+            }
+        }
+
+        function saveTalentState() {
+            const talents = [...selectedNodes]
+                .map(getTalentName)
+                .filter(Boolean);
+            localStorage.setItem(
+                TALENT_STORAGE_KEY,
+                JSON.stringify({
+                    talents,
+                    level: levelInputEl ? levelInputEl.value : "1",
+                    extra: extraPointsInputEl
+                        ? extraPointsInputEl.value
+                        : "0"
+                })
+            );
+        }
+
+        function restoreSavedSelections() {
+            const saved = readSavedTalentState();
+            const names = new Set(saved.talents);
+
+            document.querySelectorAll(".node").forEach(node => {
+                if (
+                    names.has(getTalentName(node)) &&
+                    selectedNodes.size < totalPoints
+                ) {
+                    selectedNodes.add(node);
+                    node.classList.add("selected");
+                }
+            });
+        }
 
         let nodeGraph = null;
         let startNodes = null;
@@ -3012,6 +3065,7 @@
             );
 
             updateNodeAvailability();
+            saveTalentState();
 
         }
 
@@ -3178,9 +3232,17 @@
             extraPointsInputEl =
                 document.getElementById("extraPointsInput");
 
-            totalPoints =
-                parseInt(levelInputEl.value) +
-                parseInt(extraPointsInputEl.value);
+            const savedTalentState = readSavedTalentState();
+            if (savedTalentState.level !== undefined) {
+                levelInputEl.value = savedTalentState.level;
+            }
+            if (savedTalentState.extra !== undefined) {
+                extraPointsInputEl.value = savedTalentState.extra;
+            }
+
+            const restoredLevel = clampNumberInput(levelInputEl);
+            const restoredExtra = clampNumberInput(extraPointsInputEl);
+            totalPoints = restoredLevel + restoredExtra;
 
 
             levelInputEl.addEventListener("change", () => {
@@ -3264,9 +3326,6 @@
 
             initResetModal();
 
-
-            updatePointsDisplay();
-
         }
 
 
@@ -3315,6 +3374,8 @@
 
 
             initPointsPanel();
+            restoreSavedSelections();
+            updatePointsDisplay();
 
         }
 
