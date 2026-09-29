@@ -470,7 +470,10 @@ $(function () {
 		}
 
 		if ($("#page1 [name='armor-shield']").is(":checked")) {
-			armorClass += 2;
+			if (armorType != "unarmored-monk")
+				armorClass += 2;
+			else
+				armorClass += 0;
 		}
 
 		$("#page1 [name='ac']").val(armorClassValid ? armorClass : "");
@@ -538,7 +541,6 @@ $(function () {
 		"planar philosopher": { feat: "Scion of the Outer Planes" },
 		rewarded: { list: "rewarded-feat-options" },
 		ruined: { list: "ruined-feat-options" },
-		"random feat": { list: "feat-options" },
 	};
 	var backgroundFeatMode = "choice";
 	var backgroundFeatValue = "";
@@ -551,7 +553,7 @@ $(function () {
 		if (rule && rule.feat) {
 			backgroundFeatMode = "fixed";
 			backgroundFeatValue = rule.feat;
-			firstFeat.prop("readOnly", true).removeAttr("data-suggestion-list").attr("aria-readonly", "true");
+			firstFeat.prop("readOnly", true).removeAttr("data-suggestion-list").attr("aria-readonly", "true").attr("placeholder", "");
 			if (firstFeat.val() !== rule.feat) {
 				firstFeat.val(rule.feat).trigger("change");
 			}
@@ -563,7 +565,19 @@ $(function () {
 
 		backgroundFeatMode = "choice";
 		var listId = rule ? rule.list : "feat-options";
+
+		if (backgroundName === "custom") {
+			firstFeat.attr("placeholder", "Random Feat");
+		} else if (backgroundName === "rewarded") {
+			firstFeat.attr("placeholder", "Lucky / Skilled / Magic Initiate");
+		} else if (backgroundName === "ruined") {
+			firstFeat.attr("placeholder", "Skilled / Tough / Alert");
+		} else {
+			firstFeat.attr("placeholder", "Background Feat");
+		}
+
 		firstFeat.prop("readOnly", false).attr("data-suggestion-list", listId).removeAttr("aria-readonly");
+
 		var allowedFeats = $("#" + listId + " option").map(function () {
 			return $(this).val();
 		}).get();

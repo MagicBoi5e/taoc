@@ -29,6 +29,11 @@ body {
   text-decoration: none;
 }
 
+.right-link {
+    left: auto;
+    right: 12px;
+}
+
 .talent-tree-link:hover,
 .talent-tree-link:focus-visible {
   color: #fff;
@@ -119,7 +124,7 @@ form.charsheet label {
 }
 form.charsheet header {
   display: flex;
-  align-contents: stretch;
+  align-content: stretch;
   align-items: stretch;
 }
 form.charsheet header section.charname {
@@ -842,6 +847,9 @@ form.charsheet main section.magic-items .magic-item-groups {
   min-width: 0;
 }
 form.charsheet main section.magic-items .magic-item-category {
+  position: relative;
+  z-index: 10;
+
   min-width: 0;
   padding: 6px;
   border: 1px solid #bbb;
@@ -976,9 +984,6 @@ form.charsheet main section.features div textarea {
   background-image: url("assets/inspiration.jpg");
   background-repeat: no-repeat;
   background-size: 30px 25px;
-}
-.items {
-  
 }
 
 table.items input{

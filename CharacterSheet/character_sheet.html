@@ -17,6 +17,7 @@
 </head>
 <body>
 <a class="talent-tree-link" href="../index.html" aria-label="Back to Talent Tree" title="Back to Talent Tree">&larr; Talent Tree</a>
+<a class="talent-tree-link right-link" href="../library.html" aria-label="Back to Library" title="Back to Library">Library &rarr;</a>
 <form id="page1" class="charsheet">
   <header>
     <section class="charname">
@@ -810,8 +811,8 @@
             <div class="magic-item-category">
               <label>Infusions</label>
               <div class="magic-item-slots">
-                <input name="magic-infusion-1" aria-label="Infusion 1" />
-                <input name="magic-infusion-2" aria-label="Infusion 2" />
+                <input name="magic-infusion-1" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Infusion 1" />
+                <input name="magic-infusion-2" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Infusion 2" />
               </div>
             </div>
           </div>
@@ -867,7 +868,17 @@
           <option value="Weapon of Warning"></option>
           <option value="Weapon, +1"></option>
           <option value="Wind Fan"></option>
-          <option value="Class Specific Item"></option>
+          <optgroup label="Class Specific Item">
+            <option value="All-Purpose Tool"></option>
+            <option value="Amulet of the Devout"></option>
+            <option value="Arcane Grimoire"></option>
+            <option value="Bloodwell Vial"></option>
+            <option value="Dragonhide Belt"></option>
+            <option value="Guardian Emblem"></option>
+            <option value="Moon Sickle"></option>
+            <option value="Rhythm-Maker’s Drum"></option>
+            <option value="Rod of the Pact Keeper"></option>
+          </optgroup>
         </datalist>
         <datalist id="magic-rare-options">
           <option value="Ammunition, +2"></option>
@@ -941,7 +952,17 @@
           <option value="Wand of Paralysis"></option>
           <option value="Wand of Wonder"></option>
           <option value="Weapon, +2"></option>
-          <option value="Class Specific Item"></option>
+          <optgroup label="Class Specific Item">
+            <option value="All-Purpose Tool"></option>
+            <option value="Amulet of the Devout"></option>
+            <option value="Arcane Grimoire"></option>
+            <option value="Bloodwell Vial"></option>
+            <option value="Dragonhide Belt"></option>
+            <option value="Guardian Emblem"></option>
+            <option value="Moon Sickle"></option>
+            <option value="Rhythm-Maker’s Drum"></option>
+            <option value="Rod of the Pact Keeper"></option>
+          </optgroup>
         </datalist>
         <datalist id="magic-very-rare-options">
           <option value="Ammunition, +3"></option>
@@ -985,7 +1006,17 @@
           <option value="Tome of Leadership and Influence"></option>
           <option value="Tome of Understanding"></option>
           <option value="Weapon, +3"></option>
-          <option value="Class Specific Item"></option>
+          <optgroup label="Class Specific Item">
+            <option value="All-Purpose Tool"></option>
+            <option value="Amulet of the Devout"></option>
+            <option value="Arcane Grimoire"></option>
+            <option value="Bloodwell Vial"></option>
+            <option value="Dragonhide Belt"></option>
+            <option value="Guardian Emblem"></option>
+            <option value="Moon Sickle"></option>
+            <option value="Rhythm-Maker’s Drum"></option>
+            <option value="Rod of the Pact Keeper"></option>
+          </optgroup>
         </datalist>
         <datalist id="magic-legendary-options">
           <option value="Armor of Invulnerability"></option>
@@ -1007,7 +1038,7 @@
           <option value="Lost Crown of Besilmer"></option>
           <option value="Moonblade"></option>
           <option value="Ring of Djinni Summoning"></option>
-          <option value="Ring of Elemental Command (Bonus fight vs. Elemental)"></option>
+          <option value="Ring of Elemental Command"></option>
           <option value="Ring of Spell Turning"></option>
           <option value="Ring of Three Wishes"></option>
           <option value="Robe of the Archmagi"></option>
@@ -1034,6 +1065,82 @@
           <option value="Teeth of Dahlver-Nar"></option>
           <option value="Wand of Orcus"></option>
         </datalist>
+        <datalist id="magic-infusion-options">
+          <optgroup>
+            <option value="Arcane Propulsion Armor"></option>
+            <option value="Armor of Magical Strength"></option>
+            <option value="Boots of the Winding Path"></option>
+            <option value="Enhanced Arcane Focus"></option>
+            <option value="Enhanced Defense"></option>
+            <option value="Enhanced Weapon"></option>
+            <option value="Helm of Awareness"></option>
+            <option value="Homunculus Servant"></option>
+            <option value="Mind Sharpener"></option>
+            <option value="Radiant Weapon"></option>
+            <option value="Repeating Shot"></option>
+            <option value="Repulsion Shield"></option>
+            <option value="Resistant Armor"></option>
+            <option value="Returning Weapon"></option>
+            <option value="Spell-Refueling Ring"></option>
+          </optgroup>
+          <optgroup label="Replicate Magic Item (2nd-level/3rd-level)">
+            <option value="Alchemy Jug"></option>
+            <option value="Bag of Holding"></option>
+            <option value="Cap of Water Breathing"></option>
+            <option value="Goggles of Night"></option>
+            <option value="Rope of Climbing"></option>
+            <option value="Sending Stones"></option>
+            <option value="Wand of Magic Detection"></option>
+            <option value="Wand of Secrets"></option>
+          </optgroup>
+          <optgroup label="Replicate Magic Item (6th-level/9th-level)">
+            <option value="Boots of Elvenkind"></option>
+            <option value="Cloak of Elvenkind"></option>
+            <option value="Cloak of the Manta Ray"></option>
+            <option value="Eyes of Charming"></option>
+            <option value="Gloves of Thievery"></option>
+            <option value="Lantern of Revealing"></option>
+            <option value="Pipes of Haunting"></option>
+            <option value="Ring of Water Walking"></option>
+          </optgroup>
+          <optgroup label="Replicate Magic Item (10th-level/13th-level)">
+            <option value="Boots of Striding and Springing"></option>
+            <option value="Boots of the Winterlands"></option>
+            <option value="Bracers of Archery"></option>
+            <option value="Brooch of Shielding"></option>
+            <option value="Cloak of Protection"></option>
+            <option value="Eyes of the Eagle"></option>
+            <option value="Gauntlets of Ogre Power"></option>
+            <option value="Gloves of Missile Snaring"></option>
+            <option value="Gloves of Swimming and Climbing"></option>
+            <option value="Hat of Disguise"></option>
+            <option value="Headband of Intellect"></option>
+            <option value="Helm of Telepathy"></option>
+            <option value="Medallion of Thoughts"></option>
+            <option value="Necklace of Adaptation"></option>
+            <option value="Periapt of Wound Closure"></option>
+            <option value="Pipes of the Sewers"></option>
+            <option value="Quiver of Ehlonna"></option>
+            <option value="Ring of Jumping"></option>
+            <option value="Ring of Mind Shielding"></option>
+            <option value="Slippers of Spider Climbing"></option>
+            <option value="Winged Boots"></option>
+          </optgroup>
+          <optgroup label="Replicate Magic Item (14th-level/17th-level)">
+            <option value="Amulet of health"></option>
+            <option value="Belt of hill giant strength"></option>
+            <option value="Boots of levitation"></option>
+            <option value="Boots of speed"></option>
+            <option value="Bracers of defense"></option>
+            <option value="Cloak of the bat"></option>
+            <option value="Dimensional shackle"></option>
+            <option value="Gem of seeing"></option>
+            <option value="Horn of blastin"></option>
+            <option value="Ring of free action"></option>
+            <option value="Ring of protection"></option>
+            <option value="Ring of the ram"></option>
+          </optgroup>
+        </datalist>
       </section>
            
     </section>
@@ -1050,7 +1157,7 @@
         <div class="feat-boon-category feats-category">
           <label>Feats</label>
           <div class="feat-boon-slots feat-slots">
-            <input name="feat-slot-01" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 1" />
+            <input name="feat-slot-01" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 1" placeholder="Background Feat" />
             <input name="feat-slot-02" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 2" />
             <input name="feat-slot-03" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 3" />
             <input name="feat-slot-04" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 4" />
@@ -1186,7 +1293,6 @@
         <option value="Planar Philosopher"></option>
         <option value="Rewarded"></option>
         <option value="Ruined"></option>
-        <option value="Random Feat"></option>
       </datalist>
       <datalist id="alignment-options">
         <option value="Lawful Good"></option>
