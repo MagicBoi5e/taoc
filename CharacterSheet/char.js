@@ -373,6 +373,37 @@ $(function () {
 		});
 	}
 
+	function updateClassSavingThrows() {
+		var firstClass = "";
+
+		$("#page1 .class-pair").each(function () {
+			var className = $(this).find(".class-name-input").val().trim();
+
+			if (className !== "" && firstClass === "") {
+				firstClass = className;
+			}
+		});
+
+		// Remove all existing class-based saving throw proficiencies
+		$("#page1 .saves input[type='checkbox']")
+			.prop("checked", false);
+
+		var rules = classRules[firstClass];
+
+		if (!rules || !rules.savingThrows) {
+			updateSavingThrows();
+			return;
+		}
+
+		rules.savingThrows.forEach(function (ability) {
+			$("#page1 .saves input[name='" + ability + "-save-prof']")
+				.prop("checked", true);
+		});
+
+		updateSavingThrows();
+	}
+
+
 	function updateSkills() {
 		var abilityNames = {
 			str: "Strength",
@@ -525,6 +556,8 @@ $(function () {
 
 	var classRules = {
 		"Barbarian": {
+			savingThrows: ["Strength", "Constitution"],
+
 			features: {
 				1: ["Rage", "Unarmored Defense"],
 				2: ["Reckless Attack", "Danger Sense"],
@@ -568,6 +601,8 @@ $(function () {
 		},
 
 		"Bard": {
+			savingThrows: ["Dexterity", "Charisma"],
+
 			features: {
 				1: ["Spellcasting", "Additional Bard Spells", "Bardic Inspiration"],
 				2: ["Jack of All Trades", "Magical Inspiration", "Song of Rest (d6)"],
@@ -616,6 +651,8 @@ $(function () {
 		},
 
 		"Cleric": {
+			savingThrows: ["Wisdom", "Charisma"],
+
 			features: {
 				1: ["Spellcasting", "Additional Cleric Spells"],
 				2: ["Channel Divinity (1/rest)", "Harness Divine Power"],
@@ -697,16 +734,27 @@ $(function () {
 		},
 
 		"Druid": {
+			savingThrows: ["Intelligence", "Wisdom"],
+
 			features: {
 				1: ["Spellcasting", "Additional Druid Spells", "Druidic"],
 				2: ["Wild Companion", "Wild Shape"],
-				4: ["Ability Score Improvement", "Cantrip Versatility", "Wild Shape Improvement"],
+				4: ["Ability Score Improvement", "Cantrip Versatility",
+					{
+						name: "Wild Shape Improvement (swim speed)",
+						replaces: "Wild Shape"
+					}
+				],
 				8: [
 					{
 						name: "Ability Score Improvement (2)",
 						replaces: "Ability Score Improvement"
 					},
-					"Wild Shape Improvement"],
+					{
+						name: "Wild Shape Improvement (flight speed)",
+						replaces: "Wild Shape (swim speed)"
+					}
+				],
 				10: ["Druid Circle feature"],
 				12: [
 					{
@@ -732,6 +780,8 @@ $(function () {
 		},
 
 		"Fighter": {
+			savingThrows: ["Strength", "Constitution"],
+
 			features: {
 				1: ["Fighting Style", "Fighting Style Options", "Second Wind"],
 				2: ["Action Surge (one use)"],
@@ -807,6 +857,8 @@ $(function () {
 		},
 
 		"Monk": {
+			savingThrows: ["Strength", "Dexterity"],
+
 			features: {
 				1: ["Unarmored Defense", "Martial Arts"],
 				2: ["Dedicated Weapon", "Ki", "Unarmored Movement"],
@@ -850,6 +902,8 @@ $(function () {
 		},
 
 		"Paladin": {
+			savingThrows: ["Wisdom", "Charisma"],
+
 			features: {
 				1: ["Divine Sense", "Lay on Hands"],
 				2: ["Spellcasting", "Additional Paladin Spells", "Divine Smite", "Fighting Style"],
@@ -889,20 +943,22 @@ $(function () {
 		},
 
 		"Ranger": {
+			savingThrows: ["Strength", "Dexterity"],
+
 			features: {
-				1: ["Favored Foe, Deft Explorer"],
+				1: ["Favored Foe (1d4), Deft Explorer (Canny)"],
 				2: ["Spellcasting", "Additional Ranger Spells", "Fighting Style"],
 				3: ["Primeval Awareness"],
 				4: ["Ability Score Improvement", "Martial Versatility"],
 				5: ["Extra Attack"],
 				6: [
 					{
-						name: "Favored Foe Improvement (2)",
-						replaces: "Favored Foe"
+						name: "Favored Foe Improvement (1d6)",
+						replaces: "Favored Foe (1d4)"
 					},
 					{
-						name: "Deft Explorer Improvement (3)",
-						replaces: "Deft Explorer Improvement (2)"
+						name: "Deft Explorer Improvement (Canny, Roving)",
+						replaces: "Deft Explorer Improvement (Canny)"
 					}
 				],
 				8: [
@@ -913,8 +969,8 @@ $(function () {
 					"Land’s Stride"],
 				10: [
 					{
-						name: "Deft Explorer Improvement (3)",
-						replaces: "Deft Explorer Improvement (2)"
+						name: "Deft Explorer Improvement (Canny, Roving, Tireless)",
+						replaces: "Deft Explorer Improvement (Canny, Roving)"
 					},
 					"Nature’s Veil"],
 				12: [
@@ -925,8 +981,8 @@ $(function () {
 				],
 				14: [
 					{
-						name: "Favored Foe Improvement (3)",
-						replaces: "Favored Foe Improvement (2)"
+						name: "Favored Foe Improvement (1d8)",
+						replaces: "Favored Foe Improvement (1d6)"
 					},
 					"Vanish"],
 				16: [
@@ -947,32 +1003,226 @@ $(function () {
 		},
 
 		"Rogue": {
+			savingThrows: ["Dexterity", "Intelligence"],
+
 			features: {
-				1: [""],
+				1: ["Expertise", "Sneak Attack", "Thieves' Cant"],
+				2: ["Cunning Action"],
+				3: ["Steady Aim"],
+				4: ["Ability Score Improvement"],
+				5: ["Uncanny Dodge"],
+				6: [
+					{
+						name: "Expertise (2)",
+						replaces: "Expertise"
+					}
+				],
+				7: ["Evasion"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				10: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				11: ["Reliable Talent"],
+				12: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				14: ["Blindsense"],
+				15: ["Slippery Mind"],
+				16: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				18: ["Elusive"],
+				19: [
+					{
+						name: "Ability Score Improvement (6)",
+						replaces: "Ability Score Improvement (5)"
+					}
+				],
+				20: ["Stroke of Luck"]
 			}
 		},
 
 		"Sorcerer": {
+			savingThrows: ["Constitution", "Charisma"],
+
 			features: {
-				1: [""],
+				1: ["Spellcasting"],
+				2: ["Font of Magic"],
+				3: ["Metamagic (2)"],
+				4: ["Ability Score Improvement"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				10: [
+					{
+						name: "Metamagic (3)",
+						replaces: "Metamagic (2)"
+					}
+				],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				17: [
+					{
+						name: "Metamagic (4)",
+						replaces: "Metamagic (3)"
+					}
+				],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Sorcerous Restoration"],
 			}
 		},
 
 		"Warlock": {
+			savingThrows: ["Wisdom", "Charisma"],
+
 			features: {
-				1: [""],
+				1: ["Pact Magic"],
+				2: ["Eldritch Invocations"],
+				3: ["Pact Boon"],
+				4: ["Ability Score Improvement"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				11: ["Mystic Arcanum (6th level)"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				13: ["Mystic Arcanum (7th level)"],
+				15: ["Mystic Arcanum (8th level)"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				17: ["Mystic Arcanum (9th level)"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Eldritch Master"],
 			}
 		},
 
 		"Wizard": {
+			savingThrows: ["Intelligence", "Wisdom"],
+
 			features: {
-				1: [""],
+				1: ["Spellcasting", "Arcane Recovery"],
+				4: ["Ability Score Improvement"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				18: ["Spell Mastery"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Signature Spells"],
 			}
 		},
 
 		"Artificer": {
+			savingThrows: ["Constitution", "Intelligence"],
+
 			features: {
-				1: [""],
+				1: ["Spellcasting", "Magical Tinkering"],
+				2: ["Infuse Item"],
+				3: ["The Right Tool for the Job"],
+				4: ["Ability Score Improvement"],
+				6: ["Tool Expertise"],
+				7: ["Flash of Genius"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				10: ["Magic Item Adept"],
+				11: ["Spell-Storing Item"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				14: ["Magic Item Savant (5)"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				18: [
+					{
+						name: "Magic Item Master (6)",
+						replaces: "Magic Item Savant"
+					}
+				],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Soul of Artifice"],
 			}
 		},
 	};
@@ -1535,6 +1785,7 @@ $(function () {
 	$("#page1 .skills").on("change", "input[type='checkbox']", updateSkills);
 	$("#page1 .class-level-pairs").on("input change", ".class-name-input", function () {
 		updateSelectedClass(this);
+		updateClassSavingThrows();
 		updateFeatures();
 	});
 	$("#page1 .class-level-pairs").on("input change", ".class-level-input", function () {
