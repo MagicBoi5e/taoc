@@ -99,6 +99,9 @@
           <label for="race">Race</label><input id="race" name="race" data-suggestion-list="race-options" autocomplete="off" placeholder="Human" />
         </li>
         <li>
+          <label for="charSize">Size</label><input id="charSize" name="charSize" data-suggestion-list="charSize-options" autocomplete="off" placeholder="Medium" />
+        </li>
+        <li>
           <label for="alignment">Alignment</label><input id="alignment" name="alignment" data-suggestion-list="alignment-options" autocomplete="off" placeholder="Neutral" />
         </li>
         <li>
@@ -1147,7 +1150,8 @@
     <section>
       <section class="features">
         <div>
-          <label for="features">Features & Traits</label><textarea name="features"></textarea>
+          <label for="features">Features & Traits</label>
+          <textarea name="features"></textarea>
         </div>
       </section>
     </section>  
@@ -1178,6 +1182,9 @@
             <input name="feat-slot-19" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 19" />
             <input name="feat-slot-20" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 20" />
             <input name="feat-slot-21" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 21" />
+            <input name="feat-slot-22" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 22" />
+            <input name="feat-slot-23" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 23" />
+            <input name="feat-slot-24" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 24" />          
           </div>
         </div>
         <div class="feat-boon-category boons-category">
@@ -1293,6 +1300,11 @@
         <option value="Planar Philosopher"></option>
         <option value="Rewarded"></option>
         <option value="Ruined"></option>
+      </datalist>
+      <datalist id="charSize-options">
+        <option value="Small"></option>
+        <option value="Medium"></option>
+        <option value="Large"></option>
       </datalist>
       <datalist id="alignment-options">
         <option value="Lawful Good"></option>
@@ -1475,85 +1487,6 @@
       </div>
       <label id="talents-title" class="talents-title">TALENTS</label>
     </section>
-
-
-      <!-- This is the spellcasting section-->
-<!--      
-      <section class="spellcasting">
-        <label for="spellcasting">Spellcasting</label>
-        <div>
-          <label for="spells-lvl0">===Cantrips===</label><label>(At Will)</label>
-            <table class="spells-lvl0" id="spell-list">
-            <thead>
-              <tr>
-                <th style="font-size: 12px; color: #bbb ">
-                  Prep
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Spell Name
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Source
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Save/Atk
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Time
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Range
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Comp
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Duration
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Effect
-                </th>
-                <th style="font-size: 12px; color: #bbb ">
-                  Notes
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                  <td class="prep">
-                    <input  type="checkbox" class="spellcheck" />
-                  </td>
-                  <td class="s-name">
-                    <input name="s-name1" type="text" />
-                  </td>
-                  <td class="source">
-                    <input name="source1" type="text" />
-                  </td>
-                  <td class="save">
-                    <input name="save1" type="text" />
-                  </td>
-                  <td class="time">
-                    <input name="time1" type="text" />
-                  </td>
-                  <td class="range">
-                    <input name="range1" type="text" />
-                  </td>
-                  <td class="comp">
-                    <input name="compe1" type="text" />
-                  </td>
-                  <td class="duration">
-                    <input name="duration1" type="text" />
-                  </td>
-                  <td class="effect">
-                    <input name="effect1" type="text" />
-                  </td>
-                  <td class="notes">
-                    <input name="notes1" type="text" />
-                  </td>
-                </tr>
- 
-    </section>
-    -->
 
 </form>
 </body>

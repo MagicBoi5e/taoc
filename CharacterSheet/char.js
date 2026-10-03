@@ -523,6 +523,576 @@ $(function () {
 		});
 	}
 
+	var classRules = {
+		"Barbarian": {
+			features: {
+				1: ["Rage", "Unarmored Defense"],
+				2: ["Reckless Attack", "Danger Sense"],
+				3: ["Primal Knowledge"],
+				4: ["Ability Score Improvement"],
+				5: ["Extra Attack", "Fast Movement"],
+				7: ["Feral Instinct", "Instinctive Pounce"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				9: ["Brutal Critical (1 die)"],
+				10: ["Primal Knowledge"],
+				11: ["Relentless Rage"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				13: ["Brutal Critical (2 dice)"],
+				15: ["Persistent Rage"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				17: ["Brutal Critical (3 dice)"],
+				18: ["Indomitable Might"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Primal Champion"]
+			}
+		},
+
+		"Bard": {
+			features: {
+				1: ["Spellcasting", "Additional Bard Spells", "Bardic Inspiration"],
+				2: ["Jack of All Trades", "Magical Inspiration", "Song of Rest (d6)"],
+				3: ["Expertise"],
+				4: ["Ability Score Improvement", "Bardic Versatility"],
+				5: ["Bardic Inspiration (d8)", "Font of Inspiration"],
+				6: ["Countercharm"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				9: ["Song of Rest (d8)"],
+				10: ["Bardic Inspiration (d10)",
+					{
+						name: "Expertise (2)",
+						replaces: "Expertise"
+					},
+					"Magical Secrets"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				13: ["Song of Rest (d10)"],
+				14: ["Magical Secrets"],
+				15: ["Bardic Inspiration (d12)"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				17: ["Song of Rest (d12)"],
+				18: ["Magical Secrets"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Superior Inspiration"]
+			}
+		},
+
+		"Cleric": {
+			features: {
+				1: ["Spellcasting", "Additional Cleric Spells"],
+				2: ["Channel Divinity (1/rest)", "Harness Divine Power"],
+				4: ["Ability Score Improvement", "Cantrip Versatility"],
+				5: ["Destroy Undead (CR 1/2)"],
+				6: [
+					{
+						name: "Channel Divinity (2/rest)",
+						replaces: "Channel Divinity (1/rest)"
+					}
+				],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					},
+					{
+						name: "Divine Strike",
+						replacesChoice: [
+							"Blessed Strikes",
+							"Potent Spellcasting"
+						]
+					},
+					{
+						name: "Destroy Undead (CR 1)",
+						replaces: "Destroy Undead (CR 1/2)"
+					}
+				],
+				10: ["Divine Intervention"],
+				11: [
+					{
+						name: "Destroy Undead (CR 2)",
+						replaces: "Destroy Undead (CR 1)"
+					}
+				],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				14: [
+					{
+						name: "Destroy Undead (CR 3)",
+						replaces: "Destroy Undead (CR 2)"
+					}
+				],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				17: [
+					{
+						name: "Destroy Undead (CR 4)",
+						replaces: "Destroy Undead (CR 3)"
+					}
+				],
+				18: [
+					{
+						name: "Channel Divinity (3/rest)",
+						replaces: "Channel Divinity (2/rest)"
+					}
+				],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: [
+					{
+						name: "Divine Intervention Improvement",
+						replaces: "Divine Intervention"
+					}
+				]
+			}
+		},
+
+		"Druid": {
+			features: {
+				1: ["Spellcasting", "Additional Druid Spells", "Druidic"],
+				2: ["Wild Companion", "Wild Shape"],
+				4: ["Ability Score Improvement", "Cantrip Versatility", "Wild Shape Improvement"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					},
+					"Wild Shape Improvement"],
+				10: ["Druid Circle feature"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				18: ["Timeless Body", "Beast Spells"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Archdruid"]
+			}
+		},
+
+		"Fighter": {
+			features: {
+				1: ["Fighting Style", "Fighting Style Options", "Second Wind"],
+				2: ["Action Surge (one use)"],
+				4: ["Ability Score Improvement", "Martial Versatility"],
+				5: ["Extra Attack"],
+				6: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				8: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				9: ["Indomitable (one use)"],
+				11: [
+					{
+						name: "Extra Attack (2)",
+						replaces: "Extra Attack"
+					}
+				],
+				12: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				13: [
+					{
+						name: "Indomitable (two uses)",
+						replaces: "Indomitable (one use)"
+					}
+				],
+				14: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				16: [
+					{
+						name: "Ability Score Improvement (6)",
+						replaces: "Ability Score Improvement (5)"
+					}
+				],
+				17: [
+					{
+						name: "Action Surge (two uses)",
+						replaces: "Action Surge (one use)"
+					},
+					{
+						name: "Indomitable (three uses)",
+						replaces: "Indomitable (two uses)"
+					}
+				],
+				19: [
+					{
+						name: "Ability Score Improvement (7)",
+						replaces: "Ability Score Improvement (6)"
+					}
+				],
+				20: [
+					{
+						name: "Extra Attack (3)",
+						replaces: "Extra Attack (2)"
+					}
+				]
+
+			}
+		},
+
+		"Monk": {
+			features: {
+				1: ["Unarmored Defense", "Martial Arts"],
+				2: ["Dedicated Weapon", "Ki", "Unarmored Movement"],
+				3: ["Deflect Missiles", "Ki-Fueled Attack"],
+				4: ["Ability Score Improvement", "Quickened Healing", "Slow Fall"],
+				5: ["Stunning Strike", "Focused Aim", "Extra Attack"],
+				6: ["Ki-Empowered Strikes"],
+				7: ["Evasion", "Stillness of Mind"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				9: ["Unarmored Movement Improvement"],
+				10: ["Purity of Body"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				13: ["Tongue of the Sun and Moon"],
+				14: ["Diamond Soul"],
+				15: ["Timeless Body"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				18: ["Empty Body"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Perfect Self"]
+			}
+		},
+
+		"Paladin": {
+			features: {
+				1: ["Divine Sense", "Lay on Hands"],
+				2: ["Spellcasting", "Additional Paladin Spells", "Divine Smite", "Fighting Style"],
+				3: ["Divine Health", "Harness Divine Power"],
+				4: ["Ability Score Improvement", "Martial Versatility"],
+				5: ["Extra Attack"],
+				6: ["Aura of Protection"],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					}
+				],
+				10: ["Aura of Courage"],
+				11: ["Improved Divine Smite"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				14: ["Cleansing Touch"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Aura Improvements"]
+			}
+		},
+
+		"Ranger": {
+			features: {
+				1: ["Favored Foe, Deft Explorer"],
+				2: ["Spellcasting", "Additional Ranger Spells", "Fighting Style"],
+				3: ["Primeval Awareness"],
+				4: ["Ability Score Improvement", "Martial Versatility"],
+				5: ["Extra Attack"],
+				6: [
+					{
+						name: "Favored Foe Improvement (2)",
+						replaces: "Favored Foe"
+					},
+					{
+						name: "Deft Explorer Improvement (3)",
+						replaces: "Deft Explorer Improvement (2)"
+					}
+				],
+				8: [
+					{
+						name: "Ability Score Improvement (2)",
+						replaces: "Ability Score Improvement"
+					},
+					"Land’s Stride"],
+				10: [
+					{
+						name: "Deft Explorer Improvement (3)",
+						replaces: "Deft Explorer Improvement (2)"
+					},
+					"Nature’s Veil"],
+				12: [
+					{
+						name: "Ability Score Improvement (3)",
+						replaces: "Ability Score Improvement (2)"
+					}
+				],
+				14: [
+					{
+						name: "Favored Foe Improvement (3)",
+						replaces: "Favored Foe Improvement (2)"
+					},
+					"Vanish"],
+				16: [
+					{
+						name: "Ability Score Improvement (4)",
+						replaces: "Ability Score Improvement (3)"
+					}
+				],
+				18: ["Feral Senses"],
+				19: [
+					{
+						name: "Ability Score Improvement (5)",
+						replaces: "Ability Score Improvement (4)"
+					}
+				],
+				20: ["Foe Slayer"]
+			}
+		},
+
+		"Rogue": {
+			features: {
+				1: [""],
+			}
+		},
+
+		"Sorcerer": {
+			features: {
+				1: [""],
+			}
+		},
+
+		"Warlock": {
+			features: {
+				1: [""],
+			}
+		},
+
+		"Wizard": {
+			features: {
+				1: [""],
+			}
+		},
+
+		"Artificer": {
+			features: {
+				1: [""],
+			}
+		},
+	};
+
+	function getFeaturesUpToLevel(featuresByLevel, level) {
+		var features = [];
+
+		Object.keys(featuresByLevel)
+			.sort(function (a, b) {
+				return Number(a) - Number(b);
+			})
+			.forEach(function (featureLevel) {
+				if (level >= Number(featureLevel)) {
+					features = features.concat(featuresByLevel[featureLevel]);
+				}
+			});
+
+		return features;
+	}
+
+	function removeReplacedFeatures(features) {
+		var replacedFeatures = [];
+
+		features.forEach(function (feature) {
+			if (typeof feature === "object" && feature.replaces) {
+				replacedFeatures.push(feature.replaces);
+			}
+		});
+
+		return features.filter(function (feature) {
+			var featureName = typeof feature === "string"
+				? feature
+				: feature.name;
+
+			return replacedFeatures.indexOf(featureName) === -1;
+		});
+	}
+
+	function updateFeatures() {
+		var raceFeatures = [];
+		var classFeatures = {};
+		var subclassFeatures = {};
+
+		$("#page1 .class-pair").each(function () {
+			var className = $(this).find(".class-name-input").val().trim();
+			var levelValue = $(this).find(".class-level-input").val().trim();
+			var level = Number(levelValue);
+
+			if (!className || !Number.isInteger(level) || level < 1 || level > 20) {
+				return;
+			}
+
+			var classRule = classRules[className];
+
+			if (!classRule) {
+				return;
+			}
+
+			// Class features
+			classFeatures[className] = getFeaturesUpToLevel(
+				classRule.features,
+				level
+			);
+
+			// Subclass features
+			// We will connect this to the subclass field later.
+		});
+
+		// Apply feature replacements
+		Object.keys(classFeatures).forEach(function (className) {
+			classFeatures[className] = removeReplacedFeatures(
+				classFeatures[className]
+			);
+		});
+
+		var output = [];
+
+		output.push("Race Features:");
+		output.push("");
+
+		raceFeatures.forEach(function (feature) {
+			output.push(feature);
+		});
+
+		output.push("");
+		output.push("Class Features:");
+		output.push("");
+
+		Object.keys(classFeatures).forEach(function (className) {
+			output.push(className + ":");
+
+			classFeatures[className].forEach(function (feature) {
+				if (typeof feature === "object") {
+					output.push(feature.name);
+				} else {
+					output.push(feature);
+				}
+			});
+
+			output.push("");
+		});
+
+		output.push("Subclass Features:");
+		output.push("");
+
+		Object.keys(subclassFeatures).forEach(function (subclassName) {
+			subclassFeatures[subclassName].forEach(function (feature) {
+				if (typeof feature === "object") {
+					output.push(feature.name);
+				} else {
+					output.push(feature);
+				}
+			});
+
+			output.push("");
+		});
+
+		$("#page1 [name='features']").val(output.join("\n").trim());
+	}
+
 	var backgroundFeatRules = {
 		"astral drifter": { feat: "Magic Initiate (Cleric)" },
 		"giant foundling": { feat: "Strike of the Giants" },
@@ -589,6 +1159,174 @@ $(function () {
 			firstFeat.val(nextFeat).trigger("change");
 		}
 	}
+
+
+
+	// Lineage feat allocation
+	var lineageRace = "";
+	var formerRace = "";
+
+	var racialFeatValue = [];
+	var racialFeatCount = 0;
+	var smallSizeFeatSlot = null;
+
+	var lineageRaces = [
+		"dhampir",
+		"reborn",
+		"hexblood"
+	];
+
+	var racialFeatRules = {
+		"Dwarf": ["Dwarven Fortitude", "Squat Nimbleness"],
+		"Elf": ["Elven Accuracy", "Revenant Blade"],
+		"Halfling": ["Bountiful Luck", "Second Chance"],
+		"Human": ["Prodigy"],
+		"Dragonborn": ["Dragon Fear", "Dragon Hide"],
+		"Gnome": ["Fade Away"],
+		"Half-Elf": ["Prodigy", "Elven Accuracy"],
+		"Half-Orc": ["Prodigy", "Orcish Fury"],
+		"Tiefling": ["Flames of Phlegethos", "Infernal Constitution"],
+		// Add the rest of your races here
+	};
+
+	var smallSizeFeat = "Squat Nimbleness";
+
+	function updateRace() {
+		var raceInput = $("#page1 [name='race']");
+		var selectedRace = raceInput.val().trim();
+
+		var selectedRaceLower = selectedRace.toLowerCase();
+
+		// User selected a lineage
+		if (lineageRaces.includes(selectedRaceLower)) {
+			lineageRace = selectedRaceLower;
+			formerRace = "";
+
+			raceInput
+				.val("")
+				.attr("placeholder", "Pick former race");
+
+			updateRacialFeat();
+			return;
+		}
+
+		// If the input already contains "Dhampir (Hill Dwarf)",
+		// extract just "Hill Dwarf" as the former race.
+		if (lineageRace && selectedRaceLower.startsWith(lineageRace + " (") && selectedRace.endsWith(")")) {
+			formerRace = selectedRace
+				.substring(lineageRace.length + 2, selectedRace.length - 1)
+				.trim()
+				.toLowerCase();
+		} else if (lineageRace && selectedRace) {
+			formerRace = selectedRaceLower;
+		}
+
+		// User selected a former race for a lineage
+		if (lineageRace && formerRace) {
+			var lineageName =
+				lineageRace.charAt(0).toUpperCase() + lineageRace.slice(1);
+
+			var formerName = formerRace
+				.split(" ")
+				.map(function (word) {
+					return word.charAt(0).toUpperCase() + word.slice(1);
+				})
+				.join(" ");
+
+			raceInput
+				.val(lineageName + " (" + formerName + ")")
+				.attr("placeholder", "")
+				.attr("data-lineage", lineageRace)
+				.attr("data-former-race", formerRace);
+
+			updateRacialFeat();
+			return;
+		}
+
+		// Normal race
+		lineageRace = "";
+		formerRace = "";
+
+		raceInput
+			.attr("placeholder", "Human")
+			.removeAttr("data-lineage")
+			.removeAttr("data-former-race");
+
+		updateRacialFeat();
+	}
+
+
+	function updateRacialFeat() {
+		var raceName = $("#page1 [name='race']").val().trim();
+
+		// Lineages inherit racial feats from their former race
+		if (lineageRace && formerRace) {
+			raceName = formerRace;
+		}
+
+		// Find racial feat rule without depending on capitalization
+		var racialRuleName = Object.keys(racialFeatRules).find(function (key) {
+			return key.toLowerCase() === raceName.toLowerCase();
+		});
+
+		var newRacialFeats = racialRuleName
+			? racialFeatRules[racialRuleName]
+			: [];
+
+		// Remove old racial feats
+		for (var i = 0; i < racialFeatCount; i++) {
+			var slotNumber = i + 2;
+			var slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
+			var slot = $("#page1 [name='" + slotName + "']");
+
+			slot.val("").trigger("change");
+		}
+
+		// Remove old Squat Nimbleness
+		if (smallSizeFeatSlot !== null) {
+			var oldSmallSlotName =
+				"feat-slot-" + String(smallSizeFeatSlot).padStart(2, "0");
+
+			$("#page1 [name='" + oldSmallSlotName + "']")
+				.val("")
+				.trigger("change");
+
+			smallSizeFeatSlot = null;
+		}
+
+		racialFeatValue = newRacialFeats;
+		racialFeatCount = newRacialFeats.length;
+
+		// Add racial feats starting at slot 2
+		for (var i = 0; i < racialFeatCount; i++) {
+			var slotNumber = i + 2;
+			var slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
+			var slot = $("#page1 [name='" + slotName + "']");
+
+			slot.val(newRacialFeats[i]).trigger("change");
+		}
+
+		// Add Squat Nimbleness after all racial feats if the character is Small
+		var sizeValue = $("#page1 [name='size']").val().trim().toLowerCase();
+
+		if (sizeValue === "small") {
+			smallSizeFeatSlot = racialFeatCount + 2;
+
+			var smallSlotName =
+				"feat-slot-" + String(smallSizeFeatSlot).padStart(2, "0");
+
+			$("#page1 [name='" + smallSlotName + "']")
+				.val("Squat Nimbleness")
+				.trigger("change");
+		}
+	}
+
+	$("#page1 [name='race']").on("change", function () {
+		updateRace();
+	});
+
+	$("#page1 [name='size']").on("input change", updateRacialFeat);
+
 
 	var magicItemInput = null;
 	var magicItemSuggestionIndex = -1;
@@ -797,8 +1535,12 @@ $(function () {
 	$("#page1 .skills").on("change", "input[type='checkbox']", updateSkills);
 	$("#page1 .class-level-pairs").on("input change", ".class-name-input", function () {
 		updateSelectedClass(this);
+		updateFeatures();
 	});
-	$("#page1 .class-level-pairs").on("input change", ".class-level-input", updateProficiencyBonus);
+	$("#page1 .class-level-pairs").on("input change", ".class-level-input", function () {
+		updateProficiencyBonus();
+		updateFeatures();
+	});
 	$("#page1 .hitdice").on("change", ".hit-die-checks input[type='checkbox']", function () {
 		storeHitDieCheckbox(this);
 	});
@@ -814,6 +1556,7 @@ $(function () {
 	updateClassLevelFields();
 	updateArmorCalculations();
 	updateAttunementSlots();
+	updateFeatures();
 });
 
 $ (function() {
