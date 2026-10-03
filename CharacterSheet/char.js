@@ -1559,7 +1559,7 @@ $(function () {
 		// Add Squat Nimbleness after all racial feats if the character is Small
 		var sizeValue = $("#page1 [name='size']").val().trim().toLowerCase();
 
-		if (sizeValue === "small") {
+		if (sizeValue === "Small") {
 			smallSizeFeatSlot = racialFeatCount + 2;
 
 			var smallSlotName =
