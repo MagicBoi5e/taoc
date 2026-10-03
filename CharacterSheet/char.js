@@ -1227,6 +1227,1091 @@ $(function () {
 		},
 	};
 
+	var subclassLevels = {
+		"Barbarian": 3,
+		"Bard": 3,
+		"Cleric": 1,
+		"Druid": 2,
+		"Fighter": 3,
+		"Monk": 3,
+		"Paladin": 3,
+		"Ranger": 3,
+		"Rogue": 3,
+		"Sorcerer": 1,
+		"Warlock": 3,
+		"Wizard": 2,
+		"Artificer": 3
+	};
+
+	var subclassRules = {
+		//Barbarian Subclasses//
+		"Path of the Ancestral Guardian": {
+			features: {
+				3: ["Ancestral Protectors"],
+				6: ["Spirit Shield"],
+				10: ["Consult the Spirits"],
+				14: ["Vengeful Ancestors"]
+			}
+		},
+
+		"Path of the Battlerager": {
+			features: {
+				3: ["Battlerager Armor"],
+				6: ["Reckless Abandon"],
+				10: ["Battlerager Charge"],
+				14: ["Spiked Retribution"]
+			}
+		},
+
+		"Path of the Beast": {
+			features: {
+				3: ["Form of the Beast"],
+				6: ["Bestial Soul"],
+				10: ["Infectious Fury"],
+				14: ["Call the Hunt"]
+			}
+		},
+
+		"Path of the Berserker": {
+			features: {
+				3: ["Frenzy"],
+				6: ["Mindless Rage"],
+				10: ["Intimidating Presence"],
+				14: ["Retaliation"]
+			}
+		},
+
+		"Path of the Giant": {
+			features: {
+				3: ["Giant’s Power", "Giant’s Havoc"],
+				6: ["Elemental Cleaver"],
+				10: ["Mighty Impel"],
+				14: ["Demiurgic Colossus"]
+			}
+		},
+
+		"Path of the Storm Herald": {
+			features: {
+				3: ["Storm Aura"],
+				6: ["Storm Soul"],
+				10: ["Shielding Storm"],
+				14: ["Raging Storm"]
+			}
+		},
+
+		"Path of the Totem Warrior": {
+			features: {
+				3: ["Spirit Seeker", "Totem Spirit"],
+				6: ["Aspect of the Beast"],
+				10: ["Spirit Walker"],
+				14: ["Totemic Attunement"]
+			}
+		},
+
+		"Path of the Zealot": {
+			features: {
+				3: ["Divine Fury", "Warrior of the Gods"],
+				6: ["Fanatical Focus"],
+				10: ["Zealous Presence"],
+				14: ["Rage Beyond Death"]
+			}
+		},
+
+		"Path of the Wild Magic": {
+			features: {
+				3: ["Magic Awareness", "Wild Surge"],
+				6: ["Bolstering Magic"],
+				10: ["Unstable Backlash"],
+				14: ["Controlled Surge"]
+			}
+		},
+
+		//Bard Subclasses//
+
+		"College of Creation": {
+			features: {
+				3: ["Mote of Potential", "Performance of Creation"],
+				6: ["Animating Performance"],
+				14: ["Creative Crescendo"],
+			}
+		},
+
+		"College of Eloquence": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Glamour": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Lore": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Spirits": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Swords": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Valor": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		"College of Whispers": {
+			features: {
+				3: [""],
+				6: [""],
+				14: [""],
+			}
+		},
+
+		//Cleric Subclasses//
+
+		"Arcana Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Death Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Forge Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Grave Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Knowledge Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Life Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Light Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Nature Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Order Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Peace Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Tempest Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Trickery Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"Twilight Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		"War Domain": {
+			features: {
+				1: [""],
+				2: [""],
+				6: [""],
+				8: [""],
+				17: [""],
+			}
+		},
+
+		//Druid Subclasses//
+
+		"Circle of Dreams": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Spores": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Stars": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Land": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Moon": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Shepherd": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Circle of Wildfire": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		//Fighter Subclasses//
+
+		"Arcane Archer": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Battle Master": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Cavalier": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Champion": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Eldritch Knight": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Psi Warrior": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Purple Dragon Knight": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Rune Knight": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		"Samurai": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				18: [""],
+			}
+		},
+
+		//Monk Subclasses//
+
+		"Way of Mercy": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of Shadow": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Ascendant Dragon": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Astral Self": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Drunken Master": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Four Elements": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Kensei": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Long Death": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Open Hand": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		"Way of the Sun Soul": {
+			features: {
+				3: [""],
+				6: [""],
+				11: [""],
+				17: [""],
+			}
+		},
+
+		//Paladin Subclasses//
+
+		"Oath of Conquest": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of Devotion": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of Glory": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of Redemption": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of the Ancients": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of the Crown": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of the Watchers": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oath of Vengeance": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		"Oathbreaker": {
+			features: {
+				3: [""],
+				7: [""],
+				15: [""],
+				20: [""],
+			}
+		},
+
+		//Ranger Subclasses//
+
+		"Beast Master": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Drakewarden": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Fey Wanderer": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Gloom Stalker": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Horizon Walker": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Hunter": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Monster Slayer": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		"Swarmkeeper": {
+			features: {
+				3: [""],
+				7: [""],
+				11: [""],
+				15: [""],
+			}
+		},
+
+		//Rogue Subclasses//
+
+		"Arcane Trickster": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Assassin": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Inquisitive": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Mastermind": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Phantom": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Scout": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Soulknife": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Swashbuckler": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		"Thief": {
+			features: {
+				3: [""],
+				9: [""],
+				13: [""],
+				17: [""],
+			}
+		},
+
+		//Sorcerer Subclasses//
+
+		"Aberrant Mind": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Clockwork Soul": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Divine Soul": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Draconic Bloodline": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Lunar Sorcery": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Shadow Magic": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Storm Sorcery": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		"Wild Magic": {
+			features: {
+				1: [""],
+				6: [""],
+				14: [""],
+				18: [""],
+			}
+		},
+
+		//Warlock Subclasses//
+
+		"The Archfey": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Celestial": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Fathomless": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Fiend": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Genie": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Great Old One": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Hexblade": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Undead": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"The Undying": {
+			features: {
+				1: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		//Wizard Subclasses//
+
+		"Bladesinging": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"Order of Scribes": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Abjuration": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Conjuration": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Divination": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Enchantment": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Evocation": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Illusion": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Necromancy": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"School of Transmutation": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		"War Magic": {
+			features: {
+				2: [""],
+				6: [""],
+				10: [""],
+				14: [""],
+			}
+		},
+
+		//Artificer Subclasses//
+
+		"Alchemist": {
+			features: {
+				3: ["Alchemist Spells", "Experimental Elixir", "Tool Proficiency"],
+				5: ["Alchemical Savant"],
+				9: ["Restorative Reagents"],
+				15: ["Chemical Mastery"],
+			}
+		},
+
+		"Armorer": {
+			features: {
+				3: ["Armorer Spells", "Arcane Armor", "Armor Model", "Tools of the Trade"],
+				5: ["Extra Attack"],
+				9: ["Armor Modifications"],
+				15: ["Perfected Armor"],
+			}
+		},
+
+		"Artillerist": {
+			features: {
+				3: ["Tool Proficiency", "Artillerist Spells", "Eldritch Cannon"],
+				5: ["Arcane Firearm"],
+				9: ["Explosive Cannon"],
+				15: ["Fortified Position"],
+			}
+		},
+
+		"Battle Smith": {
+			features: {
+				3: ["Battle Smith Spells", "Battle Ready", "Steel Defender", "Tool Proficiency"],
+				5: ["Extra Attack"],
+				9: ["Arcane Jolt"],
+				15: ["Improved Defender"],
+			}
+		},
+
+	};
+
 	function getFeaturesUpToLevel(featuresByLevel, level) {
 		var features = [];
 
@@ -1557,9 +2642,9 @@ $(function () {
 		}
 
 		// Add Squat Nimbleness after all racial feats if the character is Small
-		var sizeValue = $("#page1 [name='size']").val().trim().toLowerCase();
+		var sizeValue = $("#page1 [name='charSize']").val().trim().toLowerCase();
 
-		if (sizeValue === "Small") {
+		if (sizeValue === "small") {
 			smallSizeFeatSlot = racialFeatCount + 2;
 
 			var smallSlotName =
@@ -1575,7 +2660,7 @@ $(function () {
 		updateRace();
 	});
 
-	$("#page1 [name='size']").on("input change", updateRacialFeat);
+	$("#page1 [name='charSize']").on("input change", updateRacialFeat);
 
 
 	var magicItemInput = null;
