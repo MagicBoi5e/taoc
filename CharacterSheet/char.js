@@ -1338,199 +1338,200 @@ $(function () {
 
 		"College of Eloquence": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Silver Tongue", "Unsettling Words"],
+				6: ["Unfailing Inspiration", "Universal Speech"],
+				14: ["Infectious Inspiration"],
 			}
 		},
 
 		"College of Glamour": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Mantle of Inspiration", "Enthralling Performance"],
+				6: ["Mantle of Majesty"],
+				14: ["Unbreakable Majesty"],
 			}
 		},
 
 		"College of Lore": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Bonus Proficiencies", "Cutting Words"],
+				6: ["Additional Magical Secrets"],
+				14: ["Peerless Skill"],
 			}
 		},
 
 		"College of Spirits": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Guiding Whispers", "Spiritual Focus", "Tales from Beyond"],
+				6: ["Spirit Session"],
+				14: ["Mystical Connection"],
 			}
 		},
 
 		"College of Swords": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Bonus Proficiencies", "Fighting Style", "Blade Flourish", "Bonus Proficiencies"],
+				6: ["Extra Attack"],
+				14: ["Master’s Flourish"],
 			}
 		},
 
 		"College of Valor": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Bonus Proficiencies", "Combat Inspiration"],
+				6: ["Extra Attack"],
+				14: ["Battle Magic"],
 			}
 		},
 
 		"College of Whispers": {
 			features: {
-				3: [""],
-				6: [""],
-				14: [""],
+				3: ["Psychic Blades", "Words of Terror"],
+				6: ["Mantle of Whispers"],
+				14: ["Shadow Lore"],
 			}
 		},
 
 		//Cleric Subclasses//
+		//Add Domain Spells
 
 		"Arcana Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Arcane Initiate"],
+				2: ["Channel Divinity: Arcane Abjuration"],
+				6: ["Spell Breaker"],
+				8: ["Potent Spellcasting"],
+				17: ["Arcane Mastery"],
 			}
 		},
 
 		"Death Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiency", "Reaper"],
+				2: ["Channel Divinity: Touch of Death"],
+				6: ["Inescapable Destruction"],
+				8: ["Divine Strike"],
+				17: ["Improved Reaper"],
 			}
 		},
 
 		"Forge Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiencies", "Blessing of the Forge"],
+				2: ["Channel Divinity: Artisan’s Blessing"],
+				6: ["Soul of the Forge"],
+				8: ["Divine Strike"],
+				17: ["Saint of Forge and Fire"],
 			}
 		},
 
 		"Grave Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Circle of Mortality", "Eyes of the Grave"],
+				2: ["Channel Divinity: Path to the Grave"],
+				6: ["Sentinel at Death’s Door"],
+				8: ["Potent Spellcasting"],
+				17: ["Keeper of Souls"],
 			}
 		},
 
 		"Knowledge Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Blessings of Knowledge"],
+				2: ["Channel Divinity: Knowledge of theAges"],
+				6: ["Channel Divinity: Read Thoughts"],
+				8: ["Potent Spellcasting"],
+				17: ["Visions of the Past"],
 			}
 		},
 
 		"Life Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiency", "Disciple of Life"],
+				2: ["Channel Divinity: Preserve Life"],
+				6: ["Blessed Healer"],
+				8: ["Divine Strike"],
+				17: ["Supreme Healing"],
 			}
 		},
 
 		"Light Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Cantrip", "Warding Flare"],
+				2: ["Channel Divinity: Radiance of the Dawn"],
+				6: ["Improved Flare"],
+				8: ["Potent Spellcasting"],
+				17: ["Corona of Light"],
 			}
 		},
 
 		"Nature Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Acolyte of Nature", "Bonus Proficiency"],
+				2: ["Channel Divinity: Charm Animals and Plants"],
+				6: ["Dampen Elements"],
+				8: ["Divine Strike"],
+				17: ["Master of Nature"],
 			}
 		},
 
 		"Order Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiencies", "Voice of Authority"],
+				2: ["Channel Divinity: Order’s Demand"],
+				6: ["Embodiment of the Law"],
+				8: ["Divine Strike"],
+				17: ["Order’s Wrath"],
 			}
 		},
 
 		"Peace Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Implement of Peace", "Emboldening Bond"],
+				2: ["Channel Divinity: Balm of Peace"],
+				6: ["Protective Bond"],
+				8: ["Potent Spellcasting"],
+				17: ["Expansive Bond"],
 			}
 		},
 
 		"Tempest Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiencies", "Wrath of the Storm"],
+				2: ["Channel Divinity: Destructive Wrath"],
+				6: ["Thunderbolt Strike"],
+				8: ["Divine Strike"],
+				17: ["Stormborn"],
 			}
 		},
 
 		"Trickery Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Blessing of the Trickster"],
+				2: ["Channel Divinity: Invoke Duplicity"],
+				6: ["Channel Divinity: Cloak of Shadows"],
+				8: ["Divine Strike"],
+				17: ["Improved Duplicity"],
 			}
 		},
 
 		"Twilight Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiencies", "Eyes of Night", "Vigilant Blessing"],
+				2: ["Channel Divinity: Twilight Sanctuary"],
+				6: ["Steps of Night"],
+				8: ["Divine Strike"],
+				17: ["Twilight Shroud"],
 			}
 		},
 
 		"War Domain": {
 			features: {
-				1: [""],
-				2: [""],
-				6: [""],
-				8: [""],
-				17: [""],
+				1: ["Bonus Proficiencies", "War Priest"],
+				2: ["Channel Divinity: Guided Strike"],
+				6: ["Channel Divinity: War God’s Blessing"],
+				8: ["Divine Strike"],
+				17: ["Avatar of Battle"],
 			}
 		},
 
@@ -1538,147 +1539,215 @@ $(function () {
 
 		"Circle of Dreams": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Balm of the Summer Court"],
+				6: ["Hearth of Moonlight and Shadow"],
+				10: ["Hidden Paths"],
+				14: ["Walker in Dreams"],
 			}
 		},
 
 		"Circle of Spores": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Circle Spells", "Halo of Spores", "Symbiotic Entity"],
+				6: ["Fungal Infestation"],
+				10: ["Spreading Spores"],
+				14: ["Fungal Body"],
 			}
 		},
 
 		"Circle of Stars": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Star Map", "Starry Form"],
+				6: ["Cosmic Omen"],
+				10: ["Twinkling Constellations"],
+				14: ["Full of Stars"],
 			}
 		},
 
 		"Circle of Land": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Bonus Cantrip", "Natural Recovery", "Circle Spells"],
+				6: ["Land’s Stride"],
+				10: ["Nature’s Ward"],
+				14: ["Nature’s Sanctuary"],
 			}
 		},
 
 		"Circle of Moon": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Combat Wild Shape", "Circle Forms"],
+				6: ["Primal Strike", "Circle Forms"],
+				10: ["Elemental Wild Shape"],
+				14: ["Thousand Forms"],
 			}
 		},
 
 		"Circle of Shepherd": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Speech of the Woods", "Spirit Totem"],
+				6: ["Mighty Summoner"],
+				10: ["Guardian Spirit"],
+				14: ["Faithful Summons"],
 			}
 		},
 
 		"Circle of Wildfire": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Circle Spells", "Summon Wildfire Spirit"],
+				6: ["Enhanced Bond"],
+				10: ["Cauterizing Flames"],
+				14: ["Blazing Revival"],
 			}
 		},
 
 		//Fighter Subclasses//
 
-		"Arcane Archer": {
+		"Arcane Archer": { //Add Arcane Shot Options
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Arcane Archer Lore", "Arcane Shot", "Arcane Shot Options (2)"],
+				7: ["Magic Arrow", "Curving Shot",
+					{
+						name: "Arcane Shot Options (3)",
+						replaces: "Arcane Shot Options (2)"
+					}
+				],
+				10: [
+					{
+						name: "Arcane Shot Options (4)",
+						replaces: "Arcane Shot Options (3)"
+					}
+				],
+				15: [
+					{
+						name: "Arcane Shot Options (5)",
+						replaces: "Arcane Shot Options (4)"
+					},
+					"Ever-Ready Shot"],
+				18: [
+					{
+						name: "Arcane Shot Options (6)",
+						replaces: "Arcane Shot Options (5)"
+					},
+					{
+						name: "Improved Arcane Shot",
+						replaces: "Arcane Shot"
+					}
+				],
 			}
 		},
 
-		"Battle Master": {
+		"Battle Master": { // Add Maneuvers
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Combat Superiority", "Student of War"],
+				7: ["Know Your Enemy"],
+				10: [
+					{
+						name: "Improved Combat Superiority (d10)",
+						replaces: "Combat Superiority"
+					}
+				],
+				15: ["Relentless"],
+				18: [
+					{
+						name: "Improved Combat Superiority (d12)",
+						replaces: "Improved Combat Superiority (d10)"
+					}
+				],
 			}
 		},
 
 		"Cavalier": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Born to the Saddle", "Unwavering Mark", "Bonus Proficiency"],
+				7: ["Warding Maneuver"],
+				10: ["Hold the Line"],
+				15: ["Ferocious Charger"],
+				18: ["Vigilant Defender"],
 			}
 		},
 
 		"Champion": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Improved Critical"],
+				7: ["Remarkable Athlete"],
+				10: ["Additional Fighting Style"],
+				15: [
+					{
+						name: "Superior Critical",
+						replaces: "Improved Critical"
+					}
+				],
+				18: ["Survivor"],
 			}
 		},
 
 		"Eldritch Knight": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Spellcasting", "Weapon Bond"],
+				7: ["War Magic"],
+				10: ["Eldritch Strike"],
+				15: ["Arcane Charge"],
+				18: ["Improved War Magic"],
 			}
 		},
 
 		"Psi Warrior": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Psionic Power"],
+				7: ["Telekinetic Adept"],
+				10: ["Guarded Mind"],
+				15: ["Bulwark of Force"],
+				18: ["Telekinetic Master"],
 			}
 		},
 
 		"Purple Dragon Knight": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Rallying Cry"],
+				7: ["Royal Envoy"],
+				10: ["Inspiring Surge"],
+				15: ["Bulwark"],
+				18: [
+					{
+						name: "Inspiring Surge (2)",
+						replaces: "Inspiring Surge"
+					}
+				],
 			}
 		},
 
 		"Rune Knight": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Bonus Proficiencies", "Rune Carver", "Runes Known (2)", "Giant’s Might"],
+				7: ["Runic Shield",
+					{
+						name: "Runes Known (3)",
+						replaces: "Runes Known (2)"
+					}
+				],
+				10: ["Great Stature",
+					{
+						name: "Runes Known (4)",
+						replaces: "Runes Known (3)"
+					}
+				],
+				15: ["Master of Runes",
+					{
+						name: "Runes Known (5)",
+						replaces: "Runes Known (4)"
+					}
+				],
+				18: ["Runic Juggernaut"],
 			}
 		},
 
 		"Samurai": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				18: [""],
+				3: ["Bonus Proficiency", "Fighting Spirit"],
+				7: ["Elegant Courtier"],
+				10: ["Tireless Spirit"],
+				15: ["Rapid Strike"],
+				18: ["Strength before Death"],
 			}
 		},
 
@@ -1686,91 +1755,106 @@ $(function () {
 
 		"Way of Mercy": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Implements of Mercy", "Hand of Healing", "Hand of Harm"],
+				6: ["Physician’s Touch"],
+				11: ["Flurry of Healing and Harm"],
+				17: ["Hand of Ultimate Mercy"],
 			}
 		},
 
 		"Way of Shadow": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Shadow Arts"],
+				6: ["Shadow Step"],
+				11: ["Cloak of Shadows"],
+				17: ["Opportunist"],
 			}
 		},
 
 		"Way of the Ascendant Dragon": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Draconic Disciple", "Breath of the Dragon"],
+				6: ["Wings Unfurled"],
+				11: ["Aspect of the Wyrm"],
+				17: ["Ascendant Aspect"],
 			}
 		},
 
 		"Way of the Astral Self": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Arms of the Astral Self"],
+				6: ["Visage of the Astral Self"],
+				11: ["Body of the Astral Self"],
+				17: ["Awakened Astral Self"],
 			}
 		},
 
 		"Way of the Drunken Master": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Bonus Proficiencies", "Drunken Technique"],
+				6: ["Tipsy Sway"],
+				11: ["Drunkard’s Luck"],
+				17: ["Intoxicated Frenzy"],
 			}
 		},
 
 		"Way of the Four Elements": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Disciple of the Elements", "Elemental Disciplines (2)"],
+				6: [
+					{
+						name: "Elemental Disciplines (3)",
+						replaces: "Elemental Disciplines (2)"
+					}
+				],
+				11: [
+					{
+						name: "Elemental Disciplines (4)",
+						replaces: "Elemental Disciplines (3)"
+					}
+				],
+				17: [
+					{
+						name: "Elemental Disciplines (5)",
+						replaces: "Elemental Disciplines (4)"
+					}
+				],
 			}
 		},
 
 		"Way of the Kensei": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Path of the Kensei"],
+				6: ["One with the Blade", "Kensei Weapon (3)"],
+				11: ["Sharpen the Blade", "Kensei Weapon (4)"],
+				17: ["Unerring Accuracy", "Kensei Weapon (5)"],
 			}
 		},
 
 		"Way of the Long Death": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Touch of Death"],
+				6: ["Hour of Reaping"],
+				11: ["Mastery of Death"],
+				17: ["Touch of the Long Death"],
 			}
 		},
 
 		"Way of the Open Hand": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Open Hand Technique"],
+				6: ["Wholeness of Body"],
+				11: ["Tranquility"],
+				17: ["Quivering Palm"],
 			}
 		},
 
 		"Way of the Sun Soul": {
 			features: {
-				3: [""],
-				6: [""],
-				11: [""],
-				17: [""],
+				3: ["Radiant Sun Bolt"],
+				6: ["Searing Arc Strike"],
+				11: ["Searing Sunburst"],
+				17: ["Sun Shield"],
 			}
 		},
 
@@ -1778,82 +1862,82 @@ $(function () {
 
 		"Oath of Conquest": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of Conquest"],
+				15: ["Scornful Rebuke"],
+				20: ["Invincible Conqueror"],
 			}
 		},
 
 		"Oath of Devotion": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of Devotion"],
+				15: ["Purity of Spirit"],
+				20: ["Holy Nimbus"],
 			}
 		},
 
 		"Oath of Glory": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of Alacrity"],
+				15: ["Glorious Defense"],
+				20: ["Living Legend"],
 			}
 		},
 
 		"Oath of Redemption": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of the Guardian"],
+				15: ["Protective Spirit"],
+				20: ["Emissary of Redemption"],
 			}
 		},
 
 		"Oath of the Ancients": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of Warding"],
+				15: ["Undying Sentinel"],
+				20: ["Elder Champion"],
 			}
 		},
 
 		"Oath of the Crown": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Divine Allegiance"],
+				15: ["Unyielding Spirit"],
+				20: ["Exalted Champion"],
 			}
 		},
 
 		"Oath of the Watchers": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of the Sentinel"],
+				15: ["Vigilant Rebuke"],
+				20: ["Mortal Bulwark"],
 			}
 		},
 
 		"Oath of Vengeance": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Relentless Avenger"],
+				15: ["Soul of Vengeance"],
+				20: ["Avenging Angel"],
 			}
 		},
 
 		"Oathbreaker": {
 			features: {
-				3: [""],
-				7: [""],
-				15: [""],
-				20: [""],
+				3: ["Oath Spells", "Channel Divinity"],
+				7: ["Aura of Hate"],
+				15: ["Supernatural Resistance"],
+				20: ["Dread Lord"],
 			}
 		},
 
@@ -1861,73 +1945,73 @@ $(function () {
 
 		"Beast Master": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Ranger’s Companion"],
+				7: ["Exceptional Training"],
+				11: ["Bestial Fury"],
+				15: ["Share Spells"],
 			}
 		},
 
 		"Drakewarden": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Draconic Gift", "Drake Companion"],
+				7: ["Bond of Fang and Scale"],
+				11: ["Drake’s Breath"],
+				15: ["Perfected Bond"],
 			}
 		},
 
 		"Fey Wanderer": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Dreadful Strikes", "Fey Wanderer Magic", "Otherworldly Glamour"],
+				7: ["Beguiling Twist"],
+				11: ["Fey Reinforcements"],
+				15: ["Misty Wanderer"],
 			}
 		},
 
 		"Gloom Stalker": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Gloom Stalker Magic", "Dread Ambusher", "Umbral Sight"],
+				7: ["Iron Mind"],
+				11: ["Stalker’s Flurry"],
+				15: ["Shadowy Dodge"],
 			}
 		},
 
 		"Horizon Walker": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Horizon Walker Magic", "Detect Portal", "Planar Warrior"],
+				7: ["Ethereal Step"],
+				11: ["Distant Strike"],
+				15: ["Spectral Defense"],
 			}
 		},
 
 		"Hunter": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Hunter’s Prey"],
+				7: ["Defensive Tactics"],
+				11: ["Multiattack"],
+				15: ["Superior Hunter’s Defense"],
 			}
 		},
 
 		"Monster Slayer": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Monster Slayer Magic", "Hunter’s Sense", "Slayer’s Prey"],
+				7: ["Supernatural Defense"],
+				11: ["Magic-User’s Nemesis"],
+				15: ["Slayer’s Counter"],
 			}
 		},
 
 		"Swarmkeeper": {
 			features: {
-				3: [""],
-				7: [""],
-				11: [""],
-				15: [""],
+				3: ["Gathered Swarm", "Swarmkeeper Magic"],
+				7: ["Writhing Tide"],
+				11: ["Mighty Swarm"],
+				15: ["Swarming Dispersal"],
 			}
 		},
 
@@ -1935,82 +2019,82 @@ $(function () {
 
 		"Arcane Trickster": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Spellcasting", "Mage Hand Legerdemain"],
+				9: ["Magical Ambush"],
+				13: ["Versatile Trickster"],
+				17: ["Spell Thief"],
 			}
 		},
 
 		"Assassin": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Bonus Proficiencies", "Assassinate"],
+				9: ["Infiltration Expertise"],
+				13: ["Impostor"],
+				17: ["Death Strike"],
 			}
 		},
 
 		"Inquisitive": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Ear for Deceit", "Eye for Detail", "Insightful Fighting"],
+				9: ["Steady Eye"],
+				13: ["Unerring Eye"],
+				17: ["Eye for Weakness"],
 			}
 		},
 
 		"Mastermind": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Master of Intrigue", "Master of Tactics"],
+				9: ["Insightful Manipulator"],
+				13: ["Misdirection"],
+				17: ["Soul of Deceit"],
 			}
 		},
 
 		"Phantom": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Whispers of the Dead", "Wails from the Grave"],
+				9: ["Tokens of the Departed"],
+				13: ["Ghost Walk"],
+				17: ["Death’s Friend"],
 			}
 		},
 
 		"Scout": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Skirmisher", "Survivalist"],
+				9: ["Superior Mobility"],
+				13: ["Ambush Master"],
+				17: ["Sudden Strike"],
 			}
 		},
 
 		"Soulknife": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Psionic Power", "Psychic Blades"],
+				9: ["Soul Blades"],
+				13: ["Psychic Veil"],
+				17: ["Rend Mind"],
 			}
 		},
 
 		"Swashbuckler": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Fancy Footwork", "Rakish Audacity"],
+				9: ["Panache"],
+				13: ["Elegant Maneuver"],
+				17: ["Master Duelist"],
 			}
 		},
 
 		"Thief": {
 			features: {
-				3: [""],
-				9: [""],
-				13: [""],
-				17: [""],
+				3: ["Fast Hands", "Second-Story Work"],
+				9: ["Supreme Sneak"],
+				13: ["Use Magic Device"],
+				17: ["Thief’s Reflexes"],
 			}
 		},
 
@@ -2018,73 +2102,73 @@ $(function () {
 
 		"Aberrant Mind": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Psionic Spells", "Telepathic Speech"],
+				6: ["Psionic Sorcery", "Psychic Defenses"],
+				14: ["Revelation in Flesh"],
+				18: ["Warping Implosion"],
 			}
 		},
 
 		"Clockwork Soul": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Clockwork Magic", "Restore Balance"],
+				6: ["Bastion of Law"],
+				14: ["Trance of Order"],
+				18: ["Clockwork Cavalcade"],
 			}
 		},
 
 		"Divine Soul": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Divine Magic", "Favored by the Gods"],
+				6: ["Empowered Healing"],
+				14: ["Otherworldly Wings"],
+				18: ["Unearthly Recovery"],
 			}
 		},
 
 		"Draconic Bloodline": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Dragon Ancestor", "Draconic Resilience"],
+				6: ["Elemental Affinity"],
+				14: ["Dragon Wings"],
+				18: ["Draconic Presence"],
 			}
 		},
 
 		"Lunar Sorcery": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Lunar Embodiment", "Moon Fire"],
+				6: ["Lunar Boons", "Waxing and Waning"],
+				14: ["Lunar Empowerment"],
+				18: ["Lunar Phenomenon"],
 			}
 		},
 
 		"Shadow Magic": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Eyes of the Dark", "Strength of the Grave"],
+				6: ["Hound of Ill Omen"],
+				14: ["Shadow Walk"],
+				18: ["Umbral Form"],
 			}
 		},
 
 		"Storm Sorcery": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Wind Speaker", "Tempestuous Magic"],
+				6: ["Heart of the Storm", "Storm Guide"],
+				14: ["Storm’s Fury"],
+				18: ["Wind Soul"],
 			}
 		},
 
 		"Wild Magic": {
 			features: {
-				1: [""],
-				6: [""],
-				14: [""],
-				18: [""],
+				1: ["Wild Magic Surge", "Tides of Chaos"],
+				6: ["Bend Luck"],
+				14: ["Controlled Chaos"],
+				18: ["Spell Bombardment"],
 			}
 		},
 
@@ -2092,82 +2176,82 @@ $(function () {
 
 		"The Archfey": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Fey Presence"],
+				6: ["Misty Escape"],
+				10: ["Beguiling Defenses"],
+				14: ["Dark Delirium"],
 			}
 		},
 
 		"The Celestial": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Bonus Cantrips", "Healing Light"],
+				6: ["Radiant Soul"],
+				10: ["Celestial Resilience"],
+				14: ["Searing Vengeance"],
 			}
 		},
 
 		"The Fathomless": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Tentacle of the Deeps", "Gift of the Sea"],
+				6: ["Oceanic Soul", "Guardian Coil"],
+				10: ["Grasping Tentacles"],
+				14: ["Fathomless Plunge"],
 			}
 		},
 
 		"The Fiend": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Dark One’s Blessing"],
+				6: ["Dark One’s Own Luck"],
+				10: ["Fiendish Resilience"],
+				14: ["Hurl Through Hell"],
 			}
 		},
 
 		"The Genie": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Genie Kind", "Expanded Spell List", "Genie’s Vessel"],
+				6: ["Elemental Gift"],
+				10: ["Sanctuary Vessel"],
+				14: ["Limited Wish"],
 			}
 		},
 
 		"The Great Old One": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Awakened Mind"],
+				6: ["Entropic Ward"],
+				10: ["Thought Shield"],
+				14: ["Create Thrall"],
 			}
 		},
 
 		"The Hexblade": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Hexblade’s Curse", "Hex Warrior"],
+				6: ["Accursed Specter"],
+				10: ["Armor of Hexes"],
+				14: ["Master of Hexes"],
 			}
 		},
 
 		"The Undead": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Form of Dread"],
+				6: ["Grave Touched"],
+				10: ["Necrotic Husk"],
+				14: ["Spirit Projection"],
 			}
 		},
 
 		"The Undying": {
 			features: {
-				1: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				1: ["Expanded Spell List", "Among the Dead"],
+				6: ["Defy Death"],
+				10: ["Undying Nature"],
+				14: ["Indestructible Life"],
 			}
 		},
 
@@ -2175,100 +2259,100 @@ $(function () {
 
 		"Bladesinging": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Training in War and Song", "Bladesong"],
+				6: ["Extra Attack"],
+				10: ["Song of Defense"],
+				14: ["Song of Victory"],
 			}
 		},
 
 		"Order of Scribes": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Wizardly Quill", "Awakened Spellbook"],
+				6: ["Manifest Mind"],
+				10: ["Master Scrivener"],
+				14: ["One with the Word"],
 			}
 		},
 
 		"School of Abjuration": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Arcane Ward", "Abjuration Savant"],
+				6: ["Projected Ward"],
+				10: ["Improved Abjuration"],
+				14: ["Spell Resistance"],
 			}
 		},
 
 		"School of Conjuration": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Conjuration Savant", "Minor Conjuration"],
+				6: ["Benign Transposition"],
+				10: ["Focused Conjuration"],
+				14: ["Durable Summons"],
 			}
 		},
 
 		"School of Divination": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Divination Savant", "Portent"],
+				6: ["Expert Divination"],
+				10: ["The Third Eye"],
+				14: ["Greater Portent"],
 			}
 		},
 
 		"School of Enchantment": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Enchantment Savant", "Hypnotic Gaze"],
+				6: ["Instinctive Charm"],
+				10: ["Split Enchantment"],
+				14: ["Alter Memories"],
 			}
 		},
 
 		"School of Evocation": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Evocation Savant", "Sculpt Spells"],
+				6: ["Potent Cantrip"],
+				10: ["Empowered Evocation"],
+				14: ["Overchannel"],
 			}
 		},
 
 		"School of Illusion": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Illusion Savant", "Improved Minor Illusion"],
+				6: ["Malleable Illusions"],
+				10: ["Illusory Self"],
+				14: ["Illusory Reality"],
 			}
 		},
 
 		"School of Necromancy": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Necromancy Savant", "Grim Harvest"],
+				6: ["Undead Thralls"],
+				10: ["Inured to Undeath"],
+				14: ["Command Undead"],
 			}
 		},
 
 		"School of Transmutation": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Transmutation Savant", "Minor Alchemy"],
+				6: ["Transmuter’s Stone"],
+				10: ["Shapechanger"],
+				14: ["Master Transmuter"],
 			}
 		},
 
 		"War Magic": {
 			features: {
-				2: [""],
-				6: [""],
-				10: [""],
-				14: [""],
+				2: ["Arcane Deflection", "Tactical Wit"],
+				6: ["Power Surge"],
+				10: ["Durable Magic"],
+				14: ["Deflecting Shroud"],
 			}
 		},
 
