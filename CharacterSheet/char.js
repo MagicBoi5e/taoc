@@ -2396,6 +2396,12 @@ $(function () {
 
 	};
 
+	var subclassOptions = $("<datalist id='subclass-options'></datalist>");
+	Object.keys(subclassRules).forEach(function (subclassName) {
+		subclassOptions.append($("<option>").val(subclassName));
+	});
+	$("#page1").append(subclassOptions);
+
 	function getFeaturesUpToLevel(featuresByLevel, level) {
 		var features = [];
 
@@ -2457,13 +2463,27 @@ $(function () {
 			);
 
 			// Subclass features
-			// We will connect this to the subclass field later.
+			var subclassName = $(this).find(".subclass-name-input").val().trim();
+			var subclassRule = subclassRules[subclassName];
+			var subclassLevel = subclassLevels[className];
+
+			if (subclassRule && Number.isInteger(subclassLevel) && level >= subclassLevel) {
+				subclassFeatures[subclassName] = getFeaturesUpToLevel(
+					subclassRule.features,
+					level
+				);
+			}
 		});
 
 		// Apply feature replacements
 		Object.keys(classFeatures).forEach(function (className) {
 			classFeatures[className] = removeReplacedFeatures(
 				classFeatures[className]
+			);
+		});
+		Object.keys(subclassFeatures).forEach(function (subclassName) {
+			subclassFeatures[subclassName] = removeReplacedFeatures(
+				subclassFeatures[subclassName]
 			);
 		});
 
@@ -2498,6 +2518,8 @@ $(function () {
 		output.push("");
 
 		Object.keys(subclassFeatures).forEach(function (subclassName) {
+			output.push(subclassName + ":");
+
 			subclassFeatures[subclassName].forEach(function (feature) {
 				if (typeof feature === "object") {
 					output.push(feature.name);
@@ -2961,6 +2983,7 @@ $(function () {
 		updateProficiencyBonus();
 		updateFeatures();
 	});
+	$("#page1 .class-level-pairs").on("input change", ".subclass-name-input", updateFeatures);
 	$("#page1 .hitdice").on("change", ".hit-die-checks input[type='checkbox']", function () {
 		storeHitDieCheckbox(this);
 	});

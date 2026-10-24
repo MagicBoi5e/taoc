@@ -228,6 +228,12 @@ form.charsheet header section.misc ul li .class-pair .class-level-input {
   width: 44px;
   min-width: 0;
 }
+form.charsheet header section.misc ul li .class-pair .subclass-name-input {
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
 form.charsheet header section.misc ul li .class-pair-captions {
   display: grid;
   grid-column: 1 / -1;
