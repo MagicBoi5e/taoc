@@ -2630,6 +2630,65 @@ $(function () {
 		// Add the rest of your races here
 	};
 
+	var racialFeatVariantRules = {
+		"High Elf": ["Fey Teleportation"],
+		"Wood Elf": ["Wood Elf Magic"],
+		"Drow": ["Drow High Magic"],
+		"High Half-Elf": ["Fey Teleportation"],
+		"Wood Half-Elf": ["Wood Elf Magic"],
+		"Half-Drow": ["Drow High Magic"],
+		"Deep Gnome": ["Svirfneblin Magic"],
+	};
+
+	var racialFeatAliases = {
+		"hill dwarf": "Dwarf",
+		"mountain dwarf": "Dwarf",
+		"duergar": "Dwarf",
+		"mark of warding dwarf": "Dwarf",
+		"high elf": "Elf",
+		"wood elf": "Elf",
+		"drow": "Elf",
+		"sea elf": "Elf",
+		"eladrin": "Elf",
+		"shadar-kai": "Elf",
+		"astral elf": "Elf",
+		"mark of shadow elf": "Elf",
+		"lightfoot halfling": "Halfling",
+		"stout halfling": "Halfling",
+		"ghostwise halfling": "Halfling",
+		"mark of healing halfling": "Halfling",
+		"mark of hospitality halfling": "Halfling",
+		"variant human": "Human",
+		"mark of finding human": "Human",
+		"mark of handling human": "Human",
+		"mark of making human": "Human",
+		"mark of passage human": "Human",
+		"mark of sentinel human": "Human",
+		"chromatic dragonborn": "Dragonborn",
+		"metallic dragonborn": "Dragonborn",
+		"gem dragonborn": "Dragonborn",
+		"forest gnome": "Gnome",
+		"rock gnome": "Gnome",
+		"deep gnome": "Gnome",
+		"mark of scribing gnome": "Gnome",
+		"high half-elf": "Half-Elf",
+		"wood half-elf": "Half-Elf",
+		"drow half-elf": "Half-Elf",
+		"aquatic half-elf": "Half-Elf",
+		"mark of detection half-elf": "Half-Elf",
+		"mark of storm half-elf": "Half-Elf",
+		"mark of finding half-orc": "Half-Orc",
+		"variant tiefling": "Tiefling",
+		"baalzebul tiefling": "Tiefling",
+		"dispater tiefling": "Tiefling",
+		"fierna tiefling": "Tiefling",
+		"glasya tiefling": "Tiefling",
+		"levistus tiefling": "Tiefling",
+		"mammon tiefling": "Tiefling",
+		"mephistopheles tiefling": "Tiefling",
+		"zariel tiefling": "Tiefling",
+	};
+
 	var smallSizeFeat = "Squat Nimbleness";
 
 	function updateRace() {
@@ -2705,14 +2764,31 @@ $(function () {
 			raceName = formerRace;
 		}
 
-		// Find racial feat rule without depending on capitalization
-		var racialRuleName = Object.keys(racialFeatRules).find(function (key) {
-			return key.toLowerCase() === raceName.toLowerCase();
+		var normalizedRaceName = raceName.toLowerCase();
+		var racialRuleNames = Object.keys(racialFeatRules).filter(function (key) {
+			var normalizedRuleName = key.toLowerCase();
+			return normalizedRaceName === normalizedRuleName
+				|| normalizedRaceName.indexOf(normalizedRuleName + " ") === 0
+				|| normalizedRaceName.endsWith(" " + normalizedRuleName);
 		});
+		var aliasedRule = racialFeatAliases[normalizedRaceName];
 
-		var newRacialFeats = racialRuleName
-			? racialFeatRules[racialRuleName]
-			: [];
+		if (aliasedRule && racialRuleNames.indexOf(aliasedRule) === -1) {
+			racialRuleNames.push(aliasedRule);
+		}
+
+		var newRacialFeats = [];
+		racialRuleNames.forEach(function (ruleName) {
+			newRacialFeats = newRacialFeats.concat(racialFeatRules[ruleName]);
+		});
+		Object.keys(racialFeatVariantRules).forEach(function (variantName) {
+			if (normalizedRaceName === variantName.toLowerCase()) {
+				newRacialFeats = newRacialFeats.concat(racialFeatVariantRules[variantName]);
+			}
+		});
+		newRacialFeats = newRacialFeats.filter(function (feat, index) {
+			return newRacialFeats.indexOf(feat) === index;
+		});
 
 		// Remove old racial feats
 		for (var i = 0; i < racialFeatCount; i++) {
@@ -2750,7 +2826,7 @@ $(function () {
 		// Add Squat Nimbleness after all racial feats if the character is Small
 		var sizeValue = $("#page1 [name='charSize']").val().trim().toLowerCase();
 
-		if (sizeValue === "small") {
+		if (sizeValue === "small" && newRacialFeats.indexOf(smallSizeFeat) === -1) {
 			smallSizeFeatSlot = racialFeatCount + 2;
 
 			var smallSlotName =
