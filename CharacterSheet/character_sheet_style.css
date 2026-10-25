@@ -5,7 +5,6 @@
   font-family: 'Work Sans', sans-serif;
   src: url('assets/Work_Sans/WorkSans-ExtraLight.woff2') format('woff2');
 }
-
 body {
   margin: 0;
   padding: 58px 12px 24px;
@@ -148,6 +147,41 @@ form.charsheet header section.charname input {
 form.charsheet header section.charname label {
   padding-left: 1em;
 }
+form.charsheet header section.charname .character-header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px;
+}
+form.charsheet header section.charname .character-header-controls button {
+  margin: 0;
+}
+form.charsheet header section.charname .mentor-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 5px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: white;
+  font-size: 10px;
+  cursor: pointer;
+}
+form.charsheet header section.charname .mentor-toggle input {
+  margin: 0;
+  padding: 0;
+}
+form.charsheet header section.charname .mentor-type-select {
+  box-sizing: border-box;
+  width: calc(100% - 10px);
+  min-width: 0;
+  margin: 5px;
+  padding: 4px;
+}
+form.charsheet header section.charname .mentor-type-select[hidden] {
+  display: none;
+}
 form.charsheet header section.charname button {
   align-self: flex-start;
   margin: 5px 5px 0;
@@ -284,12 +318,53 @@ form.charsheet main > section section.attributes {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: stretch;
 }
 form.charsheet main > section section.attributes div.scores {
+  box-sizing: border-box;
+  position: relative;
   width: 101px;
+  min-height: 710px;
   background-color: #bbb;
   border-radius: 10px;
   padding-bottom: 5px;
+}
+form.charsheet main > section section.attributes div.scores .point-buy-counter {
+  padding: 4px 2px 2px;
+  font-size: 8px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls {
+  margin: 2px 3px 4px;
+  padding: 3px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  background: #eee;
+  font-size: 8px;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls[hidden] {
+  display: none;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls [hidden] {
+  display: none;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls label,
+form.charsheet main > section section.attributes div.scores .racial-asi-controls select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 2px;
+  font-size: 8px;
+}
+form.charsheet main > section section.attributes div.scores .racial-asi-controls .racial-asi-fixed {
+  padding-top: 3px;
+  line-height: 1.3;
 }
 form.charsheet main > section section.attributes div.scores label {
   font-size: 8px;
@@ -298,19 +373,46 @@ form.charsheet main > section section.attributes div.scores label {
 form.charsheet main > section section.attributes div.scores ul {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  gap: 12px;
 }
 form.charsheet main > section section.attributes div.scores ul li {
-  height: 80px;
-  width: 70px;
+  box-sizing: border-box;
+  height: 100px;
+  width: 90px;
   background-color: white;
   border: 1px solid black;
   text-align: center;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+}
+form.charsheet main > section section.attributes div.scores ul li div.score-value-controls {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+}
+form.charsheet main > section section.attributes div.scores ul li .score-step-button {
+  box-sizing: border-box;
+  width: 18px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background: #eee;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+form.charsheet main > section section.attributes div.scores ul li .score-step-button:disabled {
+  color: #aaa;
+  cursor: not-allowed;
 }
 form.charsheet main > section section.attributes div.scores ul li input {
   width: 100%;
@@ -319,8 +421,9 @@ form.charsheet main > section section.attributes div.scores ul li input {
 }
 form.charsheet main > section section.attributes div.scores ul li div.score input {
   text-align: center;
-  font-size: 40px;
-  padding: 2px 0px 0px 0px;
+  min-width: 0;
+  font-size: 30px;
+  padding: 2px 0 0;
   background: white;
 }
 form.charsheet main > section section.attributes div.scores ul li div.modifier {
@@ -334,6 +437,28 @@ form.charsheet main > section section.attributes div.scores ul li div.modifier i
   border-radius: 20px;
   margin: -1px;
   text-align: center;
+}
+form.charsheet main > section section.attributes div.rage-toggle-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  visibility: hidden;
+}
+form.charsheet main > section section.attributes #rage-toggle {
+  padding: 6px 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #eee;
+  font-weight: bold;
+  cursor: pointer;
+}
+form.charsheet main > section section.attributes #rage-toggle[aria-pressed="true"] {
+  color: white;
+  background: #a32929;
+}
+form.charsheet main > section section.attributes #rage-toggle:disabled {
+  cursor: not-allowed;
 }
 form.charsheet main > section section.attributes div.attr-applications div.inspiration {
   display: flex;
@@ -390,10 +515,20 @@ form.charsheet main > section section.attributes div.attr-applications div.list-
 form.charsheet main > section section.attributes div.attr-applications div.list-section ul li label span.skill {
   color: #bbb;
 }
-form.charsheet main > section section.attributes div.attr-applications div.skills ul li.stealth-disadvantage label,
-form.charsheet main > section section.attributes div.attr-applications div.skills ul li.stealth-disadvantage label span.skill,
-form.charsheet main > section section.attributes div.attr-applications div.skills ul li.stealth-disadvantage input[type=text] {
-  color: #c62828;
+form.charsheet main > section section.attributes div.attr-applications div.skills ul li.skill-disadvantage input[type=text],
+form.charsheet main > section section.attributes div.attr-applications div.saves ul li.save-disadvantage input[type=text] {
+  background-color: #c62828;
+  color: #fff;
+}
+form.charsheet main > section section.attributes div.attr-applications div.skills ul li.skill-advantage input[type=text],
+form.charsheet main > section section.attributes div.attr-applications div.saves ul li.save-advantage input[type=text] {
+  background-color: #2e7d32;
+  color: #fff;
+}
+form.charsheet main > section section.attributes div.attr-applications div.skills ul li.skill-advantage.skill-disadvantage input[type=text],
+form.charsheet main > section section.attributes div.attr-applications div.saves ul li.save-advantage.save-disadvantage input[type=text] {
+  background: linear-gradient(90deg, #2e7d32 0 50%, #c62828 50% 100%);
+  color: #fff;
 }
 form.charsheet main > section section.attributes div.attr-applications div.list-section ul li input[type=text] {
   width: 30px;
@@ -429,7 +564,18 @@ form.charsheet main > section div.passive-perception input {
   border-radius: 10px;
 }
 form.charsheet main > section div.otherprofs textarea {
+  box-sizing: border-box;
   height: 20em;
+  width: 100%;
+  border: 0;
+  border-radius: 0 0 10px 10px;
+}
+form.charsheet main > section div.otherprofs .otherprofs-content {
+  box-sizing: border-box;
+  width: calc(100% - 20px - 2px);
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
 }
 form.charsheet main > section .armor-options {
   display: grid;
@@ -439,6 +585,8 @@ form.charsheet main > section .armor-options {
   border: 1px solid black;
   border-radius: 10px;
   padding: 6px 8px;
+  box-sizing: border-box;
+  min-height: 118px;
 }
 form.charsheet main > section .armor-options > label {
   font-weight: bold;
@@ -720,10 +868,15 @@ form.charsheet main section.attacksandspellcasting {
   border: 1px solid black;
   border-radius: 10px;
   margin-top: 10px;
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
 }
 form.charsheet main section.attacksandspellcasting > div {
   margin: 10px;
   display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
   flex-direction: column;
 }
 form.charsheet main section.attacksandspellcasting > div > label {
@@ -747,7 +900,9 @@ form.charsheet main section.attacksandspellcasting > div > table input {
 }
 form.charsheet main section.attacksandspellcasting > div textarea {
   border: 0;
-  height: calc(41em + 8px);
+  flex: 1 1 0;
+  min-height: 0;
+  height: auto;
   font-family: 'Roboto', sans-serif;
 }
 form.charsheet main section.equipment {
@@ -975,23 +1130,255 @@ form.charsheet main section.flavor div:last-child {
   border-radius: 0 0 10px 10px;
 }
 form.charsheet main section.features {
+  box-sizing: border-box;
   padding: 10px;
+  display: flex;
+  flex: 0 0 calc(45em + 446px);
+  min-height: 0;
 }
-form.charsheet main section.features div {
+form.charsheet main section.features > div {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+form.charsheet main .combat-details {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 calc(41em + 150px);
+  min-height: 280px;
+  min-width: 0;
+  margin-top: 10px;
+}
+form.charsheet main .damage-resistance-bar {
+  flex: 0 0 auto;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+form.charsheet main .damage-resistance-bar label {
+  display: block;
+  font-weight: bold;
+}
+form.charsheet .ability-choice-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  padding: 2px 4px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  background: #eee;
+}
+form.charsheet .ability-choice-slot:not(.ability-choice-input) {
+  display: contents;
+}
+form.charsheet .feat-boon-slots .ability-choice-input,
+form.charsheet .talent-slots .ability-choice-input {
+  width: 100%;
+}
+form.charsheet .ability-choice-input > input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 21px;
+  padding: 1px 0;
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+}
+form.charsheet .ability-choice-input > select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 17px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+}
+form.charsheet .locked-feat-slot,
+form.charsheet .locked-magic-item-slot {
+  background: #ececec;
+  color: #666;
+}
+form.charsheet main section.features .feature-asi-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 4px;
+}
+form.charsheet main section.features .feature-asi-choice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 5px;
+  font-size: 10px;
+}
+form.charsheet main section.features .feature-asi-level {
+  min-width: 34px;
+  font-weight: bold;
+}
+form.charsheet main section.features .asi-choice-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 5px;
+}
+form.charsheet main section.features .asi-feat-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+form.charsheet main section.features .asi-feat-toggle[hidden],
+form.charsheet main section.features .asi-ability-controls[hidden] {
+  display: none;
+}
+form.charsheet main section.features .asi-feat-toggle input {
+  margin: 0;
+}
+form.charsheet main section.features .asi-ability-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+form.charsheet main section.features .asi-ability-controls select {
+  max-width: 145px;
+  min-width: 0;
+  font-size: 10px;
+}
+form.charsheet main .damage-resistance-bar .defense-details {
+  display: grid;
+  gap: 3px;
+}
+form.charsheet main .damage-resistance-bar .defense-details > div {
+  line-height: 1.35;
+}
+form.charsheet main .damage-resistance-bar .defense-details strong {
+  white-space: nowrap;
+}
+form.charsheet main .rage-choice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+form.charsheet main .rage-choice[hidden] {
+  display: none;
+}
+form.charsheet main .rage-choice label {
+  margin: 0;
+}
+form.charsheet main .rage-choice select {
+  min-width: 0;
+  max-width: 100%;
+}
+form.charsheet main section.features > div {
   padding: 10px;
   border: 1px solid black;
   border-radius: 10px;
   display: flex;
   flex-direction: column-reverse;
 }
-form.charsheet main section.features div label {
+form.charsheet main section.features > div > label {
   text-align: center;
 }
-form.charsheet main section.features div textarea {
+form.charsheet main section.features > div > textarea {
+  display: none;
+}
+form.charsheet main section.features .rage-feature-choices {
+  display: none;
+}
+form.charsheet main section.features .features-rendered {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+form.charsheet main section.features .feature-output-heading {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+form.charsheet main section.features .feature-output-heading:first-child {
+  margin-top: 0;
+}
+form.charsheet main section.features .feature-output-subheading {
+  font-weight: bold;
+}
+form.charsheet main section.features .feature-output-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 8px;
+}
+form.charsheet .fighting-style-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  background: #fff;
+  color: #222;
+  font-size: 10px;
+  line-height: 1.3;
+}
+form.charsheet .fighting-style-choice select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 24px;
+  font-size: 11px;
+}
+form.charsheet .talent-description .fighting-style-choice {
+  padding: 0;
   border: 0;
-  padding: 13px;
-  height: calc(45em + 426px);
-  font-family: 'Roboto', sans-serif;
+}
+form.charsheet .fighting-style-description {
+  overflow-wrap: anywhere;
+}
+form.charsheet main section.features .feature-output-detail {
+  padding-left: 8px;
+  font-style: italic;
+  line-height: 1.3;
+}
+form.charsheet main section.features .feature-output-spacer {
+  height: 2px;
+  flex: 0 0 2px;
+}
+form.charsheet main section.features .feature-output-entry .rage-choice {
+  flex-wrap: wrap;
+  font-size: 10px;
+}
+form.charsheet main section.features .feature-output-entry .rage-choice label {
+  font-weight: bold;
+}
+form.charsheet main section.features .feature-output-entry .totem-rage-choice label,
+form.charsheet main section.features .feature-output-entry .aspect-beast-choice label,
+form.charsheet main section.features .feature-output-entry .totemic-attunement-choice label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+form.charsheet main section.features .feature-output-entry .rage-choice select {
+  flex: 1 1 120px;
 }
 
 .active {
@@ -1069,6 +1456,36 @@ form.charsheet section.feats-boons .feat-boon-slots input {
   background: #eee;
   font-size: 11px;
 }
+form.charsheet section.feats-boons .feat-boon-slots .ability-choice-input > input {
+  height: 21px;
+  border: 0;
+  background: transparent;
+}
+form.charsheet section.feats-boons .feat-boon-slots .ability-choice-slot.feature-slot-entry {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0;
+}
+form.charsheet .feature-description,
+form.charsheet .talent-description {
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid #bbb;
+  background: #fff;
+  color: #222;
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+form.charsheet .feature-description[hidden],
+form.charsheet .talent-description[hidden] {
+  display: none;
+}
+form.charsheet section.feats-boons .feature-description {
+  border-top: 0;
+  border-radius: 0 0 2px 2px;
+}
 form.charsheet section.feats-boons .feats-boons-title {
   display: block;
   margin-top: 8px;
@@ -1085,8 +1502,13 @@ form.charsheet section.talents {
 form.charsheet section.talents .talent-slots {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(7, 30px);
   gap: 6px;
+}
+form.charsheet section.talents .talent-entry {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0;
 }
 form.charsheet section.talents .talent-slot {
   box-sizing: border-box;
@@ -1100,11 +1522,120 @@ form.charsheet section.talents .talent-slot {
   color: black;
   font-size: 11px;
 }
+form.charsheet section.talents .talent-entry.has-description .talent-slot {
+  border-radius: 2px 2px 0 0;
+}
+form.charsheet section.talents .talent-description {
+  border-top: 0;
+  border-radius: 0 0 2px 2px;
+}
+form.charsheet section.talents .ability-choice-input > input {
+  height: 21px;
+  border: 0;
+  background: transparent;
+}
 form.charsheet section.talents .talents-title {
   display: block;
   margin-top: 8px;
   text-align: center;
   font-weight: bold;
+}
+form.charsheet section.character-level-rewards {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+form.charsheet section.character-level-rewards > label {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+form.charsheet section.mentor-progression {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+form.charsheet section.mentor-progression[hidden] {
+  display: none;
+}
+form.charsheet section.mentor-progression > label {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+form.charsheet .mentor-role-choice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 6px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 10px;
+}
+form.charsheet .mentor-role-choice select {
+  min-width: 140px;
+}
+form.charsheet .mentor-role-description {
+  flex: 1 1 180px;
+}
+form.charsheet .character-level-reward-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+}
+form.charsheet .character-level-reward {
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 10px;
+}
+form.charsheet .character-level-reward.locked {
+  background: #f2f2f2;
+  color: #666;
+}
+form.charsheet .character-level-reward-heading {
+  display: block;
+  margin-bottom: 3px;
+}
+form.charsheet .character-level-reward-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+form.charsheet .character-level-reward-item {
+  line-height: 1.2;
+}
+form.charsheet .character-level-reward .asi-choice-control {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+form.charsheet .character-level-reward .asi-ability-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+form.charsheet .character-level-reward .asi-ability-controls[hidden] {
+  display: none;
+}
+form.charsheet .character-level-reward .asi-ability-controls select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  font-size: 10px;
 }
 
 input[type="checkbox"]:checked:after {
