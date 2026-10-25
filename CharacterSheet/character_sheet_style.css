@@ -1249,6 +1249,15 @@ form.charsheet main section.features .asi-feat-toggle {
   gap: 2px;
   margin: 0;
 }
+form.charsheet main section.features .asi-bank-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+form.charsheet main section.features .asi-bank-toggle input {
+  margin: 0;
+}
 form.charsheet main section.features .asi-feat-toggle[hidden],
 form.charsheet main section.features .asi-ability-controls[hidden] {
   display: none;
@@ -1481,6 +1490,11 @@ form.charsheet section.feats-boons .feat-boon-category > label {
   font-size: 10px;
   font-weight: bold;
 }
+form.charsheet .gestalt-asi-bank-status {
+  margin: 0 5px 5px;
+  font-size: 10px;
+  text-align: center;
+}
 form.charsheet section.feats-boons .feat-boon-slots {
   display: grid;
   gap: 6px;
@@ -1634,6 +1648,65 @@ form.charsheet .mentor-role-choice select {
 }
 form.charsheet .mentor-role-description {
   flex: 1 1 180px;
+}
+form.charsheet .mentor-spellcasting-panel {
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 10px;
+}
+form.charsheet .mentor-spellcasting-panel[hidden] {
+  display: none;
+}
+form.charsheet .mentor-spell-choice-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+form.charsheet .mentor-spell-choice-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+form.charsheet .mentor-spell-choice-group input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 3px;
+  font-size: 10px;
+}
+form.charsheet .mentor-spell-slot-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+form.charsheet .mentor-spell-slot-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+}
+form.charsheet .mentor-spell-slot-level {
+  margin-right: 2px;
+  font-weight: bold;
+}
+form.charsheet .mentor-spell-slot input {
+  margin: 0;
+}
+form.charsheet .mentor-combat-bonus {
+  margin: 3px 0 6px;
+  padding: 4px 6px;
+  border: 1px solid #bbb;
+  background: #fff;
+  font-size: 10px;
+}
+form.charsheet .mentor-combat-bonus[hidden] {
+  display: none;
 }
 form.charsheet .character-level-reward-list {
   display: grid;

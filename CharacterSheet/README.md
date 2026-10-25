@@ -4,7 +4,11 @@ A HTML based DnD Charcter Sheet to be used with a browser. Because PDF forms suc
 This is a DnD character sheet made in HTML to be directly run locally from the player's computer. The HTML form auto saves to local storage so that the data persists across multiple reloads/launches of the web browser. (Making a new charcter every time would defeat the purpose and would give PDF form believers a leg to stand on.)
 
 
-**Spellcasting is currently under development - The attacks, actions and weapons section can be used for spellcasting, but it is significantly more cumbersome**
+The Mentor Spellcaster track includes spell choices, its Arena spell-slot progression, and expended-slot checkboxes that reset on a Long Rest. General spellcasting outside the Mentor track is still manual; the attacks, actions and weapons section can be used for it.
+
+The Gestalt checkbox treats the highest entered class level as the character level, tracks duplicate class features, and unlocks a feat slot for each replacement. At class ASI levels 4, 8, 12, 16, and 19, Gestalt characters can bank +1 points; every two banked points unlock a feat slot.
+
+Expert mentor infusion fields unlock at levels 3, 9, 13, and 17. Warrior mentor attack and defense bonuses are reflected in the sheet's combat effects and AC calculation.
 
 ## Features ##
 1. Consistent display of information. (Say goodbye to PDF forms not opening correctly on edge and then the saved form not opening correctly on chrome where it once opened just fine.)
@@ -31,4 +35,3 @@ Simply right click on the character_sheet.html and click open with > (your favou
 
 --------------------------------------------------------------------------------------------------------
 *Credit for codebase goes to : https://codepen.io/evertras/full/YVVeMd/   This project was build upon this.
-

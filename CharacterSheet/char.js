@@ -19,6 +19,7 @@ $(function () {
 	let classAsiChoices = {};
 	let activeClassAsiKeys = [];
 	let activeSinglePointAsiKeys = {};
+	let gestaltDuplicateFeatures = [];
 	const storedClassAsiChoices = localStorage.getItem(classAsiStorageKey);
 	if (storedClassAsiChoices) {
 		try {
@@ -49,6 +50,32 @@ $(function () {
 	let activeMentorAsiLevels = [];
 	const mentorRoleStorageKey = "page1_mentorRole";
 	let selectedMentorRole = localStorage.getItem(mentorRoleStorageKey) || "";
+	const mentorSpellStorageKey = "page1_mentorSpellChoices";
+	let mentorSpellChoices = {};
+	const storedMentorSpellChoices = localStorage.getItem(mentorSpellStorageKey);
+	if (storedMentorSpellChoices) {
+		try {
+			const parsedMentorSpellChoices = JSON.parse(storedMentorSpellChoices);
+			if (parsedMentorSpellChoices && typeof parsedMentorSpellChoices === "object" && !Array.isArray(parsedMentorSpellChoices)) {
+				mentorSpellChoices = parsedMentorSpellChoices;
+			}
+		} catch (error) {
+			console.error("Unable to restore mentor spell choices.", error);
+		}
+	}
+	const attackBonusBaseStorageKey = "page1_attackBonusBaseValues";
+	let attackBonusBaseValues = {};
+	const storedAttackBonusBaseValues = localStorage.getItem(attackBonusBaseStorageKey);
+	if (storedAttackBonusBaseValues) {
+		try {
+			const parsedAttackBonusBaseValues = JSON.parse(storedAttackBonusBaseValues);
+			if (parsedAttackBonusBaseValues && typeof parsedAttackBonusBaseValues === "object" && !Array.isArray(parsedAttackBonusBaseValues)) {
+				attackBonusBaseValues = parsedAttackBonusBaseValues;
+			}
+		} catch (error) {
+			console.error("Unable to restore base attack bonuses.", error);
+		}
+	}
 	const storedMentorAsiChoices = localStorage.getItem(mentorAsiStorageKey);
 	if (storedMentorAsiChoices) {
 		try {
@@ -351,6 +378,8 @@ $(function () {
 		localStorage.removeItem(characterAsiStorageKey);
 		localStorage.removeItem(mentorAsiStorageKey);
 		localStorage.removeItem(mentorRoleStorageKey);
+		localStorage.removeItem(mentorSpellStorageKey);
+		localStorage.removeItem(attackBonusBaseStorageKey);
 		localStorage.removeItem(fightingStyleStorageKey);
 		localStorage.removeItem("page1_manualAttunementSlots");
 		localStorage.removeItem(maxHpStorageKey);
@@ -385,6 +414,7 @@ $(function () {
 		{ level: 19, rarity: "artifact", slot: 1 },
 	];
 	const mentorSinglePointAsiLevels = [4, 8, 12, 16, 19];
+	const gestaltSinglePointAsiLevels = [4, 8, 12, 16, 19];
 	const mentorFeatureRules = {
 		Expert: {
 			roleOptions: null,
@@ -395,7 +425,7 @@ $(function () {
 					"Mentor reward: gain an extra feat, magic item, and talent. Random rewards offer four options, and you can build upwards from acquired talent nodes.",
 				],
 				2: ["Cunning Action: take Dash, Disengage, or Hide as a bonus action on your turn."],
-				3: ["Infuse Item: infuse mundane items with magical infusions; learn infusions and infuse one item per known infusion."],
+				3: ["Infuse Item: learn one artificer infusion and infuse one item for each infusion known."],
 				4: ["Ability Score Improvement"],
 				6: ["Flash of Expertise: add your proficiency bonus to a nearby creature's ability check or saving throw as a reaction, proficiency-bonus uses per long rest."],
 				7: ["Evasion: take no damage on a successful Dexterity save for half damage, and half damage on a failure; no benefit while incapacitated."],
@@ -420,26 +450,26 @@ $(function () {
 				Prodigy: "Bard and Warlock spell lists; Charisma is your spellcasting ability.",
 			},
 			spellProgression: [
-				[1, 2, 2, 0, 0, 0, 0],
+				[1, 2, 0, 0, 0, 0, 0],
 				[2, 2, 2, 0, 0, 0, 0],
-				[3, 2, 3, 0, 0, 0, 0],
-				[3, 3, 3, 0, 0, 0, 0],
-				[4, 3, 4, 2, 0, 0, 0],
-				[4, 3, 4, 2, 0, 0, 0],
-				[5, 3, 4, 3, 0, 0, 0],
-				[5, 3, 4, 3, 0, 0, 0],
-				[6, 4, 4, 3, 2, 0, 0],
-				[6, 4, 4, 3, 2, 0, 0],
-				[7, 4, 4, 3, 3, 0, 0],
-				[7, 4, 4, 3, 3, 0, 0],
-				[8, 4, 4, 3, 3, 1, 0],
-				[8, 4, 4, 3, 3, 1, 0],
-				[9, 4, 4, 3, 3, 2, 0],
-				[9, 4, 4, 3, 3, 2, 0],
-				[10, 4, 4, 3, 3, 3, 1],
-				[10, 4, 4, 3, 3, 3, 1],
-				[11, 4, 4, 3, 3, 3, 2],
-				[11, 4, 4, 3, 3, 3, 2],
+				[3, 2, 2, 0, 0, 0, 0],
+				[3, 3, 2, 0, 0, 0, 0],
+				[4, 3, 2, 0, 0, 0, 0],
+				[4, 3, 3, 0, 0, 0, 0],
+				[5, 3, 3, 0, 0, 0, 0],
+				[5, 3, 3, 0, 0, 0, 0],
+				[6, 3, 3, 0, 0, 0, 0],
+				[6, 4, 4, 2, 0, 0, 0],
+				[7, 4, 4, 2, 0, 0, 0],
+				[7, 4, 4, 2, 0, 0, 0],
+				[8, 4, 4, 2, 0, 0, 0],
+				[8, 4, 4, 3, 0, 0, 0],
+				[9, 4, 4, 3, 0, 0, 0],
+				[9, 4, 4, 3, 0, 0, 0],
+				[10, 4, 4, 3, 0, 0, 0],
+				[10, 4, 4, 3, 2, 0, 0],
+				[11, 4, 4, 3, 2, 0, 0],
+				[11, 4, 4, 3, 2, 0, 0],
 			],
 			features: {
 				1: ["Bonus proficiencies: choose Wisdom, Intelligence, or Charisma for a saving throw; choose two skills from Arcana, History, Insight, Investigation, Medicine, Performance, Persuasion, and Religion; gain light armor and one tool proficiency.", "Spellcasting: choose Mage, Healer, or Prodigy as your role. You know two cantrips and one 1st-level spell from its spell list; you regain expended spell slots on a long rest."],
@@ -812,6 +842,7 @@ $(function () {
 
 	function getTotalClassLevels(excludedLevelInput) {
 		let totalLevel = 0;
+		const gestalt = isGestaltEnabled();
 
 		$("#page1 .class-pair").each(function () {
 			if ($(this).find(".class-name-input").val().trim() === "") {
@@ -826,7 +857,7 @@ $(function () {
 			const levelValue = levelInput.val().trim();
 			const level = Number(levelValue);
 			if (levelValue !== "" && Number.isInteger(level) && level >= 1 && level <= 20) {
-				totalLevel += level;
+				totalLevel = gestalt ? Math.max(totalLevel, level) : totalLevel + level;
 			}
 		});
 
@@ -1036,6 +1067,15 @@ $(function () {
 			localStorage.setItem(storageKey, JSON.stringify(false));
 		});
 		$("#page1 .ability-use-checkbox").prop("checked", false);
+		$("#page1 .mentor-spell-slot-used").prop("checked", false);
+		if (mentorSpellChoices.usedSlots) {
+			Object.keys(mentorSpellChoices.usedSlots).forEach(function (spellLevel) {
+				mentorSpellChoices.usedSlots[spellLevel] = mentorSpellChoices.usedSlots[spellLevel].map(function () {
+					return false;
+				});
+			});
+			saveMentorSpellChoices();
+		}
 
 		const maximumHp = Number($("#page1 [name='maxhp']").val());
 		if (Number.isFinite(maximumHp)) {
@@ -1064,10 +1104,12 @@ $(function () {
 			: null;
 
 		if (changedLevelInput) {
-			const remainingLevel = Math.max(0, 20 - getTotalClassLevels(changedLevelInput));
-			const changedLevel = Number($(changedLevelInput).val());
-			if ($(changedLevelInput).val().trim() !== "" && changedLevel > remainingLevel) {
-				$(changedLevelInput).val(remainingLevel >= 1 ? remainingLevel : "");
+			if (!isGestaltEnabled()) {
+				const remainingLevel = Math.max(0, 20 - getTotalClassLevels(changedLevelInput));
+				const changedLevel = Number($(changedLevelInput).val());
+				if ($(changedLevelInput).val().trim() !== "" && changedLevel > remainingLevel) {
+					$(changedLevelInput).val(remainingLevel >= 1 ? remainingLevel : "");
+				}
 			}
 		}
 
@@ -1076,7 +1118,7 @@ $(function () {
 
 		$("#page1 .class-pair").each(function () {
 			const levelInput = $(this).find(".class-level-input");
-			const maxLevel = Math.max(0, 20 - getTotalClassLevels(levelInput[0]));
+			const maxLevel = isGestaltEnabled() ? 20 : Math.max(0, 20 - getTotalClassLevels(levelInput[0]));
 			levelInput.attr("max", maxLevel);
 
 			if ($(this).find(".class-name-input").val().trim() === "") {
@@ -1091,7 +1133,7 @@ $(function () {
 				return;
 			}
 
-			totalLevel += level;
+			totalLevel = isGestaltEnabled() ? Math.max(totalLevel, level) : totalLevel + level;
 		});
 		if (totalLevel > 20) {
 			validLevels = false;
@@ -1562,6 +1604,150 @@ $(function () {
 
 	function isMentorSinglePointLevel(level) {
 		return isMentorEnabled() && mentorSinglePointAsiLevels.indexOf(Number(level)) !== -1;
+	}
+
+	function isGestaltEnabled() {
+		return $("#page1 [name='gestalt-enabled']").is(":checked");
+	}
+
+	function isSinglePointClassAsi(level) {
+		return isMentorSinglePointLevel(level)
+			|| (isGestaltEnabled() && gestaltSinglePointAsiLevels.indexOf(Number(level)) !== -1);
+	}
+
+	function saveMentorSpellChoices() {
+		localStorage.setItem(mentorSpellStorageKey, JSON.stringify(mentorSpellChoices));
+	}
+
+	function getAttackBonusBaseValue(input) {
+		if (!Object.prototype.hasOwnProperty.call(attackBonusBaseValues, input.name)) {
+			attackBonusBaseValues[input.name] = $(input).val();
+			localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
+		}
+		return String(attackBonusBaseValues[input.name] || "");
+	}
+
+	function updateCalculatedAttackBonuses() {
+		const mentorBonus = Number(characterEffects.attackBonus) || 0;
+		$("#page1 input[name^='atkbonus']").each(function () {
+			const baseValue = getAttackBonusBaseValue(this);
+			const match = baseValue.trim().match(/^([+-]?\d+)(.*)$/);
+			if (!match) {
+				$(this).val(baseValue);
+				return;
+			}
+			const adjustedBonus = Number(match[1]) + mentorBonus;
+			$(this).val((adjustedBonus > 0 ? "+" : "") + adjustedBonus + match[2]);
+		});
+	}
+
+	function renderMentorSpellcasting(mentor, mentorType, mentorLevel) {
+		const panel = $("#page1 #mentor-spellcasting-panel");
+		const spellChoices = $("#page1 #mentor-spell-choice-list").empty();
+		const slotTracker = $("#page1 #mentor-spell-slot-tracker").empty();
+		const isSpellcaster = mentorType === "Spellcaster" && mentor && mentorLevel > 0;
+		panel.prop("hidden", !isSpellcaster);
+		if (!isSpellcaster) {
+			return;
+		}
+
+		const progression = mentor.spellProgression[mentorLevel - 1];
+		[
+			{ key: "cantrips", label: "Cantrips", count: progression[1] },
+			{ key: "spells", label: "Spells known", count: progression[0] },
+		].forEach(function (category) {
+			const group = $("<div>", { class: "mentor-spell-choice-group" }).appendTo(spellChoices);
+			$("<strong>", { text: category.label }).appendTo(group);
+			for (let index = 0; index < category.count; index++) {
+				const values = Array.isArray(mentorSpellChoices[category.key]) ? mentorSpellChoices[category.key] : [];
+				const input = $("<input>", {
+					type: "text",
+					class: "mentor-spell-choice-input",
+					"data-spell-choice-kind": category.key,
+					"data-spell-choice-index": index,
+					"aria-label": category.label + " " + (index + 1),
+					placeholder: (category.key === "cantrips" ? "Cantrip " : "Spell ") + (index + 1),
+				}).val(values[index] || "");
+				input.appendTo(group);
+			}
+		});
+
+		const spellLevelNames = ["1st", "2nd", "3rd", "4th", "5th"];
+		progression.slice(2).forEach(function (maximum, levelIndex) {
+			if (!maximum) {
+				return;
+			}
+			const spellLevel = levelIndex + 1;
+			const levelGroup = $("<div>", { class: "mentor-spell-slot-group" }).appendTo(slotTracker);
+			const usedSlots = mentorSpellChoices.usedSlots && mentorSpellChoices.usedSlots[spellLevel] || [];
+			$("<span>", {
+				class: "mentor-spell-slot-level",
+				text: spellLevelNames[levelIndex] + "-level slots (" + maximum + ")",
+			}).appendTo(levelGroup);
+			for (let slotIndex = 0; slotIndex < maximum; slotIndex++) {
+				const checkbox = $("<input>", {
+					type: "checkbox",
+					class: "mentor-spell-slot-used",
+					"data-spell-slot-level": spellLevel,
+					"data-spell-slot-index": slotIndex,
+					"aria-label": spellLevelNames[levelIndex] + "-level slot " + (slotIndex + 1) + " expended",
+				}).prop("checked", !!usedSlots[slotIndex]);
+				$("<label>", { class: "mentor-spell-slot" })
+					.append(checkbox)
+					.appendTo(levelGroup);
+			}
+		});
+	}
+
+	function updateExpertInfusionSlots(mentorType, mentorLevel) {
+		const infusionCount = mentorType !== "Expert"
+			? 0
+			: (mentorLevel >= 3 ? 1 : 0)
+				+ (mentorLevel >= 9 ? 1 : 0)
+				+ (mentorLevel >= 13 ? 1 : 0)
+				+ (mentorLevel >= 17 ? 1 : 0);
+		$("#page1 [name^='magic-infusion-']").each(function (index) {
+			const unlocked = index < infusionCount;
+			if (!unlocked && magicItemInput === this) {
+				closeMagicItemSuggestions();
+			}
+			$(this)
+				.prop("readOnly", !unlocked)
+				.toggleClass("locked-magic-item-slot", !unlocked)
+				.attr("placeholder", unlocked ? "Infusion " + (index + 1) : "Unlocks at Expert level " + [3, 9, 13, 17][index]);
+			if (unlocked) {
+				$(this).attr("data-suggestion-list", "magic-infusion-options").removeAttr("aria-readonly");
+			} else {
+				$(this).removeAttr("data-suggestion-list").attr("aria-readonly", "true");
+			}
+		});
+	}
+
+	function getGestaltFeatureName(feature) {
+		return typeof feature === "string" ? feature : feature && feature.name;
+	}
+
+	function removeGestaltDuplicateFeatures(featureGroups) {
+		const seenFeatureSources = {};
+		const replacements = [];
+		featureGroups.forEach(function (group) {
+			group.features = group.features.filter(function (feature) {
+				const name = getGestaltFeatureName(feature);
+				if (!name || /^Ability Score Improvement(?:\s+\(\d+\))?$/i.test(name)) {
+					return true;
+				}
+				if (!seenFeatureSources[name]) {
+					seenFeatureSources[name] = group.source;
+					return true;
+				}
+				if (seenFeatureSources[name] === group.source) {
+					return true;
+				}
+				replacements.push(name);
+				return false;
+			});
+		});
+		return replacements;
 	}
 
 	const classRules = {
@@ -3472,7 +3658,10 @@ $(function () {
 				$("#page1 [name='atkdamage" + previous.slot + "']"),
 			];
 			if (previousFields.every(function (field, index) {
-				return field.val() === previous.values[index];
+				const currentValue = index === 1 && field.length
+					? getAttackBonusBaseValue(field[0])
+					: field.val();
+				return currentValue === previous.values[index];
 			})) {
 				previousFields.forEach(function (field) {
 					field.val("").trigger("change");
@@ -4386,8 +4575,8 @@ $(function () {
 		return String(value || "").replace(/\s+\(\+1 (Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\)$/, "");
 	}
 
-	function addAbilityScoreChoice(effects, choice, singlePoint) {
-		if (!choice || choice.chooseFeat) {
+	function addAbilityScoreChoice(effects, choice, singlePoint, gestaltPoint) {
+		if (!choice || (choice.chooseFeat && !gestaltPoint) || (choice.bankPoint && gestaltPoint)) {
 			return;
 		}
 		const first = choice.firstAbility;
@@ -4411,7 +4600,8 @@ $(function () {
 	function getAbilityImprovementEffects() {
 		const effects = createEmptyEffects();
 		activeClassAsiKeys.forEach(function (key) {
-			addAbilityScoreChoice(effects, classAsiChoices[key], !!activeSinglePointAsiKeys[key]);
+			const gestaltPoint = isGestaltEnabled() && !!activeSinglePointAsiKeys[key];
+			addAbilityScoreChoice(effects, classAsiChoices[key], !!activeSinglePointAsiKeys[key], gestaltPoint);
 		});
 		activeCharacterAsiLevels.forEach(function (level) {
 			addAbilityScoreChoice(effects, characterAsiChoices[level], false);
@@ -4451,9 +4641,19 @@ $(function () {
 
 	function updateFeatRewardSlots(characterLevel, classAsiEntries) {
 		const classFeatChoices = classAsiEntries.reduce(function (count, entry) {
-			return count + (classAsiChoices[entry.key] && classAsiChoices[entry.key].chooseFeat ? 1 : 0);
+			const choice = classAsiChoices[entry.key];
+			const isGestaltSinglePoint = isGestaltEnabled()
+				&& gestaltSinglePointAsiLevels.indexOf(entry.level) !== -1;
+			return count + (choice && choice.chooseFeat && !isGestaltSinglePoint ? 1 : 0);
 		}, 0);
+		const bankedAsiPoints = isGestaltEnabled()
+			? classAsiEntries.reduce(function (count, entry) {
+				return count + (classAsiChoices[entry.key] && classAsiChoices[entry.key].bankPoint ? 1 : 0);
+			}, 0)
+			: 0;
+		const gestaltFeatCount = Math.floor(bankedAsiPoints / 2);
 		const unlockedFeatSlots = [1];
+		const gestaltFeatLabels = [];
 		let nextSlot = getFirstCharacterFeatSlot();
 		characterFeatRewardLevels.forEach(function (level) {
 			if (characterLevel >= level) {
@@ -4465,6 +4665,21 @@ $(function () {
 			unlockedFeatSlots.push(nextSlot);
 			nextSlot += 1;
 		}
+		for (let bankedFeatIndex = 0; bankedFeatIndex < gestaltFeatCount; bankedFeatIndex++) {
+			unlockedFeatSlots.push(nextSlot);
+			gestaltFeatLabels.push({ slot: nextSlot, label: "Gestalt ASI feat (2 banked points)" });
+			nextSlot += 1;
+		}
+		gestaltDuplicateFeatures.forEach(function (featureName) {
+			unlockedFeatSlots.push(nextSlot);
+			gestaltFeatLabels.push({ slot: nextSlot, label: "Replace duplicate " + featureName });
+			nextSlot += 1;
+		});
+		$("#page1 #gestalt-asi-bank-status")
+			.text(isGestaltEnabled()
+				? "Gestalt ASI points banked toward feats: " + bankedAsiPoints + " (each pair unlocks a feat slot)."
+				: "")
+			.prop("hidden", !isGestaltEnabled());
 
 		$("#page1 [name^='feat-slot-']").each(function () {
 			const slotNumber = Number(this.name.match(/\d+$/)[0]);
@@ -4472,14 +4687,17 @@ $(function () {
 				return;
 			}
 			const unlocked = unlockedFeatSlots.indexOf(slotNumber) !== -1;
+			const gestaltFeatLabel = gestaltFeatLabels.find(function (entry) {
+				return entry.slot === slotNumber;
+			});
 			if (!unlocked && magicItemInput === this) {
 				closeMagicItemSuggestions();
 			}
 			$(this)
 				.prop("readOnly", !unlocked)
 				.toggleClass("locked-feat-slot", !unlocked)
-				.attr("placeholder", unlocked ? "" : "Unlocks with a feat reward")
-				.attr("aria-label", "Feat slot " + slotNumber + (unlocked ? "" : " (locked)"));
+				.attr("placeholder", unlocked ? (gestaltFeatLabel ? gestaltFeatLabel.label : "") : "Unlocks with a feat reward")
+				.attr("aria-label", "Feat slot " + slotNumber + (gestaltFeatLabel ? ": " + gestaltFeatLabel.label : unlocked ? "" : " (locked)"));
 			if (unlocked) {
 				$(this).attr("data-suggestion-list", "feat-options").removeAttr("aria-readonly");
 			} else {
@@ -4562,8 +4780,12 @@ $(function () {
 		activeMentorAsiLevels = [];
 
 		if (!mentor) {
+			renderMentorSpellcasting(null, mentorType, 0);
+			updateExpertInfusionSlots("", 0);
 			return;
 		}
+		renderMentorSpellcasting(mentor, mentorType, characterLevel);
+		updateExpertInfusionSlots(mentorType, characterLevel);
 
 		const selectedRole = selectedMentorRole;
 		if (mentor.roleOptions) {
@@ -4678,6 +4900,7 @@ $(function () {
 		const control = $("<div>", { class: "asi-choice-control" });
 		const singlePoint = !!options.singlePoint;
 		let checkboxLabel = $();
+		let bankLabel = $();
 		if (options.allowFeat) {
 			checkboxLabel = $("<label>", { class: "asi-feat-toggle" }).appendTo(control);
 			$("<input>", {
@@ -4687,6 +4910,16 @@ $(function () {
 				"data-asi-feat-toggle": "true",
 			}).prop("checked", !!choice.chooseFeat).appendTo(checkboxLabel);
 			$("<span>", { text: "Choose a feat instead" }).appendTo(checkboxLabel);
+		}
+		if (options.allowBank && singlePoint) {
+			bankLabel = $("<label>", { class: "asi-bank-toggle" }).appendTo(control);
+			$("<input>", {
+				type: "checkbox",
+				"data-asi-choice-key": choice.key,
+				"data-asi-choice-type": options.choiceType,
+				"data-asi-bank-toggle": "true",
+			}).prop("checked", !!choice.bankPoint).appendTo(bankLabel);
+			$("<span>", { text: "Bank this +1 point" }).appendTo(bankLabel);
 		}
 
 		const abilityControls = $("<div>", { class: "asi-ability-controls" }).appendTo(control);
@@ -4745,7 +4978,8 @@ $(function () {
 				&& abilityNames.indexOf(choice.secondAbility) !== -1
 				&& choice.firstAbility !== choice.secondAbility
 			: abilityNames.indexOf(choice.firstAbility) !== -1;
-		abilityControls.prop("hidden", !!choice.chooseFeat);
+		const bankPointSelected = !!options.allowBank && !!choice.bankPoint;
+		abilityControls.prop("hidden", (!!choice.chooseFeat && !options.allowBank) || bankPointSelected);
 		checkboxLabel.prop("hidden", !choice.chooseFeat && abilityChoiceComplete);
 		return control;
 	}
@@ -4961,6 +5195,9 @@ $(function () {
 		}
 
 		$("#page1 [name^='feat-slot-']").each(function () {
+			if ($(this).prop("readOnly")) {
+				return;
+			}
 			addSelection($(this).val(), this.name, selectedFeatureEffectRules.feats, featChoices, featBoonDescriptions);
 		});
 		$("#page1 [name^='boon-slot-']").each(function () {
@@ -5033,6 +5270,27 @@ $(function () {
 		return effects;
 	}
 
+	function getMentorCombatEffects() {
+		const effects = createEmptyEffects();
+		if (!isMentorEnabled() || $("#page1 [name='mentor-type']").val() !== "Warrior") {
+			return effects;
+		}
+
+		const mentorLevel = getTotalClassLevels();
+		const mentorRole = selectedMentorRole;
+		if (mentorRole === "Attacker") {
+			effects.attackBonus = 2;
+			effects.specialNotes.push("Warrior Attacker: +2 to all attack rolls.");
+		} else if (mentorRole === "Defender") {
+			effects.specialNotes.push("Warrior Defender: use your reaction to impose disadvantage on an attack against a creature within 5 feet of you (not you), if you can see the attacker.");
+		}
+		if (mentorLevel >= 10) {
+			effects.armorBonus = 1;
+			effects.specialNotes.push("Warrior Improved Defense: +1 AC.");
+		}
+		return effects;
+	}
+
 	function updateCharacterEffects(effects) {
 		updateRageControls();
 		raceEffects = effects;
@@ -5040,6 +5298,7 @@ $(function () {
 		mergeEffects(combinedEffects, effects);
 		mergeEffects(combinedEffects, getClassModifierEffects());
 		mergeEffects(combinedEffects, getSelectedFeatBoonTalentEffects());
+		mergeEffects(combinedEffects, getMentorCombatEffects());
 		Object.keys(combinedEffects).forEach(function (effectName) {
 			if (Array.isArray(combinedEffects[effectName])) {
 				combinedEffects[effectName] = combinedEffects[effectName].filter(function (value, index, values) {
@@ -5051,11 +5310,26 @@ $(function () {
 			}
 		});
 		characterEffects = combinedEffects;
+		const mentorCombatBonuses = [];
+		if (isMentorEnabled()
+			&& $("#page1 [name='mentor-type']").val() === "Warrior"
+			&& selectedMentorRole === "Attacker") {
+			mentorCombatBonuses.push("Warrior Attacker: +2 to all attack rolls");
+		}
+		if (isMentorEnabled()
+			&& $("#page1 [name='mentor-type']").val() === "Warrior"
+			&& getTotalClassLevels() >= 10) {
+			mentorCombatBonuses.push("Warrior Improved Defense: +1 AC");
+		}
+		$("#page1 .mentor-combat-bonus")
+			.text(mentorCombatBonuses.join(" | "))
+			.prop("hidden", mentorCombatBonuses.length === 0);
 		updateDisplayedAbilityScores();
 		const beastAttackWarning = updateBeastRageAttack();
 		if (beastAttackWarning) {
 			characterEffects.rageEffects.push(beastAttackWarning);
 		}
+		updateCalculatedAttackBonuses();
 
 		const racialSkills = characterEffects.skills || [];
 		$("#page1 .skills input[type='checkbox']").each(function () {
@@ -5179,6 +5453,7 @@ $(function () {
 		const classAsiEntriesByClass = {};
 		let classAsiEntries = [];
 		const subclassFeatures = {};
+		const gestaltFeatureGroups = [];
 		const subclassChoiceDetails = {};
 		const subclassChoiceControls = {
 			"Path of the Totem Warrior|Totem Spirit": ".totem-rage-choice",
@@ -5210,6 +5485,7 @@ $(function () {
 				classRule.features,
 				level
 			);
+			gestaltFeatureGroups.push({ source: "class:" + className, features: classFeatures[className] });
 			const classImprovements = getClassAbilityScoreImprovements(classRule, level, pairIndex);
 			if (classImprovements.length) {
 				classAsiEntriesByClass[className] = (classAsiEntriesByClass[className] || [])
@@ -5227,16 +5503,20 @@ $(function () {
 					subclassRule.features,
 					level
 				);
+				gestaltFeatureGroups.push({ source: "subclass:" + subclassName, features: subclassFeatures[subclassName] });
 			}
 		});
 
 		const characterLevel = getTotalClassLevels();
+		gestaltDuplicateFeatures = isGestaltEnabled()
+			? removeGestaltDuplicateFeatures(gestaltFeatureGroups)
+			: [];
 		syncTalentTreeLevel();
 		updateAttunementSlots();
 		activeClassAsiKeys = classAsiEntries.map(function (entry) { return entry.key; });
 		activeSinglePointAsiKeys = {};
 		classAsiEntries.forEach(function (entry) {
-			if (isMentorSinglePointLevel(entry.level)) {
+			if (isSinglePointClassAsi(entry.level)) {
 				activeSinglePointAsiKeys[entry.key] = true;
 			}
 		});
@@ -5381,10 +5661,11 @@ $(function () {
 				const row = $("<div>", { class: "feature-asi-choice" });
 				$("<span>", { class: "feature-asi-level", text: "Level " + asiEntry.level }).appendTo(row);
 				createAbilityScoreChoiceControl(choice, {
-					allowFeat: true,
+					allowFeat: !(isGestaltEnabled() && gestaltSinglePointAsiLevels.indexOf(asiEntry.level) !== -1),
+					allowBank: isGestaltEnabled() && gestaltSinglePointAsiLevels.indexOf(asiEntry.level) !== -1,
 					choiceType: "class",
 					label: "Class level " + asiEntry.level + " Ability Score Improvement",
-					singlePoint: isMentorSinglePointLevel(asiEntry.level),
+					singlePoint: isSinglePointClassAsi(asiEntry.level),
 				}).appendTo(row);
 				row.appendTo(classAsiControlsByClass[className]);
 			});
@@ -6485,6 +6766,11 @@ $(function () {
 
 	$("#page1 [name='background']").on("input change", updateBackgroundFeat);
 	$("#page1").on("input change", "[name^='feat-slot-'], [name^='boon-slot-']", updateFeatures);
+	$("#page1").on("change", "input[name^='atkbonus']", function () {
+		attackBonusBaseValues[this.name] = $(this).val();
+		localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
+		updateCalculatedAttackBonuses();
+	});
 	$("#page1").on("change", ".feature-ability-choice", function () {
 		const choiceKey = $(this).attr("data-ability-choice");
 		selectedAbilityChoices[choiceKey] = $(this).val();
@@ -6505,6 +6791,30 @@ $(function () {
 	$("#page1 [name='mentor-enabled'], #page1 [name='mentor-type']").on("input change", function () {
 		updateFeatures();
 	});
+	$("#page1 [name='gestalt-enabled']").on("input change", function () {
+		updateProficiencyBonus();
+		updateFeatures();
+	});
+	$("#page1").on("input change", ".mentor-spell-choice-input", function () {
+		const kind = $(this).attr("data-spell-choice-kind");
+		const index = Number($(this).attr("data-spell-choice-index"));
+		if (kind !== "spells" && kind !== "cantrips") {
+			return;
+		}
+		if (!Array.isArray(mentorSpellChoices[kind])) {
+			mentorSpellChoices[kind] = [];
+		}
+		mentorSpellChoices[kind][index] = $(this).val();
+		saveMentorSpellChoices();
+	});
+	$("#page1").on("change", ".mentor-spell-slot-used", function () {
+		const level = $(this).attr("data-spell-slot-level");
+		const index = Number($(this).attr("data-spell-slot-index"));
+		mentorSpellChoices.usedSlots = mentorSpellChoices.usedSlots || {};
+		mentorSpellChoices.usedSlots[level] = mentorSpellChoices.usedSlots[level] || [];
+		mentorSpellChoices.usedSlots[level][index] = $(this).prop("checked");
+		saveMentorSpellChoices();
+	});
 	$("#page1").on("change", "[name='mentor-role']", function () {
 		selectedMentorRole = $(this).val();
 		localStorage.setItem(mentorRoleStorageKey, selectedMentorRole);
@@ -6521,6 +6831,14 @@ $(function () {
 		const choice = choices[choiceKey] || {};
 		if ($(this).is("[data-asi-feat-toggle]")) {
 			choice.chooseFeat = $(this).prop("checked");
+			if (choice.chooseFeat) {
+				choice.bankPoint = false;
+			}
+		} else if ($(this).is("[data-asi-bank-toggle]")) {
+			choice.bankPoint = $(this).prop("checked");
+			if (choice.bankPoint) {
+				choice.chooseFeat = false;
+			}
 		} else {
 			choice[$(this).attr("data-asi-field")] = $(this).val();
 		}

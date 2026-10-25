@@ -24,6 +24,7 @@
       <div class="character-header-controls">
         <button id="reset-character" type="button">Reset Character</button>
         <label class="mentor-toggle"><input name="mentor-enabled" type="checkbox" /> Mentor</label>
+        <label class="mentor-toggle"><input name="gestalt-enabled" type="checkbox" /> Gestalt</label>
       </div>
       <select class="mentor-type-select" name="mentor-type" aria-label="Mentor type" hidden>
         <option value="">Choose mentor</option>
@@ -499,6 +500,7 @@
         <section class="attacksandspellcasting">
           <div>
             <label>Attacks, Actions and Cantrips</label>
+            <div class="mentor-combat-bonus" aria-live="polite" hidden></div>
             <div class="rage-choice beast-rage-choice" hidden>
               <label for="rage-beast-form">Beast Form</label>
               <select id="rage-beast-form" name="rage-beast-form">
@@ -933,8 +935,10 @@
             <div class="magic-item-category">
               <label>Infusions</label>
               <div class="magic-item-slots">
-                <input name="magic-infusion-1" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Infusion 1" />
-                <input name="magic-infusion-2" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Infusion 2" />
+                <input name="magic-infusion-1" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 3" />
+                <input name="magic-infusion-2" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 9" />
+                <input name="magic-infusion-3" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 13" />
+                <input name="magic-infusion-4" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 17" />
               </div>
             </div>
           </div>
@@ -1343,6 +1347,7 @@
       <div class="feat-boon-layout">
         <div class="feat-boon-category feats-category">
           <label>Feats</label>
+          <div id="gestalt-asi-bank-status" class="gestalt-asi-bank-status" hidden></div>
           <div class="feat-boon-slots feat-slots">
             <input name="feat-slot-01" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 1" placeholder="Background Feat" />
             <input name="feat-slot-02" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 2" />
@@ -1678,6 +1683,11 @@
     <section class="mentor-progression" aria-labelledby="mentor-progression-title" hidden>
       <label id="mentor-progression-title">MENTOR FEATURES</label>
       <div id="mentor-role-choice" class="mentor-role-choice"></div>
+      <div id="mentor-spellcasting-panel" class="mentor-spellcasting-panel" hidden>
+        <strong>Spellcasting</strong>
+        <div id="mentor-spell-choice-list" class="mentor-spell-choice-list"></div>
+        <div id="mentor-spell-slot-tracker" class="mentor-spell-slot-tracker"></div>
+      </div>
       <div id="mentor-progression-list" class="character-level-reward-list" aria-live="polite"></div>
     </section>
 
