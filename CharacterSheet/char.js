@@ -1,28 +1,28 @@
 
 $(function () {
-	var savedClass = localStorage.getItem("page1_characterclass");
-	var savedClassLevel = localStorage.getItem("page1_classlevel");
+	const savedClass = localStorage.getItem("page1_characterclass");
+	const savedClassLevel = localStorage.getItem("page1_classlevel");
 
 	if (savedClass === null && savedClassLevel !== null) {
-		var legacyClassLevel = JSON.parse(savedClassLevel);
+		const legacyClassLevel = JSON.parse(savedClassLevel);
 
 		if (typeof legacyClassLevel === "string") {
-			var legacyMatch = legacyClassLevel.trim().match(/^(.*?)\s+(\d{1,2})$/);
-			var className = legacyMatch ? legacyMatch[1].trim() : legacyClassLevel;
-			var level = legacyMatch ? legacyMatch[2] : "";
+			const legacyMatch = legacyClassLevel.trim().match(/^(.*?)\s+(\d{1,2})$/);
+			const className = legacyMatch ? legacyMatch[1].trim() : legacyClassLevel;
+			const level = legacyMatch ? legacyMatch[2] : "";
 
 			localStorage.setItem("page1_characterclass", JSON.stringify(className));
 			localStorage.setItem("page1_classlevel", JSON.stringify(level));
 		}
 	}
-	var classAsiStorageKey = "page1_classAsiChoices";
-	var classAsiChoices = {};
-	var activeClassAsiKeys = [];
-	var activeSinglePointAsiKeys = {};
-	var storedClassAsiChoices = localStorage.getItem(classAsiStorageKey);
+	const classAsiStorageKey = "page1_classAsiChoices";
+	let classAsiChoices = {};
+	let activeClassAsiKeys = [];
+	let activeSinglePointAsiKeys = {};
+	const storedClassAsiChoices = localStorage.getItem(classAsiStorageKey);
 	if (storedClassAsiChoices) {
 		try {
-			var parsedClassAsiChoices = JSON.parse(storedClassAsiChoices);
+			const parsedClassAsiChoices = JSON.parse(storedClassAsiChoices);
 			if (parsedClassAsiChoices && typeof parsedClassAsiChoices === "object" && !Array.isArray(parsedClassAsiChoices)) {
 				classAsiChoices = parsedClassAsiChoices;
 			}
@@ -30,13 +30,13 @@ $(function () {
 			console.error("Unable to restore class ability score improvement choices.", error);
 		}
 	}
-	var characterAsiStorageKey = "page1_characterAsiChoices";
-	var characterAsiChoices = {};
-	var activeCharacterAsiLevels = [];
-	var storedCharacterAsiChoices = localStorage.getItem(characterAsiStorageKey);
+	const characterAsiStorageKey = "page1_characterAsiChoices";
+	let characterAsiChoices = {};
+	let activeCharacterAsiLevels = [];
+	const storedCharacterAsiChoices = localStorage.getItem(characterAsiStorageKey);
 	if (storedCharacterAsiChoices) {
 		try {
-			var parsedCharacterAsiChoices = JSON.parse(storedCharacterAsiChoices);
+			const parsedCharacterAsiChoices = JSON.parse(storedCharacterAsiChoices);
 			if (parsedCharacterAsiChoices && typeof parsedCharacterAsiChoices === "object" && !Array.isArray(parsedCharacterAsiChoices)) {
 				characterAsiChoices = parsedCharacterAsiChoices;
 			}
@@ -44,15 +44,15 @@ $(function () {
 			console.error("Unable to restore character-level ability score improvement choices.", error);
 		}
 	}
-	var mentorAsiStorageKey = "page1_mentorAsiChoices";
-	var mentorAsiChoices = {};
-	var activeMentorAsiLevels = [];
-	var mentorRoleStorageKey = "page1_mentorRole";
-	var selectedMentorRole = localStorage.getItem(mentorRoleStorageKey) || "";
-	var storedMentorAsiChoices = localStorage.getItem(mentorAsiStorageKey);
+	const mentorAsiStorageKey = "page1_mentorAsiChoices";
+	let mentorAsiChoices = {};
+	let activeMentorAsiLevels = [];
+	const mentorRoleStorageKey = "page1_mentorRole";
+	let selectedMentorRole = localStorage.getItem(mentorRoleStorageKey) || "";
+	const storedMentorAsiChoices = localStorage.getItem(mentorAsiStorageKey);
 	if (storedMentorAsiChoices) {
 		try {
-			var parsedMentorAsiChoices = JSON.parse(storedMentorAsiChoices);
+			const parsedMentorAsiChoices = JSON.parse(storedMentorAsiChoices);
 			if (parsedMentorAsiChoices && typeof parsedMentorAsiChoices === "object" && !Array.isArray(parsedMentorAsiChoices)) {
 				mentorAsiChoices = parsedMentorAsiChoices;
 			}
@@ -60,19 +60,19 @@ $(function () {
 			console.error("Unable to restore mentor ability score improvement choices.", error);
 		}
 	}
-	var savedClassList = localStorage.getItem("page1_characterclass");
+	const savedClassList = localStorage.getItem("page1_characterclass");
 	if (savedClassList !== null) {
-		var savedClasses = JSON.parse(savedClassList);
+		const savedClasses = JSON.parse(savedClassList);
 		if (typeof savedClasses === "string" && /[\/\r\n]/.test(savedClasses)) {
-			var splitClasses = savedClasses.split(/[\/\r\n]+/).map(function (className) {
+			const splitClasses = savedClasses.split(/[\/\r\n]+/).map(function (className) {
 				return className.trim();
 			}).filter(function (className) {
 				return className !== "";
 			});
 			if (splitClasses.length > 0) {
 				localStorage.setItem("page1_characterclass", JSON.stringify(splitClasses[0]));
-				for (var classIndex = 1; classIndex < splitClasses.length && classIndex < 13; classIndex++) {
-					var classKey = "page1_characterclass-" + (classIndex + 1);
+				for (let classIndex = 1; classIndex < splitClasses.length && classIndex < 13; classIndex++) {
+					const classKey = "page1_characterclass-" + (classIndex + 1);
 					if (localStorage.getItem(classKey) === null) {
 						localStorage.setItem(classKey, JSON.stringify(splitClasses[classIndex]));
 					}
@@ -80,15 +80,15 @@ $(function () {
 			}
 		}
 	}
-	var savedLevelList = localStorage.getItem("page1_classlevel");
+	const savedLevelList = localStorage.getItem("page1_classlevel");
 	if (savedLevelList !== null) {
-		var savedLevels = JSON.parse(savedLevelList);
+		const savedLevels = JSON.parse(savedLevelList);
 		if (typeof savedLevels === "string" && /[\/\r\n]/.test(savedLevels)) {
-			var splitLevels = savedLevels.split(/[\/\r\n]+/).map(function (level) {
+			const splitLevels = savedLevels.split(/[\/\r\n]+/).map(function (level) {
 				return level.trim();
 			});
 			localStorage.setItem("page1_classlevel", JSON.stringify(splitLevels[0]));
-			for (var levelIndex = 1; levelIndex < splitLevels.length && levelIndex < 13; levelIndex++) {
+			for (let levelIndex = 1; levelIndex < splitLevels.length && levelIndex < 13; levelIndex++) {
 				localStorage.setItem("page1_classlevel-" + (levelIndex + 1), JSON.stringify(splitLevels[levelIndex]));
 			}
 		}
@@ -100,9 +100,9 @@ $(function () {
 		}
 	);
 
-	var talentStorageKey = "taoc_selected_talents";
-	var fightingStyleStorageKey = "page1_fightingStyleChoices";
-	var fightingStyleChoices = {
+	const talentStorageKey = "taoc_selected_talents";
+	const fightingStyleStorageKey = "page1_fightingStyleChoices";
+	const fightingStyleChoices = {
 		"Archery": {
 			sources: ["fighter", "ranger", "all"],
 			description: "Gain +2 to attack rolls with ranged weapons.",
@@ -158,13 +158,13 @@ $(function () {
 	};
 
 	function readFightingStyleChoices() {
-		var storedChoices = localStorage.getItem(fightingStyleStorageKey);
+		const storedChoices = localStorage.getItem(fightingStyleStorageKey);
 		if (storedChoices === null) {
 			return {};
 		}
 
 		try {
-			var parsedChoices = JSON.parse(storedChoices);
+			const parsedChoices = JSON.parse(storedChoices);
 			if (parsedChoices && typeof parsedChoices === "object" && !Array.isArray(parsedChoices)) {
 				return parsedChoices;
 			}
@@ -175,25 +175,25 @@ $(function () {
 		return {};
 	}
 
-	var selectedFightingStyles = readFightingStyleChoices();
+	const selectedFightingStyles = readFightingStyleChoices();
 
 	function createFightingStyleControl(choiceKey, source) {
-		var control = $("<div>", { class: "fighting-style-choice" });
-		var select = $("<select>", {
+		const control = $("<div>", { class: "fighting-style-choice" });
+		const select = $("<select>", {
 			"aria-label": "Fighting style",
 			"data-fighting-style-key": choiceKey,
 		}).appendTo(control);
 		$("<option>", { value: "", text: "Choose fighting style" }).appendTo(select);
 
-		var selectedStyle = selectedFightingStyles[choiceKey];
-		var unavailableStyles = Object.keys(selectedFightingStyles).reduce(function (styles, key) {
+		const selectedStyle = selectedFightingStyles[choiceKey];
+		const unavailableStyles = Object.keys(selectedFightingStyles).reduce(function (styles, key) {
 			if (key !== choiceKey && selectedFightingStyles[key]) {
 				styles.push(selectedFightingStyles[key]);
 			}
 			return styles;
 		}, []);
 		Object.keys(fightingStyleChoices).forEach(function (styleName) {
-			var style = fightingStyleChoices[styleName];
+			const style = fightingStyleChoices[styleName];
 			if (style.sources.indexOf(source) === -1) {
 				return;
 			}
@@ -218,9 +218,9 @@ $(function () {
 	}
 
 	function syncTalentTreeLevel() {
-		var characterLevel = 0;
-		var hasClass = false;
-		var hasIncompleteClass = false;
+		let characterLevel = 0;
+		let hasClass = false;
+		let hasIncompleteClass = false;
 
 		$("#page1 .class-pair").each(function () {
 			if ($(this).find(".class-name-input").val().trim() === "") {
@@ -228,8 +228,8 @@ $(function () {
 			}
 
 			hasClass = true;
-			var levelValue = $(this).find(".class-level-input").val().trim();
-			var level = Number(levelValue);
+			const levelValue = $(this).find(".class-level-input").val().trim();
+			const level = Number(levelValue);
 			if (levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
 				hasIncompleteClass = true;
 				return;
@@ -242,8 +242,8 @@ $(function () {
 			return;
 		}
 
-		var storedTalentState = localStorage.getItem(talentStorageKey);
-		var talentState = {
+		const storedTalentState = localStorage.getItem(talentStorageKey);
+		let talentState = {
 			talents: [],
 			level: String(characterLevel),
 			extra: "0",
@@ -251,7 +251,7 @@ $(function () {
 
 		if (storedTalentState !== null) {
 			try {
-				var parsedTalentState = JSON.parse(storedTalentState);
+				const parsedTalentState = JSON.parse(storedTalentState);
 				if (Array.isArray(parsedTalentState)) {
 					talentState.talents = parsedTalentState;
 				} else if (parsedTalentState && typeof parsedTalentState === "object" && Array.isArray(parsedTalentState.talents)) {
@@ -276,8 +276,8 @@ $(function () {
 
 	function readSelectedTalents() {
 		try {
-			var savedState = JSON.parse(localStorage.getItem(talentStorageKey));
-			var talents = Array.isArray(savedState)
+			const savedState = JSON.parse(localStorage.getItem(talentStorageKey));
+			const talents = Array.isArray(savedState)
 				? savedState
 				: savedState && Array.isArray(savedState.talents)
 					? savedState.talents
@@ -287,12 +287,13 @@ $(function () {
 				return typeof talent === "string" && talent.trim() !== "";
 			}).slice(0, 21);
 		} catch (error) {
+			console.error("Unable to restore saved talents.", error);
 			return [];
 		}
 	}
 
 	function syncTalentSlots() {
-		var talents = readSelectedTalents();
+		const talents = readSelectedTalents();
 
 		$("#page1 .talent-slot").each(function (index) {
 			$(this).val(talents[index] || "");
@@ -301,15 +302,15 @@ $(function () {
 
 	function renderTalentDescriptions(descriptions, fightingStyles) {
 		$("#page1 .talent-slot").each(function () {
-			var description = (descriptions[this.name] || []).join(" ");
-			var descriptionBox = $(this).closest(".talent-entry").find(".talent-description").empty();
+			const description = (descriptions[this.name] || []).join(" ");
+			const descriptionBox = $(this).closest(".talent-entry").find(".talent-description").empty();
 			if (description) {
 				descriptionBox.text(description);
 			}
 			if (fightingStyles[this.name]) {
 				createFightingStyleControl("talent:" + this.name, fightingStyles[this.name]).appendTo(descriptionBox);
 			}
-			var hasDescription = description !== "" || !!fightingStyles[this.name];
+			const hasDescription = description !== "" || !!fightingStyles[this.name];
 			descriptionBox.prop("hidden", !hasDescription);
 			$(this).closest(".talent-entry").toggleClass("has-description", hasDescription);
 		});
@@ -317,7 +318,7 @@ $(function () {
 
 	function renderFeatBoonDescriptions(descriptions) {
 		$("#page1 .feat-boon-slots input[name^='feat-slot-'], #page1 .feat-boon-slots input[name^='boon-slot-']").each(function () {
-			var description = (descriptions[this.name] || []).join(" ");
+			const description = (descriptions[this.name] || []).join(" ");
 			$(this).closest(".ability-choice-slot").find(".feature-description")
 				.text(description)
 				.prop("hidden", description === "");
@@ -358,21 +359,21 @@ $(function () {
 		window.location.reload();
 	});
 
-	var storedBaseSpeed = localStorage.getItem("page1_baseSpeed");
-	var baseSpeedValue = storedBaseSpeed === null
+	const storedBaseSpeed = localStorage.getItem("page1_baseSpeed");
+	let baseSpeedValue = storedBaseSpeed === null
 		? $("#page1 [name='speed']").val().trim()
 		: JSON.parse(storedBaseSpeed);
-	var storedBaseSpeedManual = localStorage.getItem("page1_baseSpeedManual");
-	var baseSpeedIsManual = storedBaseSpeedManual === null
+	const storedBaseSpeedManual = localStorage.getItem("page1_baseSpeedManual");
+	let baseSpeedIsManual = storedBaseSpeedManual === null
 		? String(baseSpeedValue).trim() !== "" && Number(baseSpeedValue) !== 30
 		: JSON.parse(storedBaseSpeedManual);
-	var raceEffects = {};
-	var characterEffects = {};
-	var abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
-	var pointBuyCosts = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
-	var characterFeatRewardLevels = [1, 3, 6, 9, 12, 15, 18];
-	var characterAsiRewardLevels = [4, 8, 12, 16, 20];
-	var characterMagicItemRewards = [
+	let raceEffects = {};
+	let characterEffects = {};
+	const abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
+	const pointBuyCosts = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
+	const characterFeatRewardLevels = [1, 3, 6, 9, 12, 15, 18];
+	const characterAsiRewardLevels = [4, 8, 12, 16, 20];
+	const characterMagicItemRewards = [
 		{ level: 2, rarity: "uncommon", slot: 1 },
 		{ level: 5, rarity: "uncommon", slot: 2 },
 		{ level: 7, rarity: "rare", slot: 1 },
@@ -383,8 +384,8 @@ $(function () {
 		{ level: 17, rarity: "legendary", slot: 1 },
 		{ level: 19, rarity: "artifact", slot: 1 },
 	];
-	var mentorSinglePointAsiLevels = [4, 8, 12, 16, 19];
-	var mentorFeatureRules = {
+	const mentorSinglePointAsiLevels = [4, 8, 12, 16, 19];
+	const mentorFeatureRules = {
 		Expert: {
 			roleOptions: null,
 			features: {
@@ -477,12 +478,12 @@ $(function () {
 			},
 		},
 	};
-	var pointBuyStorageKey = "page1_pointBuyBaseScores";
-	var pointBuyBaseScores = {};
-	var storedPointBuyScores = localStorage.getItem(pointBuyStorageKey);
+	const pointBuyStorageKey = "page1_pointBuyBaseScores";
+	let pointBuyBaseScores = {};
+	const storedPointBuyScores = localStorage.getItem(pointBuyStorageKey);
 	if (storedPointBuyScores) {
 		try {
-			var parsedPointBuyScores = JSON.parse(storedPointBuyScores);
+			const parsedPointBuyScores = JSON.parse(storedPointBuyScores);
 			if (parsedPointBuyScores && typeof parsedPointBuyScores === "object" && !Array.isArray(parsedPointBuyScores)) {
 				pointBuyBaseScores = parsedPointBuyScores;
 			}
@@ -490,9 +491,9 @@ $(function () {
 			console.error("Unable to restore saved point-buy scores.", error);
 		}
 	}
-	var abilityChoiceStorageKey = "page1_selectedAbilityChoices";
-	var selectedAbilityChoices = {};
-	var storedAbilityChoices = localStorage.getItem(abilityChoiceStorageKey);
+	const abilityChoiceStorageKey = "page1_selectedAbilityChoices";
+	let selectedAbilityChoices = {};
+	const storedAbilityChoices = localStorage.getItem(abilityChoiceStorageKey);
 	if (storedAbilityChoices) {
 		try {
 			selectedAbilityChoices = JSON.parse(storedAbilityChoices) || {};
@@ -500,9 +501,24 @@ $(function () {
 			console.error("Unable to restore saved feat and talent ability choices.", error);
 		}
 	}
-	var applyingCalculatedScores = false;
-	var maxHpStorageKey = "page1_baseMaxHp";
-	var baseMaxHpValue = localStorage.getItem(maxHpStorageKey);
+	let applyingCalculatedScores = false;
+	const maxHpStorageKey = "page1_baseMaxHp";
+	let baseMaxHpValue = localStorage.getItem(maxHpStorageKey);
+	const maxHpAdjustmentStorageKey = "page1_maxHpAdjustment";
+	let maxHpAdjustment = null;
+	const storedMaxHpAdjustment = localStorage.getItem(maxHpAdjustmentStorageKey);
+	if (storedMaxHpAdjustment !== null) {
+		try {
+			const parsedMaxHpAdjustment = JSON.parse(storedMaxHpAdjustment);
+			if (Number.isFinite(parsedMaxHpAdjustment)) {
+				maxHpAdjustment = parsedMaxHpAdjustment;
+			} else {
+				console.error("Unable to restore the saved hit point adjustment: expected a number.");
+			}
+		} catch (error) {
+			console.error("Unable to restore the saved hit point adjustment.", error);
+		}
+	}
 	if (baseMaxHpValue !== null) {
 		try {
 			baseMaxHpValue = JSON.parse(baseMaxHpValue);
@@ -511,7 +527,22 @@ $(function () {
 			baseMaxHpValue = null;
 		}
 	}
-	var armorTypes = {
+	const hitDieByClass = {
+		barbarian: 12,
+		bard: 8,
+		cleric: 8,
+		druid: 8,
+		fighter: 10,
+		monk: 8,
+		paladin: 10,
+		ranger: 10,
+		rogue: 8,
+		sorcerer: 6,
+		warlock: 8,
+		wizard: 6,
+		artificer: 8,
+	};
+	const armorTypes = {
 		unarmored: { baseAC: 10, usesDexterity: true },
 		padded: { baseAC: 11, usesDexterity: true, stealthDisadvantage: true },
 		leather: { baseAC: 11, usesDexterity: true },
@@ -535,23 +566,23 @@ $(function () {
 	}
 
 	function updatePointBuyCounter() {
-		var spent = 0;
-		var complete = true;
-		var valid = true;
+		let spent = 0;
+		let complete = true;
+		let valid = true;
 		abilityNames.forEach(function (ability) {
-			var value = pointBuyBaseScores[ability];
+			const value = pointBuyBaseScores[ability];
 			if (value === undefined || String(value).trim() === "") {
 				complete = false;
 				return;
 			}
-			var score = Number(value);
+			const score = Number(value);
 			if (!Number.isInteger(score) || pointBuyCosts[score] === undefined) {
 				valid = false;
 				return;
 			}
 			spent += pointBuyCosts[score];
 		});
-		var counterText = complete && valid
+		let counterText = complete && valid
 			? "Point Buy: " + spent + "/27"
 			: "Point Buy: --/27";
 		if (complete && valid) {
@@ -560,11 +591,11 @@ $(function () {
 		$("#point-buy-counter").text(counterText)
 			.toggleClass("over-budget", complete && valid && spent > 27);
 		$("#page1 .score-step-button").each(function () {
-			var ability = $(this).attr("data-score-ability");
-			var change = Number($(this).attr("data-score-change"));
-			var baseScore = Number(pointBuyBaseScores[ability]);
-			var nextScore = baseScore + change;
-			var nextSpent = spent;
+			const ability = $(this).attr("data-score-ability");
+			const change = Number($(this).attr("data-score-change"));
+			const baseScore = Number(pointBuyBaseScores[ability]);
+			const nextScore = baseScore + change;
+			let nextSpent = spent;
 			if (complete && valid && change > 0) {
 				nextSpent += pointBuyCosts[nextScore] - pointBuyCosts[baseScore];
 			}
@@ -579,13 +610,13 @@ $(function () {
 	}
 
 	function getRacialAbilityScoreBonuses() {
-		var bonuses = {};
+		const bonuses = {};
 		abilityNames.forEach(function (ability) {
 			bonuses[ability] = 0;
 		});
-		var race = ($("#page1 [name='race']").val() || "").trim().toLowerCase();
-		var isLineage = /^(dhampir|reborn|hexblood)\s+\(/.test(race);
-		var knownRace = isLineage || $("#race-options option").filter(function () {
+		const race = ($("#page1 [name='race']").val() || "").trim().toLowerCase();
+		const isLineage = /^(dhampir|reborn|hexblood)\s+\(/.test(race);
+		const knownRace = isLineage || $("#race-options option").filter(function () {
 			return $(this).val().toLowerCase() === race;
 		}).length > 0;
 		if (!knownRace || !race) {
@@ -598,11 +629,11 @@ $(function () {
 			return bonuses;
 		}
 
-		var first = $("#page1 [name='racial-asi-ability-1']").val();
-		var second = $("#page1 [name='racial-asi-ability-2']").val();
-		var third = $("#page1 [name='racial-asi-ability-3']").val();
-		var isVariantHuman = race === "variant human";
-		var isCustomLineage = race === "custom lineage";
+		const first = $("#page1 [name='racial-asi-ability-1']").val();
+		const second = $("#page1 [name='racial-asi-ability-2']").val();
+		const third = $("#page1 [name='racial-asi-ability-3']").val();
+		const isVariantHuman = race === "variant human";
+		const isCustomLineage = race === "custom lineage";
 		if (isCustomLineage) {
 			if (first) {
 				bonuses[first] = 2;
@@ -626,15 +657,15 @@ $(function () {
 	}
 
 	function updateRacialAbilityScoreControls() {
-		var race = ($("#page1 [name='race']").val() || "").trim().toLowerCase();
-		var isLineage = /^(dhampir|reborn|hexblood)\s+\(/.test(race);
-		var knownRace = isLineage || $("#race-options option").filter(function () {
+		const race = ($("#page1 [name='race']").val() || "").trim().toLowerCase();
+		const isLineage = /^(dhampir|reborn|hexblood)\s+\(/.test(race);
+		const knownRace = isLineage || $("#race-options option").filter(function () {
 			return $(this).val().toLowerCase() === race;
 		}).length > 0;
-		var controls = $("#racial-asi-controls");
-		var variantHuman = race === "variant human";
-		var customLineage = race === "custom lineage";
-		var mountainDwarf = race === "mountain dwarf";
+		const controls = $("#racial-asi-controls");
+		const variantHuman = race === "variant human";
+		const customLineage = race === "custom lineage";
+		const mountainDwarf = race === "mountain dwarf";
 		controls.prop("hidden", !knownRace || !race);
 		controls.find(".racial-asi-mode-label, [name='racial-asi-mode']").prop("hidden", variantHuman || customLineage || mountainDwarf);
 		controls.find(".racial-asi-fixed")
@@ -645,20 +676,20 @@ $(function () {
 			.prop("hidden", mountainDwarf || customLineage);
 		controls.find("label[for='racial-asi-ability-3'], select[name='racial-asi-ability-3']")
 			.prop("hidden", mountainDwarf || customLineage || variantHuman || $("#page1 [name='racial-asi-mode']").val() !== "three-one");
-		var threeOne = $("#page1 [name='racial-asi-mode']").val() === "three-one";
+		const threeOne = $("#page1 [name='racial-asi-mode']").val() === "three-one";
 		controls.find("label[for='racial-asi-ability-1']").text(customLineage ? "Increase +2" : variantHuman || threeOne ? "First +1" : "Increase +2");
 		controls.find("label[for='racial-asi-ability-2']").text(variantHuman || threeOne ? "Second +1" : "Increase +1");
 		controls.find("label[for='racial-asi-ability-3']").text("Third +1");
 	}
 
 	function getAbilityScoreBonus(ability) {
-		var bonuses = characterEffects.abilityScoreBonuses || {};
+		const bonuses = characterEffects.abilityScoreBonuses || {};
 		return Number(bonuses[ability]) || 0;
 	}
 
 	function initializePointBuyBaseScores() {
 		abilityNames.forEach(function (ability) {
-			var baseValue = pointBuyBaseScores[ability];
+			let baseValue = pointBuyBaseScores[ability];
 			if (baseValue === undefined || String(baseValue).trim() === "") {
 				baseValue = $("#page1 [name='" + ability + "score']").val().trim();
 			}
@@ -674,14 +705,14 @@ $(function () {
 	function updateDisplayedAbilityScores() {
 		applyingCalculatedScores = true;
 		abilityNames.forEach(function (ability) {
-			var base = pointBuyBaseScores[ability];
-			var input = $("#page1 [name='" + ability + "score']");
-			var currentValue = input.val().trim();
-			var baseNumber = Number(base);
-			var abilityMaximumBonuses = characterEffects.abilityScoreMaximumBonuses || {};
-			var abilityMaximum = 20 + (Number(abilityMaximumBonuses[ability]) || 0);
+			const base = pointBuyBaseScores[ability];
+			const input = $("#page1 [name='" + ability + "score']");
+			const currentValue = input.val().trim();
+			const baseNumber = Number(base);
+			const abilityMaximumBonuses = characterEffects.abilityScoreMaximumBonuses || {};
+			const abilityMaximum = 20 + (Number(abilityMaximumBonuses[ability]) || 0);
 			input.attr("max", abilityMaximum);
-			var nextValue = base === undefined || String(base).trim() === ""
+			const nextValue = base === undefined || String(base).trim() === ""
 				? ""
 				: Number.isFinite(baseNumber)
 					? String(Math.min(abilityMaximum, baseNumber + getAbilityScoreBonus(ability)))
@@ -695,72 +726,105 @@ $(function () {
 		updatePointBuyCounter();
 	}
 
+	function getCalculatedMaxHpBeforeAdjustment() {
+		let hitPointsFromClassLevels = 0;
+		let totalLevels = 0;
+		let firstClassLevel = true;
+		const averageHitPointsByDie = { 6: 4, 8: 5, 10: 6, 12: 7 };
+
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim().toLowerCase();
+			const levelValue = $(this).find(".class-level-input").val().trim();
+			const level = Number(levelValue);
+			const hitDie = hitDieByClass[className];
+			if (!hitDie || levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
+				return;
+			}
+
+			hitPointsFromClassLevels += firstClassLevel
+				? hitDie + (level - 1) * averageHitPointsByDie[hitDie]
+				: level * averageHitPointsByDie[hitDie];
+			totalLevels += level;
+			firstClassLevel = false;
+		});
+
+		const constitutionModifier = getModifierValue("Constitution");
+		return hitPointsFromClassLevels + totalLevels * (constitutionModifier === null ? 0 : constitutionModifier);
+	}
+
 	function updateDisplayedMaxHp() {
-		var input = $("#page1 [name='maxhp']");
-		var currentValue = input.val().trim();
-		if (baseMaxHpValue === null) {
-			baseMaxHpValue = currentValue;
-		}
-		if (String(baseMaxHpValue).trim() === "") {
-			input.val("");
-		} else if (Number.isFinite(Number(baseMaxHpValue))) {
-			var nextValue = String(Number(baseMaxHpValue) + (characterEffects.maxHpBonus || 0));
-			if (currentValue !== nextValue) {
-				input.val(nextValue).trigger("change");
+		const input = $("#page1 [name='maxhp']");
+		const currentValue = input.val().trim();
+		const calculatedBaseMaxHp = getCalculatedMaxHpBeforeAdjustment();
+		const calculatedMaxHp = calculatedBaseMaxHp + (characterEffects.maxHpBonus || 0);
+
+		if (maxHpAdjustment === null) {
+			if (baseMaxHpValue !== null && String(baseMaxHpValue).trim() !== "" && Number.isFinite(Number(baseMaxHpValue))) {
+				maxHpAdjustment = Number(baseMaxHpValue) - calculatedBaseMaxHp;
+			} else if (currentValue !== "" && Number.isFinite(Number(currentValue))) {
+				maxHpAdjustment = Number(currentValue) - calculatedMaxHp;
+			} else {
+				maxHpAdjustment = 0;
 			}
 		}
-		localStorage.setItem(maxHpStorageKey, JSON.stringify(baseMaxHpValue));
+
+		const nextValue = String(calculatedMaxHp + maxHpAdjustment);
+		if (currentValue !== nextValue) {
+			input.val(nextValue).trigger("change");
+		}
+		localStorage.setItem(maxHpAdjustmentStorageKey, JSON.stringify(maxHpAdjustment));
+		localStorage.removeItem(maxHpStorageKey);
 	}
 
 	function updateModifier(scoreInput) {
-		var ability = $(scoreInput).closest("li");
-		var scoreValue = ability.find(".score input").val().trim();
-		var modifierInput = ability.find(".modifier input");
+		const ability = $(scoreInput).closest("li");
+		const scoreValue = ability.find(".score input").val().trim();
+		const modifierInput = ability.find(".modifier input");
 
 		if (scoreValue === "" || !Number.isFinite(Number(scoreValue))) {
 			modifierInput.val("");
 			return;
 		}
 
-		var modifier = Math.floor((Number(scoreValue) - 10) / 2);
+		const modifier = Math.floor((Number(scoreValue) - 10) / 2);
 		modifierInput.val(modifier >= 0 ? "+" + modifier : modifier);
 	}
 
 	function updateInitiative() {
-		var modifierValue = $("#page1 [name='Dexteritymod']").val().trim();
-		var initiativeInput = $("#page1 [name='initiative']");
+		const modifierValue = $("#page1 [name='Dexteritymod']").val().trim();
+		const initiativeInput = $("#page1 [name='initiative']");
 
 		if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
 			initiativeInput.val("");
 			return;
 		}
 
-		var initiativeBonus = (characterEffects.initiativeBonusAbilities || []).reduce(function (total, ability) {
+		let initiativeBonus = (characterEffects.initiativeBonusAbilities || []).reduce(function (total, ability) {
 			return total + (getModifierValue(ability) || 0);
 		}, 0);
 		initiativeBonus += characterEffects.initiativeBonus || 0;
 		if (characterEffects.initiativeProficiencyBonus) {
 			initiativeBonus += Number($("#page1 [name='proficiencybonus']").val()) || 0;
 		}
-		var initiative = Number(modifierValue) + initiativeBonus;
+		const initiative = Number(modifierValue) + initiativeBonus;
 		initiativeInput.val(initiative >= 0 ? "+" + initiative : initiative);
 	}
 
 	function getTotalClassLevels(excludedLevelInput) {
-		var totalLevel = 0;
+		let totalLevel = 0;
 
 		$("#page1 .class-pair").each(function () {
 			if ($(this).find(".class-name-input").val().trim() === "") {
 				return;
 			}
 
-			var levelInput = $(this).find(".class-level-input");
+			const levelInput = $(this).find(".class-level-input");
 			if (levelInput[0] === excludedLevelInput) {
 				return;
 			}
 
-			var levelValue = levelInput.val().trim();
-			var level = Number(levelValue);
+			const levelValue = levelInput.val().trim();
+			const level = Number(levelValue);
 			if (levelValue !== "" && Number.isInteger(level) && level >= 1 && level <= 20) {
 				totalLevel += level;
 			}
@@ -770,33 +834,18 @@ $(function () {
 	}
 
 	function updateTotalHitDice() {
-		var hitDieByClass = {
-			barbarian: 12,
-			bard: 8,
-			cleric: 8,
-			druid: 8,
-			fighter: 10,
-			monk: 8,
-			paladin: 10,
-			ranger: 10,
-			rogue: 8,
-			sorcerer: 6,
-			warlock: 8,
-			wizard: 6,
-			artificer: 8,
-		};
-		var levelsByDie = {};
-		var checkedStates = {};
+		const levelsByDie = {};
+		const checkedStates = {};
 
 		$("#page1 .hit-die-checks input[type='checkbox']").each(function () {
 			checkedStates[this.name] = this.checked;
 		});
 
 		$("#page1 .class-pair").each(function () {
-			var className = $(this).find(".class-name-input").val().trim().toLowerCase();
-			var levelValue = $(this).find(".class-level-input").val().trim();
-			var level = Number(levelValue);
-			var hitDie = hitDieByClass[className];
+			const className = $(this).find(".class-name-input").val().trim().toLowerCase();
+			const levelValue = $(this).find(".class-level-input").val().trim();
+			const level = Number(levelValue);
+			const hitDie = hitDieByClass[className];
 
 			if (!hitDie || levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
 				return;
@@ -806,22 +855,22 @@ $(function () {
 		});
 
 		$("#page1 .hit-die-row").each(function () {
-			var row = $(this);
-			var hitDie = Number(row.attr("data-die"));
-			var count = levelsByDie[hitDie] || 0;
-			var checks = row.find(".hit-die-checks");
+			const row = $(this);
+			const hitDie = Number(row.attr("data-die"));
+			const count = levelsByDie[hitDie] || 0;
+			const checks = row.find(".hit-die-checks");
 			checks.empty();
 			row.find(".hit-die-total").text(count + "d" + hitDie);
 			row.prop("hidden", count === 0);
 
-			for (var index = 1; index <= count; index++) {
-				var checkboxName = "hitdie-d" + hitDie + "-" + index;
-				var storageKey = "page1_" + checkboxName;
-				var checkbox = $("<input type='checkbox' />").attr({
+			for (let index = 1; index <= count; index++) {
+				const checkboxName = "hitdie-d" + hitDie + "-" + index;
+				const storageKey = "page1_" + checkboxName;
+				const checkbox = $("<input type='checkbox' />").attr({
 					name: checkboxName,
 					"aria-label": "Spent d" + hitDie + " hit die " + index,
 				});
-				var isChecked = Object.prototype.hasOwnProperty.call(checkedStates, checkboxName)
+				const isChecked = Object.prototype.hasOwnProperty.call(checkedStates, checkboxName)
 					? checkedStates[checkboxName]
 					: localStorage.getItem(storageKey) === "true";
 
@@ -831,12 +880,175 @@ $(function () {
 		});
 	}
 
+	function getClassLevelForUseTracker(className, subclassName) {
+		let level = 0;
+		$("#page1 .class-pair").each(function () {
+			const pairClassName = $(this).find(".class-name-input").val().trim();
+			const pairSubclassName = $(this).find(".subclass-name-input").val().trim();
+			if ((className && pairClassName.toLowerCase() === className.toLowerCase())
+				|| (subclassName && pairSubclassName.toLowerCase() === subclassName.toLowerCase())) {
+				const levelValue = $(this).find(".class-level-input").val().trim();
+				const classLevel = Number(levelValue);
+				if (Number.isInteger(classLevel) && classLevel >= 1 && classLevel <= 20) {
+					level = classLevel;
+				}
+			}
+		});
+		return level;
+	}
+
+	function getClassNameForUseTracker(subclassName) {
+		let className = "";
+		$("#page1 .class-pair").each(function () {
+			if ($(this).find(".subclass-name-input").val().trim().toLowerCase() === subclassName.toLowerCase()) {
+				className = $(this).find(".class-name-input").val().trim();
+			}
+		});
+		return className;
+	}
+
+	function getAbilityUseDefinition(featureName, className, classLevel, source) {
+		const normalizedFeature = featureName.trim().toLowerCase();
+		const normalizedClass = (className || "").toLowerCase();
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const charismaModifier = getModifierValue("Charisma");
+		const intelligenceModifier = getModifierValue("Intelligence");
+		let definition = null;
+
+		if (source === "mentor") {
+			if (normalizedClass === "expert" && normalizedFeature.indexOf("flash of expertise:") === 0) {
+				definition = { key: "flash-of-expertise", maximum: proficiencyBonus, recharge: "long" };
+			} else if (normalizedClass === "warrior" && normalizedFeature.indexOf("second wind:") === 0) {
+				definition = { key: "second-wind", maximum: classLevel >= 20 ? 2 : 1, recharge: "long" };
+			} else if (normalizedClass === "warrior" && normalizedFeature.indexOf("indomitable:") === 0) {
+				definition = { key: "indomitable", maximum: classLevel >= 18 ? 2 : 1, recharge: "long" };
+			}
+		} else if (normalizedClass === "expert" && normalizedFeature.indexOf("flash of expertise:") === 0) {
+			definition = { key: "flash-of-expertise", maximum: proficiencyBonus, recharge: "long" };
+		} else if (normalizedClass === "warrior" && normalizedFeature.indexOf("second wind:") === 0) {
+			definition = { key: "second-wind", maximum: classLevel >= 20 ? 2 : 1, recharge: "long" };
+		} else if (normalizedClass === "warrior" && normalizedFeature.indexOf("indomitable:") === 0) {
+			definition = { key: "indomitable", maximum: classLevel >= 18 ? 2 : 1, recharge: "long" };
+		} else if (normalizedClass === "barbarian" && normalizedFeature === "rage" && classLevel < 20) {
+			const rageUses = classLevel >= 17 ? 6 : classLevel >= 12 ? 5 : classLevel >= 6 ? 4 : classLevel >= 3 ? 3 : 2;
+			definition = { key: "rage", maximum: rageUses, recharge: "long" };
+		} else if (normalizedClass === "bard" && normalizedFeature.indexOf("bardic inspiration") === 0) {
+			definition = { key: "bardic-inspiration", maximum: Math.max(1, charismaModifier || 0), recharge: classLevel >= 5 ? "short" : "long" };
+		} else if (normalizedClass === "cleric" && normalizedFeature.indexOf("channel divinity") === 0) {
+			const channelUsesMatch = normalizedFeature.match(/\((\d+)\/rest\)/);
+			definition = { key: "channel-divinity", maximum: channelUsesMatch ? Number(channelUsesMatch[1]) : 1, recharge: "short" };
+		} else if (normalizedClass === "cleric" && normalizedFeature === "harness divine power") {
+			definition = { key: "harness-divine-power", maximum: classLevel >= 18 ? 3 : classLevel >= 6 ? 2 : 1, recharge: "long" };
+		} else if (normalizedClass === "cleric" && normalizedFeature.indexOf("divine intervention") === 0 && classLevel < 20) {
+			definition = { key: "divine-intervention", maximum: 1, recharge: "long" };
+		} else if (normalizedClass === "druid" && normalizedFeature === "wild shape") {
+			definition = { key: "wild-shape", maximum: 2, recharge: "short" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("second wind") === 0) {
+			definition = { key: "second-wind", maximum: 1, recharge: "short" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("action surge") === 0) {
+			definition = { key: "action-surge", maximum: classLevel >= 17 ? 2 : 1, recharge: "short" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("indomitable") === 0) {
+			definition = { key: "indomitable", maximum: classLevel >= 17 ? 3 : classLevel >= 13 ? 2 : 1, recharge: "long" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("combat superiority") === 0) {
+			definition = { key: "combat-superiority", maximum: classLevel >= 15 ? 6 : classLevel >= 7 ? 5 : 4, recharge: "short" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("arcane shot") === 0) {
+			definition = { key: "arcane-shot", maximum: 2, recharge: "short" };
+		} else if (normalizedClass === "fighter" && normalizedFeature.indexOf("fighting spirit") === 0) {
+			definition = { key: "fighting-spirit", maximum: 3, recharge: "long" };
+		} else if (normalizedClass === "monk" && normalizedFeature === "ki") {
+			definition = { key: "ki", maximum: classLevel, recharge: "short" };
+		} else if (normalizedClass === "paladin" && normalizedFeature === "divine sense") {
+			definition = { key: "divine-sense", maximum: 1 + Math.max(0, charismaModifier || 0), recharge: "long" };
+		} else if (normalizedClass === "paladin" && normalizedFeature === "cleansing touch") {
+			definition = { key: "cleansing-touch", maximum: Math.max(1, charismaModifier || 0), recharge: "long" };
+		} else if (normalizedClass === "ranger" && normalizedFeature.indexOf("favored foe") === 0) {
+			definition = { key: "favored-foe", maximum: proficiencyBonus, recharge: "long" };
+		} else if (normalizedClass === "ranger" && normalizedFeature.indexOf("nature’s veil") === 0) {
+			definition = { key: "natures-veil", maximum: proficiencyBonus, recharge: "long" };
+		} else if (normalizedClass === "rogue" && normalizedFeature === "stroke of luck") {
+			definition = { key: "stroke-of-luck", maximum: 1, recharge: "short" };
+		} else if (normalizedClass === "sorcerer" && normalizedFeature === "font of magic") {
+			definition = { key: "sorcery-points", maximum: classLevel, recharge: "long" };
+		} else if (normalizedClass === "warlock" && normalizedFeature === "eldritch master") {
+			definition = { key: "eldritch-master", maximum: 1, recharge: "long" };
+		} else if (normalizedClass === "wizard" && normalizedFeature === "arcane recovery") {
+			definition = { key: "arcane-recovery", maximum: 1, recharge: "long" };
+		} else if (normalizedClass === "artificer" && normalizedFeature === "flash of genius") {
+			definition = { key: "flash-of-genius", maximum: Math.max(1, intelligenceModifier || 0), recharge: "long" };
+		} else if (normalizedFeature.indexOf("breath weapon") === 0) {
+			definition = { key: "breath-weapon", maximum: 1, recharge: "short" };
+		} else if (normalizedFeature.indexOf("relentless endurance") === 0) {
+			definition = { key: "relentless-endurance", maximum: 1, recharge: "long" };
+		} else if (normalizedFeature.indexOf("fey step") === 0) {
+			definition = { key: "fey-step", maximum: 1, recharge: "short" };
+		}
+
+		if (!definition || !Number.isInteger(definition.maximum) || definition.maximum < 1) {
+			return null;
+		}
+		return definition;
+	}
+
+	function createAbilityUseTracker(featureName, source, className, classLevel, identity) {
+		const definition = getAbilityUseDefinition(featureName, className, classLevel, source);
+		if (!definition || !identity) {
+			return $();
+		}
+
+		const resourceIdentity = identity + "|" + definition.key;
+		const tracker = $("<span>", {
+			class: "ability-use-tracker",
+			title: definition.maximum + " uses per " + definition.recharge + " rest",
+			"aria-label": featureName + ": " + definition.maximum + " uses per " + definition.recharge + " rest",
+		});
+		$("<span>", { class: "ability-use-label", text: "Uses" }).appendTo(tracker);
+		for (let useIndex = 1; useIndex <= definition.maximum; useIndex++) {
+			const storageKey = "page1_abilityUse_" + encodeURIComponent(resourceIdentity) + "_" + useIndex;
+			const checkbox = $("<input>", {
+				type: "checkbox",
+				class: "ability-use-checkbox",
+				name: "ability-use-" + encodeURIComponent(resourceIdentity) + "-" + useIndex,
+				"aria-label": featureName + " use " + useIndex + " of " + definition.maximum,
+				title: "Use " + useIndex + " of " + definition.maximum,
+				"data-ability-use-storage": storageKey,
+			});
+			checkbox.prop("checked", localStorage.getItem(storageKey) === "true");
+			tracker.append(checkbox);
+		}
+		return tracker;
+	}
+
+	function takeLongRest() {
+		$("#page1 .hit-die-checks input[type='checkbox']")
+			.prop("checked", false)
+			.each(function () {
+				localStorage.setItem("page1_" + this.name, JSON.stringify(false));
+			});
+
+		const resourceStorageKeys = [];
+		for (let storageIndex = 0; storageIndex < localStorage.length; storageIndex++) {
+			const storageKey = localStorage.key(storageIndex);
+			if (storageKey && (storageKey.indexOf("page1_abilityUse_") === 0 || /^page1_hitdie-d\d+-\d+$/.test(storageKey))) {
+				resourceStorageKeys.push(storageKey);
+			}
+		}
+		resourceStorageKeys.forEach(function (storageKey) {
+			localStorage.setItem(storageKey, JSON.stringify(false));
+		});
+		$("#page1 .ability-use-checkbox").prop("checked", false);
+
+		const maximumHp = Number($("#page1 [name='maxhp']").val());
+		if (Number.isFinite(maximumHp)) {
+			$("#page1 [name='currenthp']").val(maximumHp).trigger("input").trigger("change");
+		}
+	}
+
 	function storeHitDieCheckbox(checkbox) {
-		var storageKey = "page1_" + checkbox.name;
+		const storageKey = "page1_" + checkbox.name;
 		localStorage.setItem(storageKey, JSON.stringify(checkbox.checked));
 
-		var elementListKey = "elementList_page1";
-		var elementList = JSON.parse(localStorage.getItem(elementListKey)) || [];
+		const elementListKey = "elementList_page1";
+		const elementList = JSON.parse(localStorage.getItem(elementListKey)) || [];
 		if (elementList.indexOf(storageKey) === -1) {
 			elementList.push(storageKey);
 			localStorage.setItem(elementListKey, JSON.stringify(elementList));
@@ -844,35 +1056,35 @@ $(function () {
 	}
 
 	function updateProficiencyBonus(event) {
-		var populatedPairs = $("#page1 .class-pair").filter(function () {
+		const populatedPairs = $("#page1 .class-pair").filter(function () {
 			return $(this).find(".class-name-input").val().trim() !== "";
 		});
-		var changedLevelInput = event && $(event.target).hasClass("class-level-input")
+		const changedLevelInput = event && $(event.target).hasClass("class-level-input")
 			? event.target
 			: null;
 
 		if (changedLevelInput) {
-			var remainingLevel = Math.max(0, 20 - getTotalClassLevels(changedLevelInput));
-			var changedLevel = Number($(changedLevelInput).val());
+			const remainingLevel = Math.max(0, 20 - getTotalClassLevels(changedLevelInput));
+			const changedLevel = Number($(changedLevelInput).val());
 			if ($(changedLevelInput).val().trim() !== "" && changedLevel > remainingLevel) {
 				$(changedLevelInput).val(remainingLevel >= 1 ? remainingLevel : "");
 			}
 		}
 
-		var validLevels = populatedPairs.length > 0;
-		var totalLevel = 0;
+		let validLevels = populatedPairs.length > 0;
+		let totalLevel = 0;
 
 		$("#page1 .class-pair").each(function () {
-			var levelInput = $(this).find(".class-level-input");
-			var maxLevel = Math.max(0, 20 - getTotalClassLevels(levelInput[0]));
+			const levelInput = $(this).find(".class-level-input");
+			const maxLevel = Math.max(0, 20 - getTotalClassLevels(levelInput[0]));
 			levelInput.attr("max", maxLevel);
 
 			if ($(this).find(".class-name-input").val().trim() === "") {
 				return;
 			}
 
-			var levelValue = levelInput.val().trim();
-			var level = Number(levelValue);
+			const levelValue = levelInput.val().trim();
+			const level = Number(levelValue);
 
 			if (levelValue === "" || !Number.isInteger(level) || level < 1 || level > 20) {
 				validLevels = false;
@@ -884,7 +1096,7 @@ $(function () {
 		if (totalLevel > 20) {
 			validLevels = false;
 		}
-		var proficiencyInput = $("#page1 [name='proficiencybonus']");
+		const proficiencyInput = $("#page1 [name='proficiencybonus']");
 
 		if (!validLevels) {
 			proficiencyInput.val("");
@@ -894,7 +1106,7 @@ $(function () {
 			return;
 		}
 
-		var proficiencyBonus = 2 + Math.floor((totalLevel - 1) / 4);
+		const proficiencyBonus = 2 + Math.floor((totalLevel - 1) / 4);
 		proficiencyInput.val("+" + proficiencyBonus);
 		updateSavingThrows();
 		updateSkills();
@@ -902,8 +1114,8 @@ $(function () {
 	}
 
 	function updateClassLevelFields() {
-		var pairs = $("#page1 .class-pair");
-		var lastPopulatedPair = -1;
+		const pairs = $("#page1 .class-pair");
+		let lastPopulatedPair = -1;
 
 		pairs.each(function (index) {
 			if ($(this).find(".class-name-input").val().trim() !== "") {
@@ -911,10 +1123,10 @@ $(function () {
 			}
 		});
 
-		var totalLevel = getTotalClassLevels();
-		var extraPairCount = totalLevel < 20 ? 1 : 0;
-		var visiblePairCount = Math.min(pairs.length, Math.max(1, lastPopulatedPair + 1 + extraPairCount));
-		var focusedPair = $(document.activeElement).closest(".class-pair");
+		const totalLevel = getTotalClassLevels();
+		const extraPairCount = totalLevel < 20 ? 1 : 0;
+		let visiblePairCount = Math.min(pairs.length, Math.max(1, lastPopulatedPair + 1 + extraPairCount));
+		const focusedPair = $(document.activeElement).closest(".class-pair");
 		if (focusedPair.length > 0) {
 			visiblePairCount = Math.max(visiblePairCount, pairs.index(focusedPair) + 1);
 		}
@@ -927,12 +1139,12 @@ $(function () {
 	}
 
 	function updateSelectedClass(input) {
-		var pair = $(input).closest(".class-pair");
-		var selectedClass = $(input).val().trim();
-		var isValidClass = $("#class-options option").filter(function () {
+		const pair = $(input).closest(".class-pair");
+		const selectedClass = $(input).val().trim();
+		const isValidClass = $("#class-options option").filter(function () {
 			return $(this).val() === selectedClass;
 		}).length > 0;
-		var levelInput = pair.find(".class-level-input");
+		const levelInput = pair.find(".class-level-input");
 
 		if (isValidClass && levelInput.val().trim() === "") {
 			if (getTotalClassLevels() >= 20) {
@@ -949,9 +1161,9 @@ $(function () {
 	}
 
 	function updateSavingThrows() {
-		var proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
-		var proficiencyBonus = Number(proficiencyValue);
-		var savingThrowEffects = (characterEffects.saveAdvantages || [])
+		const proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
+		let proficiencyBonus = Number(proficiencyValue);
+		const savingThrowEffects = (characterEffects.saveAdvantages || [])
 			.concat(characterEffects.saveDisadvantages || [])
 			.concat(characterEffects.rageEffects || []);
 
@@ -960,13 +1172,13 @@ $(function () {
 		}
 
 		$("#page1 .saves input[type='text']").each(function () {
-			var saveName = $(this).attr("name");
-			var abilityName = saveName.replace("-save", "");
-			var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
-			var proficient = $("#page1 [name='" + saveName + "-prof']").is(":checked");
-			var expertise = (characterEffects.expertiseSavingThrows || []).indexOf(abilityName) !== -1;
-			var advantageReasons = getRollAdvantageReasons(savingThrowEffects, "saving", abilityName);
-			var disadvantageReasons = getRollDisadvantageReasons(savingThrowEffects, "saving", abilityName);
+			const saveName = $(this).attr("name");
+			const abilityName = saveName.replace("-save", "");
+			const modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+			const proficient = $("#page1 [name='" + saveName + "-prof']").is(":checked");
+			const expertise = (characterEffects.expertiseSavingThrows || []).indexOf(abilityName) !== -1;
+			const advantageReasons = getRollAdvantageReasons(savingThrowEffects, "saving", abilityName);
+			const disadvantageReasons = getRollDisadvantageReasons(savingThrowEffects, "saving", abilityName);
 			$(this).closest("li")
 				.toggleClass("save-advantage", advantageReasons.length > 0)
 				.toggleClass("save-disadvantage", disadvantageReasons.length > 0)
@@ -977,14 +1189,14 @@ $(function () {
 				return;
 			}
 
-			var saveBonus = (characterEffects.saveBonusAbilities || []).reduce(function (total, ability) {
+			let saveBonus = (characterEffects.saveBonusAbilities || []).reduce(function (total, ability) {
 				return total + Math.max(1, getModifierValue(ability) || 0);
 			}, 0);
 			saveBonus += characterEffects.allSavingThrowBonus || 0;
 			if (characterEffects.halfProficiencyToSaves) {
 				saveBonus += Math.ceil(proficiencyBonus / 2);
 			}
-			var save = Number(modifierValue)
+			const save = Number(modifierValue)
 				+ (proficient ? proficiencyBonus * (expertise ? 2 : 1) : 0)
 				+ saveBonus;
 			$(this).val(save >= 0 ? "+" + save : save);
@@ -992,10 +1204,10 @@ $(function () {
 	}
 
 	function updateClassSavingThrows() {
-		var firstClass = "";
+		let firstClass = "";
 
 		$("#page1 .class-pair").each(function () {
-			var className = $(this).find(".class-name-input").val().trim();
+			const className = $(this).find(".class-name-input").val().trim();
 
 			if (className !== "" && firstClass === "") {
 				firstClass = className;
@@ -1006,8 +1218,8 @@ $(function () {
 		$("#page1 .saves input[type='checkbox']")
 			.prop("checked", false);
 
-		var rules = classRules[firstClass];
-		var featureSavingThrows = (getClassModifierEffects().savingThrows || [])
+		const rules = classRules[firstClass];
+		const featureSavingThrows = (getClassModifierEffects().savingThrows || [])
 			.concat(getSelectedFeatBoonTalentEffects().savingThrows || []);
 
 		if (!rules || !rules.savingThrows) {
@@ -1030,7 +1242,7 @@ $(function () {
 
 
 	function updateSkills() {
-		var abilityNames = {
+		const abilityNames = {
 			str: "Strength",
 			dex: "Dexterity",
 			con: "Constitution",
@@ -1038,23 +1250,23 @@ $(function () {
 			wis: "Wisdom",
 			cha: "Charisma",
 		};
-		var proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
-		var proficiencyBonus = Number(proficiencyValue);
+		const proficiencyValue = $("#page1 [name='proficiencybonus']").val().trim();
+		let proficiencyBonus = Number(proficiencyValue);
 
 		if (!Number.isFinite(proficiencyBonus)) {
 			proficiencyBonus = 0;
 		}
 
 		$("#page1 .skills ul li").each(function () {
-			var abilityCode = $(this).find("label .skill").text().replace(/[()]/g, "").trim().toLowerCase();
-			var abilityName = abilityNames[abilityCode];
-			var skillInput = $(this).find("input[type='text']").first();
-			var skillName = $(this).find("label").clone().children().remove().end().text().trim();
-			var skillEffects = (characterEffects.checkAdvantages || [])
+			const abilityCode = $(this).find("label .skill").text().replace(/[()]/g, "").trim().toLowerCase();
+			const abilityName = abilityNames[abilityCode];
+			const skillInput = $(this).find("input[type='text']").first();
+			const skillName = $(this).find("label").clone().children().remove().end().text().trim();
+			const skillEffects = (characterEffects.checkAdvantages || [])
 				.concat(characterEffects.checkDisadvantages || [])
 				.concat(characterEffects.rageEffects || []);
-			var advantageReasons = getRollAdvantageReasons(skillEffects, "check", skillName, abilityName);
-			var disadvantageReasons = getRollDisadvantageReasons(skillEffects, "check", skillName, abilityName);
+			const advantageReasons = getRollAdvantageReasons(skillEffects, "check", skillName, abilityName);
+			const disadvantageReasons = getRollDisadvantageReasons(skillEffects, "check", skillName, abilityName);
 			if (skillName === "Stealth" && $("#page1").attr("data-armor-stealth-disadvantage") === "true") {
 				disadvantageReasons.push("Equipped armor imposes disadvantage on Stealth checks");
 			}
@@ -1068,16 +1280,16 @@ $(function () {
 				return;
 			}
 
-			var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
-			var proficient = $(this).find("input[type='checkbox']").is(":checked");
+			const modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+			const proficient = $(this).find("input[type='checkbox']").is(":checked");
 
 			if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
 				skillInput.val("");
 				return;
 			}
 
-			var expertise = (characterEffects.expertiseSkills || []).indexOf(skillName) !== -1;
-			var skill = Number(modifierValue) + (proficient ? proficiencyBonus * (expertise ? 2 : 1) : 0);
+			const expertise = (characterEffects.expertiseSkills || []).indexOf(skillName) !== -1;
+			const skill = Number(modifierValue) + (proficient ? proficiencyBonus * (expertise ? 2 : 1) : 0);
 			skillInput.val(skill >= 0 ? "+" + skill : skill);
 		});
 
@@ -1105,26 +1317,26 @@ $(function () {
 	}
 
 	function getRollEffectReasons(effects, polarity, rollType, rollName, abilityName) {
-		var reasons = [];
-		var rollPattern = rollType === "saving" ? /saving throws?/i : /(?:ability )?checks?/i;
-		var abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
-		var ability = abilityName || "";
+		const reasons = [];
+		const rollPattern = rollType === "saving" ? /saving throws?/i : /(?:ability )?checks?/i;
+		const abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
+		const ability = abilityName || "";
 
 		(effects || []).forEach(function (effect) {
 			if (typeof effect !== "string") {
 				return;
 			}
-			var pattern = new RegExp("\\b" + polarity + "\\s+on\\s+(.+?)\\s+" + rollPattern.source + "\\b", "i");
-			var match = pattern.exec(effect);
+			const pattern = new RegExp("\\b" + polarity + "\\s+on\\s+(.+?)\\s+" + rollPattern.source + "\\b", "i");
+			const match = pattern.exec(effect);
 			if (!match) {
 				return;
 			}
 
-			var scope = match[1];
-			var scopeAbilities = abilityNames.filter(function (name) {
+			const scope = match[1];
+			const scopeAbilities = abilityNames.filter(function (name) {
 				return new RegExp("\\b" + name + "\\b", "i").test(scope);
 			});
-			var appliesToRoll = /\b(?:all|any)\b/i.test(scope)
+			const appliesToRoll = /\b(?:all|any)\b/i.test(scope)
 				|| (rollType === "saving"
 					? scopeAbilities.length === 0 || scopeAbilities.indexOf(rollName) !== -1
 					: !ability || scopeAbilities.length === 0 || scopeAbilities.indexOf(ability) !== -1);
@@ -1132,12 +1344,12 @@ $(function () {
 				return;
 			}
 
-			var remainder = effect.slice(match.index + match[0].length).trim().replace(/[.,;]+$/, "").trim();
+			const remainder = effect.slice(match.index + match[0].length).trim().replace(/[.,;]+$/, "").trim();
 			if (remainder) {
-				var isDangerSenseScope = rollType === "saving"
+				const isDangerSenseScope = rollType === "saving"
 					&& /^against effects you can see(?:,\s*while not blinded, deafened, or incapacitated)?$/i.test(remainder);
-				var isSharedDuration = /^to you\b/i.test(remainder);
-				var isCombinedRageScope = rollType === "check"
+				const isSharedDuration = /^to you\b/i.test(remainder);
+				const isCombinedRageScope = rollType === "check"
 					&& new RegExp("^and\\s+(?:" + abilityNames.join("|") + ")\\s+saving throws?$", "i").test(remainder);
 				if (!isDangerSenseScope && !isSharedDuration && !isCombinedRageScope) {
 					return;
@@ -1157,8 +1369,8 @@ $(function () {
 	}
 
 	function updatePassivePerception() {
-		var perceptionValue = $("#page1 [name='Perception']").val().trim();
-		var passivePerception = $("#page1 [name='passiveperception']");
+		const perceptionValue = $("#page1 [name='Perception']").val().trim();
+		const passivePerception = $("#page1 [name='passiveperception']");
 
 		if (perceptionValue === "" || !Number.isFinite(Number(perceptionValue))) {
 			passivePerception.val("");
@@ -1169,7 +1381,7 @@ $(function () {
 	}
 
 	function getModifierValue(abilityName) {
-		var modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
+		const modifierValue = $("#page1 [name='" + abilityName + "mod']").val().trim();
 
 		if (modifierValue === "" || !Number.isFinite(Number(modifierValue))) {
 			return null;
@@ -1179,23 +1391,23 @@ $(function () {
 	}
 
 	function updateArmorCalculations() {
-		var armorType = $("#page1 [name='armor-type']").val();
-		var armor = armorTypes[armorType] || armorTypes.unarmored;
-		var armorClass = armor.baseAC;
-		var armorClassValid = true;
-		var classArmor = armorType === "unarmored" ? characterEffects.classArmor : null;
-		var racialArmor = armorType === "unarmored" ? characterEffects.armor : null;
+		const armorType = $("#page1 [name='armor-type']").val();
+		const armor = armorTypes[armorType] || armorTypes.unarmored;
+		let armorClass = armor.baseAC;
+		let armorClassValid = true;
+		let classArmor = armorType === "unarmored" ? characterEffects.classArmor : null;
+		const racialArmor = armorType === "unarmored" ? characterEffects.armor : null;
 		if (classArmor && classArmor.requiresNoShield && $("#page1 [name='armor-shield']").is(":checked")) {
 			classArmor = null;
 		}
-		var usesDexterity = armor.usesDexterity;
-		var secondaryAbility = armor.secondaryAbility;
-		var dexterityModifier = getModifierValue("Dexterity");
-		var miscBonusValue = $("#page1 [name='armor-ac-bonus']").val().trim();
-		var miscBonus = miscBonusValue === "" ? 0 : Number(miscBonusValue);
+		let usesDexterity = armor.usesDexterity;
+		let secondaryAbility = armor.secondaryAbility;
+		const dexterityModifier = getModifierValue("Dexterity");
+		const miscBonusValue = $("#page1 [name='armor-ac-bonus']").val().trim();
+		const miscBonus = miscBonusValue === "" ? 0 : Number(miscBonusValue);
 
 		if (classArmor || racialArmor) {
-			var unarmoredFeature = classArmor || racialArmor;
+			const unarmoredFeature = classArmor || racialArmor;
 			armorClass = unarmoredFeature.base;
 			usesDexterity = !!unarmoredFeature.dexterity;
 			secondaryAbility = unarmoredFeature.ability;
@@ -1205,7 +1417,7 @@ $(function () {
 			if (dexterityModifier === null) {
 				armorClassValid = false;
 			} else {
-				var dexterityCap = armor.dexterityCap;
+				let dexterityCap = armor.dexterityCap;
 				if (characterEffects.mediumArmorMaster && dexterityCap === 2 && dexterityModifier >= 3) {
 					dexterityCap = 3;
 				}
@@ -1216,7 +1428,7 @@ $(function () {
 		}
 
 		if (secondaryAbility) {
-			var secondaryModifier = getModifierValue(secondaryAbility);
+			const secondaryModifier = getModifierValue(secondaryAbility);
 
 			if (secondaryModifier === null) {
 				armorClassValid = false;
@@ -1230,12 +1442,12 @@ $(function () {
 		}
 
 		armorClass += characterEffects.armorBonus || 0;
-		var proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
 		if (characterEffects.halfProficiencyToArmor) {
 			armorClass += Math.ceil(proficiencyBonus / 2);
 		}
-		var equippedArmorType = $("#page1 [name='armor-type']").val();
-		var isUnarmoredForBonus = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(equippedArmorType) !== -1;
+		const equippedArmorType = $("#page1 [name='armor-type']").val();
+		const isUnarmoredForBonus = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(equippedArmorType) !== -1;
 		armorClass += isUnarmoredForBonus
 			? characterEffects.armorBonusWhileUnarmored || 0
 			: characterEffects.armorBonusWhileArmored || 0;
@@ -1248,8 +1460,8 @@ $(function () {
 		}
 
 		$("#page1 [name='ac']").val(armorClassValid ? armorClass : "");
-		var mediumArmorTypes = ["hide", "chain-shirt", "scale-mail", "breastplate", "half-plate"];
-		var stealthDisadvantage = !!armor.stealthDisadvantage
+		const mediumArmorTypes = ["hide", "chain-shirt", "scale-mail", "breastplate", "half-plate"];
+		const stealthDisadvantage = !!armor.stealthDisadvantage
 			&& !(characterEffects.mediumArmorMaster && mediumArmorTypes.indexOf(equippedArmorType) !== -1);
 		$("#page1")
 			.attr("data-armor-stealth-disadvantage", stealthDisadvantage ? "true" : "false");
@@ -1258,19 +1470,19 @@ $(function () {
 	}
 
 	function updateArmorSpeed(armor) {
-		var speedInput = $("#page1 [name='speed']");
-		var effectiveBaseSpeed = !baseSpeedIsManual && Number.isFinite(characterEffects.walkSpeed)
+		const speedInput = $("#page1 [name='speed']");
+		const effectiveBaseSpeed = !baseSpeedIsManual && Number.isFinite(characterEffects.walkSpeed)
 			? characterEffects.walkSpeed
 			: baseSpeedValue;
-		var speedValue = String(effectiveBaseSpeed).trim();
-		var speed = Number(speedValue);
-		var strengthValue = $("#page1 [name='Strengthscore']").val().trim();
-		var strength = Number(strengthValue);
-		var strengthRequirementNotMet = armor.strengthRequirement !== undefined
+		const speedValue = String(effectiveBaseSpeed).trim();
+		const speed = Number(speedValue);
+		const strengthValue = $("#page1 [name='Strengthscore']").val().trim();
+		const strength = Number(strengthValue);
+		const strengthRequirementNotMet = armor.strengthRequirement !== undefined
 			&& strengthValue !== ""
 			&& Number.isFinite(strength)
 			&& strength < armor.strengthRequirement;
-		var heavyArmorSpeedPenalty = strengthRequirementNotMet
+		const heavyArmorSpeedPenalty = strengthRequirementNotMet
 			&& !characterEffects.ignoreHeavyArmorSpeedPenalty
 			? 10
 			: 0;
@@ -1282,22 +1494,22 @@ $(function () {
 			return;
 		}
 
-		var speedBonus = (characterEffects.speedBonuses || []).reduce(function (total, bonus) {
-			var meetsArmorRequirement = !bonus.notWearingHeavyArmor || !armor.heavy;
-			var armorType = $("#page1 [name='armor-type']").val();
-			var isUnarmored = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(armorType) !== -1;
-			var meetsUnarmoredRequirement = !bonus.unarmored || isUnarmored;
-			var meetsShieldRequirement = !bonus.noShield || !$("#page1 [name='armor-shield']").is(":checked");
+		const speedBonus = (characterEffects.speedBonuses || []).reduce(function (total, bonus) {
+			const meetsArmorRequirement = !bonus.notWearingHeavyArmor || !armor.heavy;
+			const armorType = $("#page1 [name='armor-type']").val();
+			const isUnarmored = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(armorType) !== -1;
+			const meetsUnarmoredRequirement = !bonus.unarmored || isUnarmored;
+			const meetsShieldRequirement = !bonus.noShield || !$("#page1 [name='armor-shield']").is(":checked");
 			return total + (meetsArmorRequirement && meetsUnarmoredRequirement && meetsShieldRequirement ? bonus.value : 0);
 		}, 0);
 		speedInput.val(speed + speedBonus - heavyArmorSpeedPenalty);
 	}
 
 	function updateAttunementSlots() {
-		var slotCountInput = $("#page1 [name='attunement-slots']");
-		var manualSlotStorageKey = "page1_manualAttunementSlots";
-		var savedManualSlots = localStorage.getItem(manualSlotStorageKey);
-		var manualSlotCount = savedManualSlots === null
+		const slotCountInput = $("#page1 [name='attunement-slots']");
+		const manualSlotStorageKey = "page1_manualAttunementSlots";
+		const savedManualSlots = localStorage.getItem(manualSlotStorageKey);
+		let manualSlotCount = savedManualSlots === null
 			? Number(slotCountInput.val())
 			: Number(savedManualSlots);
 		if (!Number.isInteger(manualSlotCount)) {
@@ -1308,34 +1520,34 @@ $(function () {
 			localStorage.setItem(manualSlotStorageKey, String(manualSlotCount));
 		}
 
-		var artificerLevel = 0;
+		let artificerLevel = 0;
 		$("#page1 .class-pair").each(function () {
 			if ($(this).find(".class-name-input").val().trim().toLowerCase() !== "artificer") {
 				return;
 			}
 
-			var levelValue = $(this).find(".class-level-input").val().trim();
-			var level = Number(levelValue);
+			const levelValue = $(this).find(".class-level-input").val().trim();
+			const level = Number(levelValue);
 			if (Number.isInteger(level) && level >= 1 && level <= 20) {
 				artificerLevel += level;
 			}
 		});
-		var artificerBonusSlots = (artificerLevel >= 10 ? 1 : 0)
+		const artificerBonusSlots = (artificerLevel >= 10 ? 1 : 0)
 			+ (artificerLevel >= 14 ? 1 : 0)
 			+ (artificerLevel >= 18 ? 1 : 0);
-		var mentorLevel = Number(getTotalClassLevels());
-		var expertMentorLevel = isMentorEnabled() && $("#page1 [name='mentor-type']").val() === "Expert"
+		const mentorLevel = Number(getTotalClassLevels());
+		const expertMentorLevel = isMentorEnabled() && $("#page1 [name='mentor-type']").val() === "Expert"
 			? mentorLevel
 			: 0;
-		var expertMentorSlots = expertMentorLevel >= 20 ? 5 : expertMentorLevel >= 11 ? 4 : 3;
-		var minimumSlotCount = Math.min(6, Math.max(3 + artificerBonusSlots, expertMentorSlots));
-		var slotCount = Math.max(manualSlotCount, minimumSlotCount);
+		const expertMentorSlots = expertMentorLevel >= 20 ? 5 : expertMentorLevel >= 11 ? 4 : 3;
+		const minimumSlotCount = Math.min(6, Math.max(3 + artificerBonusSlots, expertMentorSlots));
+		let slotCount = Math.max(manualSlotCount, minimumSlotCount);
 		slotCount = Math.max(3, Math.min(6, slotCount));
 		slotCountInput.attr("min", minimumSlotCount);
 		slotCountInput.val(slotCount);
 
 		$("#page1 .attunement-slots-grid input[type='checkbox']").each(function (index) {
-			var enabled = index < slotCount;
+			const enabled = index < slotCount;
 			$(this).prop("disabled", !enabled);
 
 			if (!enabled) {
@@ -1352,7 +1564,7 @@ $(function () {
 		return isMentorEnabled() && mentorSinglePointAsiLevels.indexOf(Number(level)) !== -1;
 	}
 
-	var classRules = {
+	const classRules = {
 		"Barbarian": {
 			savingThrows: ["Strength", "Constitution"],
 
@@ -2025,7 +2237,7 @@ $(function () {
 		},
 	};
 
-	var subclassLevels = {
+	const subclassLevels = {
 		"Barbarian": 3,
 		"Bard": 3,
 		"Cleric": 1,
@@ -2041,7 +2253,7 @@ $(function () {
 		"Artificer": 3
 	};
 
-	var subclassRules = {
+	const subclassRules = {
 		//Barbarian Subclasses//
 		"Path of the Ancestral Guardian": {
 			features: {
@@ -3194,15 +3406,15 @@ $(function () {
 
 	};
 
-	var rageActive = localStorage.getItem("page1_rageActive") === "true";
-	var rageAttackStorageKey = "page1_rageAttackSlot";
-	var beastRageFeature = "";
+	let rageActive = localStorage.getItem("page1_rageActive") === "true";
+	const rageAttackStorageKey = "page1_rageAttackSlot";
+	let beastRageFeature = "";
 
 	function getBarbarianContext() {
-		var barbarianContext = null;
+		let barbarianContext = null;
 		$("#page1 .class-pair").each(function () {
-			var className = $(this).find(".class-name-input").val().trim();
-			var level = Number($(this).find(".class-level-input").val());
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
 			if (className !== "Barbarian" || !Number.isInteger(level) || level < 1 || level > 20) {
 				return;
 			}
@@ -3220,8 +3432,8 @@ $(function () {
 	}
 
 	function updateRageControls() {
-		var barbarianContext = getBarbarianContext();
-		var available = barbarianContext !== null;
+		const barbarianContext = getBarbarianContext();
+		const available = barbarianContext !== null;
 		if (!available || (rageActive && isWearingHeavyArmor())) {
 			rageActive = false;
 			localStorage.setItem("page1_rageActive", "false");
@@ -3245,16 +3457,16 @@ $(function () {
 
 	function updateBeastRageAttack() {
 		beastRageFeature = "";
-		var previousAttack = localStorage.getItem(rageAttackStorageKey);
+		const previousAttack = localStorage.getItem(rageAttackStorageKey);
 		if (previousAttack) {
-			var previous;
+			let previous;
 			try {
 				previous = JSON.parse(previousAttack);
 			} catch (error) {
 				localStorage.removeItem(rageAttackStorageKey);
 				throw error;
 			}
-			var previousFields = [
+			const previousFields = [
 				$("#page1 [name='atkname" + previous.slot + "']"),
 				$("#page1 [name='atkbonus" + previous.slot + "']"),
 				$("#page1 [name='atkdamage" + previous.slot + "']"),
@@ -3269,8 +3481,8 @@ $(function () {
 			localStorage.removeItem(rageAttackStorageKey);
 		}
 
-		var barbarianContext = getBarbarianContext();
-		var form = $("#page1 [name='rage-beast-form']").val();
+		const barbarianContext = getBarbarianContext();
+		const form = $("#page1 [name='rage-beast-form']").val();
 		if (!barbarianContext
 			|| barbarianContext.subclass !== "Path of the Beast"
 			|| barbarianContext.level < 3
@@ -3278,7 +3490,7 @@ $(function () {
 			return "";
 		}
 
-		var attacks = {
+		const attacks = {
 			bite: {
 				name: "Beast Bite",
 				die: "1d8",
@@ -3298,22 +3510,22 @@ $(function () {
 				feature: "When a creature you can see hits you within 10 feet, use your reaction to add 1d8 to your AC against that attack.",
 			},
 		};
-		var attack = attacks[form];
-		var strengthModifier = Number($("#page1 [name='Strengthmod']").val()) || 0;
-		var proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
-		var attackBonus = (Number.isFinite(strengthModifier) ? strengthModifier : 0)
+		const attack = attacks[form];
+		const strengthModifier = Number($("#page1 [name='Strengthmod']").val()) || 0;
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const attackBonus = (Number.isFinite(strengthModifier) ? strengthModifier : 0)
 			+ (Number.isFinite(proficiencyBonus) ? proficiencyBonus : 0);
-		var rageDamageBonus = barbarianContext.level >= 16 ? 4 : barbarianContext.level >= 9 ? 3 : 2;
-		var damageModifier = strengthModifier + (rageActive ? rageDamageBonus : 0);
-		var damage = attack.die + (damageModifier >= 0 ? "+" : "") + damageModifier + " " + attack.type;
+		const rageDamageBonus = barbarianContext.level >= 16 ? 4 : barbarianContext.level >= 9 ? 3 : 2;
+		const damageModifier = strengthModifier + (rageActive ? rageDamageBonus : 0);
+		let damage = attack.die + (damageModifier >= 0 ? "+" : "") + damageModifier + " " + attack.type;
 		if (barbarianContext.level >= 6) {
 			damage += " (magical)";
 		}
-		var attackValues = [attack.name, (attackBonus >= 0 ? "+" : "") + attackBonus, damage];
+		const attackValues = [attack.name, (attackBonus >= 0 ? "+" : "") + attackBonus, damage];
 		beastRageFeature = attack.feature;
-		var slot = null;
-		for (var index = 1; index <= 5; index++) {
-			var fields = [
+		let slot = null;
+		for (let index = 1; index <= 5; index++) {
+			const fields = [
 				$("#page1 [name='atkname" + index + "']"),
 				$("#page1 [name='atkbonus" + index + "']"),
 				$("#page1 [name='atkdamage" + index + "']"),
@@ -3334,7 +3546,7 @@ $(function () {
 		return "";
 	}
 
-	var classModifierRules = {
+	const classModifierRules = {
 		Barbarian: [
 			{ level: 1, effects: { classArmor: { base: 10, dexterity: true, ability: "Constitution" } } },
 			{ level: 2, effects: { saveAdvantages: ["Advantage on Dexterity saving throws against effects you can see, while not blinded, deafened, or incapacitated"] } },
@@ -3378,7 +3590,7 @@ $(function () {
 		],
 	};
 
-	var subclassModifierRules = {
+	const subclassModifierRules = {
 		"College of Lore": [
 			{ level: 3, effects: { choiceNotes: ["Choose three skill proficiencies (Bonus Proficiencies)"] } },
 		],
@@ -3576,13 +3788,13 @@ $(function () {
 		],
 	};
 
-	var subclassOptions = $("<datalist id='subclass-options'></datalist>");
+	const subclassOptions = $("<datalist id='subclass-options'></datalist>");
 	Object.keys(subclassRules).forEach(function (subclassName) {
 		subclassOptions.append($("<option>").val(subclassName));
 	});
 	$("#page1").append(subclassOptions);
 
-	var subclassClassRules = {
+	const subclassClassRules = {
 		Barbarian: function (name) { return name.indexOf("Path of ") === 0; },
 		Bard: function (name) { return name.indexOf("College of ") === 0; },
 		Cleric: function (name) { return name.endsWith(" Domain"); },
@@ -3612,18 +3824,18 @@ $(function () {
 	};
 
 	function getSubclassesForClass(className) {
-		var matches = subclassClassRules[className];
+		const matches = subclassClassRules[className];
 		return matches
 			? Object.keys(subclassRules).filter(matches)
 			: [];
 	}
 
 	function updateSubclassForPair(pair) {
-		var className = pair.find(".class-name-input").val().trim();
-		var subclassInput = pair.find(".subclass-name-input");
-		var allowedSubclasses = getSubclassesForClass(className);
-		var currentSubclass = subclassInput.val().trim();
-		var isValidSubclass = allowedSubclasses.indexOf(currentSubclass) !== -1;
+		const className = pair.find(".class-name-input").val().trim();
+		const subclassInput = pair.find(".subclass-name-input");
+		const allowedSubclasses = getSubclassesForClass(className);
+		const currentSubclass = subclassInput.val().trim();
+		const isValidSubclass = allowedSubclasses.indexOf(currentSubclass) !== -1;
 
 		subclassInput.attr("data-subclass-class", className);
 		if (currentSubclass && !isValidSubclass) {
@@ -3641,7 +3853,7 @@ $(function () {
 	});
 
 	function getFeaturesUpToLevel(featuresByLevel, level) {
-		var features = [];
+		let features = [];
 
 		Object.keys(featuresByLevel)
 			.sort(function (a, b) {
@@ -3657,7 +3869,7 @@ $(function () {
 	}
 
 	function removeReplacedFeatures(features) {
-		var replacedFeatures = [];
+		const replacedFeatures = [];
 
 		features.forEach(function (feature) {
 			if (typeof feature === "object" && feature.replaces) {
@@ -3666,7 +3878,7 @@ $(function () {
 		});
 
 		return features.filter(function (feature) {
-			var featureName = typeof feature === "string"
+			const featureName = typeof feature === "string"
 				? feature
 				: feature.name;
 
@@ -3675,19 +3887,19 @@ $(function () {
 	}
 
 	function getSelectedRaceRule() {
-		var selectedRace = $("#page1 [name='race']").val().trim();
-		var normalizedRace = selectedRace.toLowerCase();
-		var familyName = racialFeatAliases[normalizedRace];
-		var baseRuleName = Object.keys(racialFeatureRules).find(function (name) {
+		const selectedRace = $("#page1 [name='race']").val().trim();
+		const normalizedRace = selectedRace.toLowerCase();
+		const familyName = racialFeatAliases[normalizedRace];
+		const baseRuleName = Object.keys(racialFeatureRules).find(function (name) {
 			return name.toLowerCase() === (familyName || normalizedRace).toLowerCase();
 		});
-		var variantRuleName = Object.keys(racialFeatureVariantRules).find(function (name) {
+		const variantRuleName = Object.keys(racialFeatureVariantRules).find(function (name) {
 			return name.toLowerCase() === normalizedRace;
 		});
-		var standaloneRuleName = Object.keys(racialFeatureStandaloneRules).find(function (name) {
+		let standaloneRuleName = Object.keys(racialFeatureStandaloneRules).find(function (name) {
 			return name.toLowerCase() === normalizedRace;
 		});
-		var rules = [];
+		const rules = [];
 
 		if (lineageRace) {
 			standaloneRuleName = Object.keys(racialFeatureStandaloneRules).find(function (name) {
@@ -3708,7 +3920,7 @@ $(function () {
 			}
 		}
 
-		var result = {
+		const result = {
 			features: [],
 			effects: {
 				skills: [],
@@ -3732,7 +3944,7 @@ $(function () {
 		rules.forEach(function (rule) {
 			result.features = result.features.concat(rule.features || []);
 			Object.keys(rule.effects || {}).forEach(function (effectName) {
-				var effectValue = rule.effects[effectName];
+				const effectValue = rule.effects[effectName];
 				if (Array.isArray(effectValue)) {
 					result.effects[effectName] = (result.effects[effectName] || []).concat(effectValue);
 				} else {
@@ -3792,7 +4004,7 @@ $(function () {
 
 	function mergeEffects(target, source) {
 		Object.keys(source || {}).forEach(function (effectName) {
-			var value = source[effectName];
+			const value = source[effectName];
 			if (Array.isArray(value)) {
 				target[effectName] = (target[effectName] || []).concat(value);
 			} else if (effectName === "armorBonus") {
@@ -3820,7 +4032,7 @@ $(function () {
 	}
 
 	function getClassModifierEffects() {
-		var effects = createEmptyEffects();
+		const effects = createEmptyEffects();
 
 		function addLevelEffects(rules, level) {
 			(rules || []).forEach(function (rule) {
@@ -3831,24 +4043,24 @@ $(function () {
 		}
 
 		$("#page1 .class-pair").each(function () {
-			var className = $(this).find(".class-name-input").val().trim();
-			var level = Number($(this).find(".class-level-input").val());
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
 			if (!className || !Number.isInteger(level) || level < 1 || level > 20) {
 				return;
 			}
 
 			addLevelEffects(classModifierRules[className], level);
-			var subclassName = $(this).find(".subclass-name-input").val().trim();
-			var subclassLevel = subclassLevels[className];
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			const subclassLevel = subclassLevels[className];
 			if (subclassName && Number.isInteger(subclassLevel) && level >= subclassLevel) {
 				addLevelEffects(subclassModifierRules[subclassName], level);
 			}
 		});
 
-		var barbarianContext = getBarbarianContext();
+		const barbarianContext = getBarbarianContext();
 		if (rageActive && barbarianContext) {
-			var level = barbarianContext.level;
-			var rageDamageBonus = level >= 16 ? 4 : level >= 9 ? 3 : 2;
+			const level = barbarianContext.level;
+			const rageDamageBonus = level >= 16 ? 4 : level >= 9 ? 3 : 2;
 			effects.rageEffects.push(
 				"Strength-based melee weapon attacks deal +" + rageDamageBonus + " damage; advantage on Strength checks and Strength saving throws"
 			);
@@ -3856,9 +4068,9 @@ $(function () {
 				? "Cannot cast spells or concentrate; rage lasts up to 1 minute, and Persistent Rage ends early only if you become unconscious or choose to end it"
 				: "Cannot cast spells or concentrate; rage lasts up to 1 minute and ends early if you become unconscious, choose to end it as a bonus action, or neither attack a hostile creature nor take damage since your previous turn");
 
-			var subclassName = barbarianContext.subclass;
-			var beastForm = $("#page1 [name='rage-beast-form']").val();
-			var isBearTotem = subclassName === "Path of the Totem Warrior"
+			const subclassName = barbarianContext.subclass;
+			const beastForm = $("#page1 [name='rage-beast-form']").val();
+			const isBearTotem = subclassName === "Path of the Totem Warrior"
 				&& level >= 3
 				&& $("#page1 [name='rage-totem-spirit']").val() === "bear";
 			if (isBearTotem) {
@@ -3870,7 +4082,7 @@ $(function () {
 			if (subclassName === "Path of the Ancestral Guardian" && level >= 3) {
 				effects.rageEffects.push("Ancestral Protectors: the first creature hit on your turn has disadvantage on attacks against targets other than you; any creature other than you that it hits has resistance to damage from its attacks");
 				if (level >= 6) {
-					var spiritShieldDice = level >= 14 ? 4 : level >= 10 ? 3 : 2;
+					const spiritShieldDice = level >= 14 ? 4 : level >= 10 ? 3 : 2;
 					effects.rageEffects.push("Spirit Shield reaction: reduce damage to a nearby creature by " + spiritShieldDice + "d6");
 				}
 				if (level >= 14) {
@@ -3911,7 +4123,7 @@ $(function () {
 			} else if (subclassName === "Path of the Giant" && level >= 3) {
 				effects.rageEffects.push("Giant's Havoc: become Large if space permits, gain 5 ft. reach, and deal +1d6 damage once per turn");
 				if (level >= 6) {
-					var giantDamageType = $("#page1 [name='rage-giant-damage']").val();
+					const giantDamageType = $("#page1 [name='rage-giant-damage']").val();
 					effects.rageEffects.push("Elemental Cleaver: add 1d6 " + (giantDamageType || "chosen elemental") + " damage to one weapon; it becomes magical and can be thrown and recalled");
 				}
 				if (level >= 10) {
@@ -3921,10 +4133,10 @@ $(function () {
 					effects.rageEffects.push("Demiurgic Colossus: become Huge if space permits, gain 10 ft. reach, and increase Giant's Havoc bonus damage to 1d8");
 				}
 			} else if (subclassName === "Path of the Storm Herald" && level >= 3) {
-				var stormAura = $("#page1 [name='rage-storm-aura']").val();
+				const stormAura = $("#page1 [name='rage-storm-aura']").val();
 				effects.rageEffects.push("Storm Aura (" + (stormAura || "choose Desert, Sea, or Tundra") + "): activate your aura's area effect when you enter rage and as a bonus action");
 				if (level >= 6) {
-					var stormResistance = { desert: "Fire", sea: "Lightning", tundra: "Cold" }[stormAura];
+					const stormResistance = { desert: "Fire", sea: "Lightning", tundra: "Cold" }[stormAura];
 					if (stormResistance) {
 						effects.damageResistances.push(stormResistance + " (Storm Soul, while raging)");
 					} else {
@@ -3938,7 +4150,7 @@ $(function () {
 					effects.rageEffects.push("Raging Storm: gain the additional reaction effect for your chosen Desert, Sea, or Tundra aura");
 				}
 			} else if (subclassName === "Path of the Zealot" && level >= 3) {
-				var zealotDamageType = $("#page1 [name='rage-zealot-damage']").val();
+				const zealotDamageType = $("#page1 [name='rage-zealot-damage']").val();
 				effects.rageEffects.push("Divine Fury: first creature hit on each of your turns takes 1d6 + " + Math.floor(level / 2) + " " + (zealotDamageType || "radiant or necrotic") + " damage");
 				if (level >= 6) {
 					effects.rageEffects.push("Fanatical Focus: once per rage, reroll a failed saving throw");
@@ -3966,7 +4178,7 @@ $(function () {
 		Object.keys(effects).forEach(function (effectName) {
 			if (Array.isArray(effects[effectName])) {
 				effects[effectName] = effects[effectName].filter(function (value, index, values) {
-					var comparable = typeof value === "object" ? JSON.stringify(value) : value;
+					const comparable = typeof value === "object" ? JSON.stringify(value) : value;
 					return values.findIndex(function (otherValue) {
 						return (typeof otherValue === "object" ? JSON.stringify(otherValue) : otherValue) === comparable;
 					}) === index;
@@ -3976,7 +4188,7 @@ $(function () {
 		return effects;
 	}
 
-	var selectedFeatureEffectRules = {
+	const selectedFeatureEffectRules = {
 		feats: {
 			"athlete": { abilityChoices: ["Strength", "Dexterity"] },
 			"crusher": { abilityChoices: ["Strength", "Constitution"] },
@@ -4082,7 +4294,7 @@ $(function () {
 		},
 	};
 
-	var talentDescriptionByName = {
+	const talentDescriptionByName = {
 		"ranged": "+1 to ranged attack rolls.",
 		"melee": "+1 to melee attack rolls.",
 		"defense": "+1 to AC.",
@@ -4178,8 +4390,8 @@ $(function () {
 		if (!choice || choice.chooseFeat) {
 			return;
 		}
-		var first = choice.firstAbility;
-		var second = choice.secondAbility;
+		const first = choice.firstAbility;
+		const second = choice.secondAbility;
 		if (singlePoint) {
 			if (abilityNames.indexOf(first) !== -1) {
 				effects.abilityScoreBonuses[first] = (effects.abilityScoreBonuses[first] || 0) + 1;
@@ -4197,7 +4409,7 @@ $(function () {
 	}
 
 	function getAbilityImprovementEffects() {
-		var effects = createEmptyEffects();
+		const effects = createEmptyEffects();
 		activeClassAsiKeys.forEach(function (key) {
 			addAbilityScoreChoice(effects, classAsiChoices[key], !!activeSinglePointAsiKeys[key]);
 		});
@@ -4211,17 +4423,17 @@ $(function () {
 	}
 
 	function getClassAbilityScoreImprovements(classRule, classLevel, pairIndex) {
-		var improvements = [];
+		const improvements = [];
 		Object.keys((classRule && classRule.features) || {}).forEach(function (levelKey) {
-			var level = Number(levelKey);
+			const level = Number(levelKey);
 			if (!Number.isInteger(level) || level > classLevel) {
 				return;
 			}
-			var featuresAtLevel = Array.isArray(classRule.features[levelKey])
+			const featuresAtLevel = Array.isArray(classRule.features[levelKey])
 				? classRule.features[levelKey]
 				: [classRule.features[levelKey]];
 			featuresAtLevel.forEach(function (feature) {
-				var name = typeof feature === "object" && feature ? feature.name : feature;
+				const name = typeof feature === "object" && feature ? feature.name : feature;
 				if (typeof name === "string" && /^Ability Score Improvement(?:\s+\(\d+\))?$/i.test(name)) {
 					improvements.push({
 						key: "class-pair-" + pairIndex + "-asi-" + level,
@@ -4238,28 +4450,28 @@ $(function () {
 	}
 
 	function updateFeatRewardSlots(characterLevel, classAsiEntries) {
-		var classFeatChoices = classAsiEntries.reduce(function (count, entry) {
+		const classFeatChoices = classAsiEntries.reduce(function (count, entry) {
 			return count + (classAsiChoices[entry.key] && classAsiChoices[entry.key].chooseFeat ? 1 : 0);
 		}, 0);
-		var unlockedFeatSlots = [1];
-		var nextSlot = getFirstCharacterFeatSlot();
+		const unlockedFeatSlots = [1];
+		let nextSlot = getFirstCharacterFeatSlot();
 		characterFeatRewardLevels.forEach(function (level) {
 			if (characterLevel >= level) {
 				unlockedFeatSlots.push(nextSlot);
 				nextSlot += 1;
 			}
 		});
-		for (var classFeatIndex = 0; classFeatIndex < classFeatChoices; classFeatIndex++) {
+		for (let classFeatIndex = 0; classFeatIndex < classFeatChoices; classFeatIndex++) {
 			unlockedFeatSlots.push(nextSlot);
 			nextSlot += 1;
 		}
 
 		$("#page1 [name^='feat-slot-']").each(function () {
-			var slotNumber = Number(this.name.match(/\d+$/)[0]);
+			const slotNumber = Number(this.name.match(/\d+$/)[0]);
 			if (slotNumber === 1 || isRacialFeatSlot(slotNumber)) {
 				return;
 			}
-			var unlocked = unlockedFeatSlots.indexOf(slotNumber) !== -1;
+			const unlocked = unlockedFeatSlots.indexOf(slotNumber) !== -1;
 			if (!unlocked && magicItemInput === this) {
 				closeMagicItemSuggestions();
 			}
@@ -4286,22 +4498,22 @@ $(function () {
 	}
 
 	function renderCharacterLevelRewards(characterLevel) {
-		var rewardList = $("#page1 #character-level-reward-list").empty();
-		var rewardLevels = characterFeatRewardLevels
+		const rewardList = $("#page1 #character-level-reward-list").empty();
+		const rewardLevels = characterFeatRewardLevels
 			.concat(characterAsiRewardLevels)
 			.concat(characterMagicItemRewards.map(function (reward) { return reward.level; }))
 			.filter(function (level, index, levels) { return levels.indexOf(level) === index; })
 			.sort(function (first, second) { return first - second; });
 
 		rewardLevels.forEach(function (level) {
-			var card = $("<div>", {
+			const card = $("<div>", {
 				class: "character-level-reward" + (characterLevel >= level ? " earned" : " locked"),
 			}).appendTo(rewardList);
 			$("<strong>", { class: "character-level-reward-heading", text: "Level " + level }).appendTo(card);
-			var contents = $("<div>", { class: "character-level-reward-content" }).appendTo(card);
+			const contents = $("<div>", { class: "character-level-reward-content" }).appendTo(card);
 
 			if (characterFeatRewardLevels.indexOf(level) !== -1) {
-				var featSlot = getFirstCharacterFeatSlot() + characterFeatRewardLevels.indexOf(level);
+				const featSlot = getFirstCharacterFeatSlot() + characterFeatRewardLevels.indexOf(level);
 				$("<span>", {
 					class: "character-level-reward-item",
 					text: "Feat" + (featSlot ? " - Slot " + featSlot : ""),
@@ -4310,8 +4522,8 @@ $(function () {
 			if (characterAsiRewardLevels.indexOf(level) !== -1) {
 				$("<span>", { class: "character-level-reward-item", text: "Ability Score Improvement" }).appendTo(contents);
 				if (characterLevel >= level) {
-					var levelKey = String(level);
-					var choice = $.extend({}, characterAsiChoices[levelKey] || {}, { key: levelKey });
+					const levelKey = String(level);
+					const choice = $.extend({}, characterAsiChoices[levelKey] || {}, { key: levelKey });
 					createAbilityScoreChoiceControl(choice, {
 						allowFeat: false,
 						choiceType: "character",
@@ -4321,7 +4533,7 @@ $(function () {
 			}
 			characterMagicItemRewards.forEach(function (reward) {
 				if (reward.level === level) {
-					var rarity = reward.rarity.split("-").map(function (word) {
+					const rarity = reward.rarity.split("-").map(function (word) {
 						return word.charAt(0).toUpperCase() + word.slice(1);
 					}).join(" ");
 					$("<span>", {
@@ -4334,28 +4546,28 @@ $(function () {
 	}
 
 	function updateMentorSelectionUi() {
-		var mentorEnabled = isMentorEnabled();
-		var mentorType = $("#page1 [name='mentor-type']").val();
-		var typeSelect = $("#page1 .mentor-type-select");
+		const mentorEnabled = isMentorEnabled();
+		const mentorType = $("#page1 [name='mentor-type']").val();
+		const typeSelect = $("#page1 .mentor-type-select");
 		typeSelect.prop("hidden", !mentorEnabled).prop("disabled", !mentorEnabled);
 		$("#page1 .mentor-progression").prop("hidden", !mentorEnabled || !mentorFeatureRules[mentorType]);
 	}
 
 	function renderMentorProgression(characterLevel) {
 		updateMentorSelectionUi();
-		var mentorType = $("#page1 [name='mentor-type']").val();
-		var mentor = isMentorEnabled() ? mentorFeatureRules[mentorType] : null;
-		var roleChoice = $("#page1 #mentor-role-choice").empty();
-		var progressionList = $("#page1 #mentor-progression-list").empty();
+		const mentorType = $("#page1 [name='mentor-type']").val();
+		const mentor = isMentorEnabled() ? mentorFeatureRules[mentorType] : null;
+		const roleChoice = $("#page1 #mentor-role-choice").empty();
+		const progressionList = $("#page1 #mentor-progression-list").empty();
 		activeMentorAsiLevels = [];
 
 		if (!mentor) {
 			return;
 		}
 
-		var selectedRole = selectedMentorRole;
+		const selectedRole = selectedMentorRole;
 		if (mentor.roleOptions) {
-			var roleSelect = $("<select>", {
+			const roleSelect = $("<select>", {
 				name: "mentor-role",
 				"aria-label": mentorType + " mentor role",
 			}).appendTo(roleChoice);
@@ -4370,26 +4582,38 @@ $(function () {
 			}).appendTo(roleChoice);
 		}
 
-		for (var level = 1; level <= 20; level++) {
-			var earned = characterLevel >= level;
-			var card = $("<div>", {
+		for (let level = 1; level <= 20; level++) {
+			const earned = characterLevel >= level;
+			const card = $("<div>", {
 				class: "character-level-reward" + (earned ? " earned" : " locked"),
 			}).appendTo(progressionList);
 			$("<strong>", { class: "character-level-reward-heading", text: "Level " + level }).appendTo(card);
-			var contents = $("<div>", { class: "character-level-reward-content" }).appendTo(card);
+			const contents = $("<div>", { class: "character-level-reward-content" }).appendTo(card);
 			$("<span>", {
 				class: "character-level-reward-item",
 				text: "Proficiency Bonus +" + (2 + Math.floor((level - 1) / 4)),
 			}).appendTo(contents);
 			(mentor.features[level] || []).forEach(function (feature) {
-				$("<span>", {
+				const featureItem = $("<span>", {
 					class: "character-level-reward-item",
 					text: feature,
 				}).appendTo(contents);
+				if (earned) {
+					const mentorUseTracker = createAbilityUseTracker(
+						feature,
+						"mentor",
+						mentorType,
+						characterLevel,
+						"mentor:" + mentorType
+					);
+					if (mentorUseTracker.length) {
+						featureItem.append(mentorUseTracker);
+					}
+				}
 				if (feature === "Ability Score Improvement" && earned) {
-					var levelKey = String(level);
+					const levelKey = String(level);
 					activeMentorAsiLevels.push(levelKey);
-					var choice = $.extend({}, mentorAsiChoices[levelKey] || {}, { key: levelKey });
+					const choice = $.extend({}, mentorAsiChoices[levelKey] || {}, { key: levelKey });
 					createAbilityScoreChoiceControl(choice, {
 						allowFeat: false,
 						choiceType: "mentor",
@@ -4400,12 +4624,12 @@ $(function () {
 			});
 
 			if (mentorType === "Spellcaster") {
-				var progression = mentor.spellProgression[level - 1];
-				var slotCounts = progression.slice(2).map(function (count) {
+				const progression = mentor.spellProgression[level - 1];
+				const slotCounts = progression.slice(2).map(function (count) {
 					return count || null;
 				});
-				var spellLevelNames = ["1st", "2nd", "3rd", "4th", "5th"];
-				var slots = slotCounts.map(function (count, index) {
+				const spellLevelNames = ["1st", "2nd", "3rd", "4th", "5th"];
+				const slots = slotCounts.map(function (count, index) {
 					return count ? spellLevelNames[index] + ": " + count : null;
 				}).filter(Boolean);
 				$("<span>", {
@@ -4423,15 +4647,15 @@ $(function () {
 
 	function updateMagicItemRewardSlots(characterLevel) {
 		characterMagicItemRewards.forEach(function (reward) {
-			var name = "magic-" + reward.rarity + "-" + reward.slot;
-			var input = $("#page1 [name='" + name + "']");
+			const name = "magic-" + reward.rarity + "-" + reward.slot;
+			const input = $("#page1 [name='" + name + "']");
 			if (input.length === 0) {
 				return;
 			}
-			var rarity = reward.rarity.split("-").map(function (word) {
+			const rarity = reward.rarity.split("-").map(function (word) {
 				return word.charAt(0).toUpperCase() + word.slice(1);
 			}).join(" ");
-			var isUnlocked = characterLevel >= reward.level;
+			const isUnlocked = characterLevel >= reward.level;
 			input
 				.prop("readOnly", !isUnlocked)
 				.toggleClass("locked-magic-item-slot", !isUnlocked)
@@ -4451,9 +4675,9 @@ $(function () {
 	}
 
 	function createAbilityScoreChoiceControl(choice, options) {
-		var control = $("<div>", { class: "asi-choice-control" });
-		var singlePoint = !!options.singlePoint;
-		var checkboxLabel = $();
+		const control = $("<div>", { class: "asi-choice-control" });
+		const singlePoint = !!options.singlePoint;
+		let checkboxLabel = $();
 		if (options.allowFeat) {
 			checkboxLabel = $("<label>", { class: "asi-feat-toggle" }).appendTo(control);
 			$("<input>", {
@@ -4465,8 +4689,8 @@ $(function () {
 			$("<span>", { text: "Choose a feat instead" }).appendTo(checkboxLabel);
 		}
 
-		var abilityControls = $("<div>", { class: "asi-ability-controls" }).appendTo(control);
-		var modeSelect = $("<select>", {
+		const abilityControls = $("<div>", { class: "asi-ability-controls" }).appendTo(control);
+		const modeSelect = $("<select>", {
 			"data-asi-choice-key": choice.key,
 			"data-asi-choice-type": options.choiceType,
 			"data-asi-field": "mode",
@@ -4482,7 +4706,7 @@ $(function () {
 		modeSelect.prop("hidden", singlePoint);
 
 		function createAbilitySelect(field, label) {
-			var select = $("<select>", {
+			const select = $("<select>", {
 				"data-asi-choice-key": choice.key,
 				"data-asi-choice-type": options.choiceType,
 				"data-asi-field": field,
@@ -4496,10 +4720,10 @@ $(function () {
 			return select;
 		}
 
-		var firstSelect = createAbilitySelect("firstAbility", "first ability");
-		var secondSelect = createAbilitySelect("secondAbility", "second ability");
+		const firstSelect = createAbilitySelect("firstAbility", "first ability");
+		const secondSelect = createAbilitySelect("secondAbility", "second ability");
 		function disableDuplicateSecondAbility() {
-			var firstAbility = firstSelect.val();
+			const firstAbility = firstSelect.val();
 			secondSelect.find("option").each(function () {
 				if (this.value) {
 					$(this).prop("disabled", this.value === firstAbility);
@@ -4514,7 +4738,7 @@ $(function () {
 		if (singlePoint || choice.mode !== "one-one") {
 			secondSelect.prop("hidden", true);
 		}
-		var abilityChoiceComplete = singlePoint
+		const abilityChoiceComplete = singlePoint
 			? abilityNames.indexOf(choice.firstAbility) !== -1
 			: choice.mode === "one-one"
 			? abilityNames.indexOf(choice.firstAbility) !== -1
@@ -4527,20 +4751,20 @@ $(function () {
 	}
 
 	function renderAbilityChoiceControls(choices) {
-		var activeChoices = {};
+		const activeChoices = {};
 		choices.forEach(function (choice) {
-			var slot = $("#page1 [name='" + choice.key + "']");
+			const slot = $("#page1 [name='" + choice.key + "']");
 			if (!slot.length) {
 				return;
 			}
-			var wrapper = slot.parent(".ability-choice-slot");
+			const wrapper = slot.parent(".ability-choice-slot");
 			if (!wrapper.length) {
 				console.error("Missing ability-choice wrapper for " + choice.key + ".");
 				return;
 			}
 			wrapper.addClass("ability-choice-input");
 			slot.val(getBaseSelectedFeatureName(slot.val()));
-			var select = wrapper.children(".feature-ability-choice");
+			let select = wrapper.children(".feature-ability-choice");
 			if (!select.length) {
 				select = $("<select>", { class: "feature-ability-choice" }).appendTo(wrapper);
 			}
@@ -4548,10 +4772,10 @@ $(function () {
 				.attr("data-ability-choice", choice.key)
 				.attr("aria-label", choice.label + " - choose ability")
 				.prop("hidden", false);
-			var currentAbilities = select.find("option").slice(1).map(function () {
+			const currentAbilities = select.find("option").slice(1).map(function () {
 				return this.value;
 			}).get();
-			var abilitiesChanged = currentAbilities.length !== choice.abilities.length
+			const abilitiesChanged = currentAbilities.length !== choice.abilities.length
 				|| currentAbilities.some(function (ability, index) {
 					return ability !== choice.abilities[index];
 				});
@@ -4562,12 +4786,12 @@ $(function () {
 					$("<option>", { value: ability, text: ability }).appendTo(select);
 				});
 			}
-			var selected = selectedAbilityChoices[choice.key];
+			const selected = selectedAbilityChoices[choice.key];
 			select.val(choice.abilities.indexOf(selected) !== -1 ? selected : "");
 			activeChoices[choice.key] = true;
 		});
 		$("#page1 .ability-choice-slot").each(function () {
-			var slotName = $(this).children("input").attr("name");
+			const slotName = $(this).children("input").attr("name");
 			if (!activeChoices[slotName]) {
 				$(this).removeClass("ability-choice-input")
 					.children(".feature-ability-choice")
@@ -4589,11 +4813,11 @@ $(function () {
 			}
 		});
 		$("#page1 .talent-slot").each(function () {
-			var slot = $(this);
+			const slot = $(this);
 			if (slot.closest(".talent-entry").length) {
 				return;
 			}
-			var entry = $("<div>", { class: "talent-entry" });
+			const entry = $("<div>", { class: "talent-entry" });
 			slot.parent().before(entry);
 			slot.parent().appendTo(entry);
 			$("<div>", {
@@ -4605,17 +4829,17 @@ $(function () {
 	}
 
 	function getSelectedFeatBoonTalentEffects() {
-		var effects = createEmptyEffects();
-		var featChoices = [];
-		var talentChoices = [];
-		var featBoonDescriptions = {};
-		var talentDescriptions = {};
-		var talentFightingStyles = {};
+		const effects = createEmptyEffects();
+		const featChoices = [];
+		const talentChoices = [];
+		const featBoonDescriptions = {};
+		const talentDescriptions = {};
+		const talentFightingStyles = {};
 
 		function addSelection(selectionName, slotName, ruleSet, choices, descriptions) {
-			var featureName = getBaseSelectedFeatureName(selectionName.trim());
-			var normalizedName = featureName.toLowerCase();
-			var rule = ruleSet[normalizedName];
+			const featureName = getBaseSelectedFeatureName(selectionName.trim());
+			const normalizedName = featureName.toLowerCase();
+			let rule = ruleSet[normalizedName];
 			if (!selectionName) {
 				return;
 			}
@@ -4624,9 +4848,9 @@ $(function () {
 			}
 			rule = rule || {};
 			mergeEffects(effects, rule.effects || {});
-			var descriptionLines = (rule.notes || []).slice();
-			var ruleEffects = rule.effects || {};
-			var effectLabels = [
+			let descriptionLines = (rule.notes || []).slice();
+			const ruleEffects = rule.effects || {};
+			const effectLabels = [
 				["attackBonus", "Attack rolls"],
 				["armorBonus", "Armor Class"],
 				["initiativeBonus", "Initiative"],
@@ -4716,7 +4940,7 @@ $(function () {
 					label: featureName + " (" + slotName.slice(-2) + ")",
 					abilities: rule.abilityChoices,
 				});
-				var selectedAbility = selectedAbilityChoices[slotName];
+				const selectedAbility = selectedAbilityChoices[slotName];
 				if (rule.abilityChoices.indexOf(selectedAbility) !== -1) {
 					if (rule.choiceEffect === "savingThrows") {
 						effects.savingThrows.push(selectedAbility);
@@ -4750,7 +4974,7 @@ $(function () {
 		renderTalentDescriptions(talentDescriptions, talentFightingStyles);
 		mergeEffects(effects, getAbilityImprovementEffects());
 		renderAbilityChoiceControls(featChoices.concat(talentChoices));
-		var totalLevels = getTotalClassLevels();
+		const totalLevels = getTotalClassLevels();
 		if (effects.maxHpPerLevel) {
 			effects.maxHpBonus = (effects.maxHpBonus || 0) + effects.maxHpPerLevel * totalLevels;
 		}
@@ -4812,14 +5036,14 @@ $(function () {
 	function updateCharacterEffects(effects) {
 		updateRageControls();
 		raceEffects = effects;
-		var combinedEffects = createEmptyEffects();
+		const combinedEffects = createEmptyEffects();
 		mergeEffects(combinedEffects, effects);
 		mergeEffects(combinedEffects, getClassModifierEffects());
 		mergeEffects(combinedEffects, getSelectedFeatBoonTalentEffects());
 		Object.keys(combinedEffects).forEach(function (effectName) {
 			if (Array.isArray(combinedEffects[effectName])) {
 				combinedEffects[effectName] = combinedEffects[effectName].filter(function (value, index, values) {
-					var comparable = typeof value === "object" ? JSON.stringify(value) : value;
+					const comparable = typeof value === "object" ? JSON.stringify(value) : value;
 					return values.findIndex(function (otherValue) {
 						return (typeof otherValue === "object" ? JSON.stringify(otherValue) : otherValue) === comparable;
 					}) === index;
@@ -4828,68 +5052,68 @@ $(function () {
 		});
 		characterEffects = combinedEffects;
 		updateDisplayedAbilityScores();
-		var beastAttackWarning = updateBeastRageAttack();
+		const beastAttackWarning = updateBeastRageAttack();
 		if (beastAttackWarning) {
 			characterEffects.rageEffects.push(beastAttackWarning);
 		}
 
-		var racialSkills = characterEffects.skills || [];
+		const racialSkills = characterEffects.skills || [];
 		$("#page1 .skills input[type='checkbox']").each(function () {
-			var checkbox = $(this);
-			var manualProficiency = checkbox.data("manualRacialProficiency");
+			const checkbox = $(this);
+			let manualProficiency = checkbox.data("manualRacialProficiency");
 			if (manualProficiency === undefined) {
 				manualProficiency = this.checked;
 				checkbox.data("manualRacialProficiency", manualProficiency);
 			}
 
-			var skillName = this.name.replace(/-prof$/, "");
+			const skillName = this.name.replace(/-prof$/, "");
 			checkbox.prop("checked", manualProficiency || racialSkills.indexOf(skillName) !== -1);
 		});
 
-		var choiceNotes = (characterEffects.choiceNotes || []).slice();
+		const choiceNotes = (characterEffects.choiceNotes || []).slice();
 		["swimSpeed", "climbSpeed", "flySpeed"].forEach(function (speedType) {
 			if (Number.isFinite(characterEffects[speedType])) {
-				var label = speedType.replace("Speed", " speed").replace(/^./, function (letter) {
+				const label = speedType.replace("Speed", " speed").replace(/^./, function (letter) {
 					return letter.toUpperCase();
 				});
 				choiceNotes.push(label + ": " + characterEffects[speedType] + " ft.");
 			}
 		});
-		var proficiencyCategories = [
+		const proficiencyCategories = [
 			{ label: "Languages", entries: characterEffects.languages || [] },
 			{ label: "Armor", entries: characterEffects.armorProficiencies || [] },
 			{ label: "Weapons", entries: characterEffects.weaponProficiencies || [] },
 			{ label: "Tools", entries: characterEffects.toolProficiencies || [] },
 		];
-		var proficiencySections = proficiencyCategories.map(function (section) {
+		const proficiencySections = proficiencyCategories.map(function (section) {
 			return section.label + ": " + (section.entries.length > 0 ? section.entries.join(", ") : "None");
 		});
 		if (choiceNotes.length > 0) {
 			proficiencySections.push("Other: " + choiceNotes.join(", "));
 		}
-		var $proficiencies = $("#page1 [name='otherprofs']");
-		var existingText = $proficiencies.val() || "";
-		var previousGenerated = localStorage.getItem("page1_generatedProficiencies")
+		const $proficiencies = $("#page1 [name='otherprofs']");
+		let existingText = $proficiencies.val() || "";
+		const previousGenerated = localStorage.getItem("page1_generatedProficiencies")
 			|| localStorage.getItem("page1_racialProficiencies")
 			|| "";
 		if (previousGenerated && existingText.indexOf(previousGenerated) === 0) {
 			existingText = existingText.slice(previousGenerated.length).replace(/^(?:\r?\n)+/, "");
 		}
-		var generatedText = proficiencySections.join("\n");
+		const generatedText = proficiencySections.join("\n");
 		$proficiencies.val(generatedText + (existingText ? "\n\n" + existingText : ""));
 		localStorage.setItem("page1_generatedProficiencies", generatedText);
 		localStorage.removeItem("page1_racialProficiencies");
 		$proficiencies.trigger("change");
 
-		var saveAdvantages = characterEffects.saveAdvantages || [];
-		var conditionNames = [
+		const saveAdvantages = characterEffects.saveAdvantages || [];
+		const conditionNames = [
 			"Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Grappled",
 			"Incapacitated", "Invisible", "Paralyzed", "Petrified", "Poisoned", "Prone",
 			"Restrained", "Stunned", "Unconscious",
 		];
-		var conditionAdvantages = (characterEffects.conditionAdvantages || []).slice();
+		let conditionAdvantages = (characterEffects.conditionAdvantages || []).slice();
 		saveAdvantages.forEach(function (advantage) {
-			var normalizedAdvantage = advantage.toLowerCase();
+			const normalizedAdvantage = advantage.toLowerCase();
 			if (normalizedAdvantage.indexOf("against being") === -1 && normalizedAdvantage.indexOf("against poison") === -1) {
 				return;
 			}
@@ -4949,14 +5173,14 @@ $(function () {
 	}
 
 	function updateFeatures() {
-		var raceRule = getSelectedRaceRule();
-		var raceFeatures = raceRule.features;
-		var classFeatures = {};
-		var classAsiEntriesByClass = {};
-		var classAsiEntries = [];
-		var subclassFeatures = {};
-		var subclassChoiceDetails = {};
-		var subclassChoiceControls = {
+		const raceRule = getSelectedRaceRule();
+		const raceFeatures = raceRule.features;
+		const classFeatures = {};
+		const classAsiEntriesByClass = {};
+		let classAsiEntries = [];
+		const subclassFeatures = {};
+		const subclassChoiceDetails = {};
+		const subclassChoiceControls = {
 			"Path of the Totem Warrior|Totem Spirit": ".totem-rage-choice",
 			"Path of the Totem Warrior|Aspect of the Beast": ".aspect-beast-choice",
 			"Path of the Totem Warrior|Totemic Attunement": ".totemic-attunement-choice",
@@ -4967,15 +5191,15 @@ $(function () {
 		raceRule.effects.abilityScoreBonuses = getRacialAbilityScoreBonuses();
 
 		$("#page1 .class-pair").each(function (pairIndex) {
-			var className = $(this).find(".class-name-input").val().trim();
-			var levelValue = $(this).find(".class-level-input").val().trim();
-			var level = Number(levelValue);
+			const className = $(this).find(".class-name-input").val().trim();
+			const levelValue = $(this).find(".class-level-input").val().trim();
+			const level = Number(levelValue);
 
 			if (!className || !Number.isInteger(level) || level < 1 || level > 20) {
 				return;
 			}
 
-			var classRule = classRules[className];
+			const classRule = classRules[className];
 
 			if (!classRule) {
 				return;
@@ -4986,7 +5210,7 @@ $(function () {
 				classRule.features,
 				level
 			);
-			var classImprovements = getClassAbilityScoreImprovements(classRule, level, pairIndex);
+			const classImprovements = getClassAbilityScoreImprovements(classRule, level, pairIndex);
 			if (classImprovements.length) {
 				classAsiEntriesByClass[className] = (classAsiEntriesByClass[className] || [])
 					.concat(classImprovements);
@@ -4994,9 +5218,9 @@ $(function () {
 			}
 
 			// Subclass features
-			var subclassName = $(this).find(".subclass-name-input").val().trim();
-			var subclassRule = subclassRules[subclassName];
-			var subclassLevel = subclassLevels[className];
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			const subclassRule = subclassRules[subclassName];
+			const subclassLevel = subclassLevels[className];
 
 			if (subclassRule && Number.isInteger(subclassLevel) && level >= subclassLevel) {
 				subclassFeatures[subclassName] = getFeaturesUpToLevel(
@@ -5006,7 +5230,7 @@ $(function () {
 			}
 		});
 
-		var characterLevel = getTotalClassLevels();
+		const characterLevel = getTotalClassLevels();
 		syncTalentTreeLevel();
 		updateAttunementSlots();
 		activeClassAsiKeys = classAsiEntries.map(function (entry) { return entry.key; });
@@ -5037,9 +5261,9 @@ $(function () {
 			);
 		});
 
-		var totemContext = getBarbarianContext();
+		const totemContext = getBarbarianContext();
 		if (totemContext && totemContext.subclass === "Path of the Totem Warrior") {
-			var totemDescriptions = {
+			const totemDescriptions = {
 				spirit: {
 					bear: "Totem Spirit (Bear): while raging, you have resistance to all damage except psychic.",
 					eagle: "Totem Spirit (Eagle): while raging, you can Dash as a bonus action, and opportunity attacks against you have disadvantage.",
@@ -5067,9 +5291,9 @@ $(function () {
 				{ name: "rage-aspect-beast", level: 6, feature: "aspect" },
 				{ name: "rage-totemic-attunement", level: 14, feature: "attunement" },
 			].forEach(function (choice) {
-				var selectedTotem = $("#page1 [name='" + choice.name + "']").val();
-				var description = totemDescriptions[choice.feature][selectedTotem];
-				var featureName = {
+				const selectedTotem = $("#page1 [name='" + choice.name + "']").val();
+				const description = totemDescriptions[choice.feature][selectedTotem];
+				const featureName = {
 					spirit: "Totem Spirit",
 					aspect: "Aspect of the Beast",
 					attunement: "Totemic Attunement",
@@ -5080,7 +5304,7 @@ $(function () {
 			});
 		}
 
-		var output = [];
+		const output = [];
 
 		output.push("Race Features:");
 		output.push("");
@@ -5114,9 +5338,9 @@ $(function () {
 			output.push(subclassName + ":");
 
 			subclassFeatures[subclassName].forEach(function (feature) {
-				var featureName = typeof feature === "object" ? feature.name : feature;
+				const featureName = typeof feature === "object" ? feature.name : feature;
 				output.push(featureName);
-				var featureKey = subclassName + "|" + featureName;
+				const featureKey = subclassName + "|" + featureName;
 				if (subclassChoiceDetails[featureKey]) {
 					output.push(subclassChoiceDetails[featureKey]);
 				}
@@ -5128,7 +5352,7 @@ $(function () {
 			output.push("");
 		});
 
-		var activeFeatureEffects = (characterEffects.rageEffects || [])
+		const activeFeatureEffects = (characterEffects.rageEffects || [])
 			.concat(characterEffects.damageResistanceNotes || []);
 		if (activeFeatureEffects.length > 0) {
 			output.push("Rage & Conditional Subclass Effects:");
@@ -5137,24 +5361,24 @@ $(function () {
 				output.push(feature);
 			});
 		}
-		var serializedFeatures = output.join("\n").trim();
-		var choiceControls = {};
+		const serializedFeatures = output.join("\n").trim();
+		const choiceControls = {};
 		Object.keys(subclassChoiceControls).forEach(function (featureKey) {
 			choiceControls[featureKey] = $(subclassChoiceControls[featureKey]).detach();
 		});
-		var renderedFeatures = $("#page1 .features-rendered").empty();
-		var currentSection = "";
-		var currentSubclass = "";
-		var currentClass = "";
-		var lastEntry = null;
-		var renderedClassAsiControls = {};
-		var classAsiControlsByClass = {};
+		const renderedFeatures = $("#page1 .features-rendered").empty();
+		let currentSection = "";
+		let currentSubclass = "";
+		let currentClass = "";
+		let lastEntry = null;
+		const renderedClassAsiControls = {};
+		const classAsiControlsByClass = {};
 		Object.keys(classAsiEntriesByClass).forEach(function (className) {
 			classAsiControlsByClass[className] = $("<div>", { class: "feature-asi-choices" });
 			classAsiEntriesByClass[className].forEach(function (asiEntry) {
-				var savedChoice = classAsiChoices[asiEntry.key] || {};
-				var choice = $.extend({}, savedChoice, { key: asiEntry.key });
-				var row = $("<div>", { class: "feature-asi-choice" });
+				const savedChoice = classAsiChoices[asiEntry.key] || {};
+				const choice = $.extend({}, savedChoice, { key: asiEntry.key });
+				const row = $("<div>", { class: "feature-asi-choice" });
 				$("<span>", { class: "feature-asi-level", text: "Level " + asiEntry.level }).appendTo(row);
 				createAbilityScoreChoiceControl(choice, {
 					allowFeat: true,
@@ -5165,7 +5389,7 @@ $(function () {
 				row.appendTo(classAsiControlsByClass[className]);
 			});
 		});
-		var detailLines = Object.keys(subclassChoiceDetails).map(function (key) {
+		const detailLines = Object.keys(subclassChoiceDetails).map(function (key) {
 			return subclassChoiceDetails[key];
 		});
 		if (beastRageFeature) {
@@ -5210,10 +5434,35 @@ $(function () {
 				return;
 			}
 
-			var entry = $("<div>", { class: "feature-output-entry" }).appendTo(renderedFeatures);
-			$("<div>", { class: "feature-output-name", text: line }).appendTo(entry);
-			var fightingStyleSource = null;
-			var fightingStyleKey = "";
+			const entry = $("<div>", { class: "feature-output-entry" }).appendTo(renderedFeatures);
+			const titleRow = $("<div>", { class: "feature-output-title-row" }).appendTo(entry);
+			$("<div>", { class: "feature-output-name", text: line }).appendTo(titleRow);
+			let trackerClassName = currentClass;
+			let trackerLevel = currentClass
+				? getClassLevelForUseTracker(currentClass)
+				: 0;
+			let trackerIdentity = "";
+			if (currentSection === "Race Features:") {
+				trackerIdentity = "race:" + ($("#page1 [name='race']").val() || "selected-race");
+			} else if (currentSection === "Class Features:") {
+				trackerIdentity = "class:" + currentClass;
+			} else if (currentSection === "Subclass Features:") {
+				trackerClassName = getClassNameForUseTracker(currentSubclass);
+				trackerLevel = getClassLevelForUseTracker(trackerClassName, currentSubclass);
+				trackerIdentity = "subclass:" + currentSubclass;
+			}
+			const abilityUseTracker = createAbilityUseTracker(
+				line,
+				currentSection === "Race Features:" ? "race" : "class",
+				trackerClassName,
+				trackerLevel,
+				trackerIdentity
+			);
+			if (abilityUseTracker.length) {
+				titleRow.append(abilityUseTracker);
+			}
+			let fightingStyleSource = null;
+			let fightingStyleKey = "";
 			if (currentSection === "Class Features:" && line === "Fighting Style") {
 				fightingStyleSource = {
 					Fighter: "fighter",
@@ -5238,7 +5487,7 @@ $(function () {
 				classAsiControlsByClass[currentClass].appendTo(entry);
 				renderedClassAsiControls[currentClass] = true;
 			}
-			var featureKey = currentSubclass + "|" + line;
+			const featureKey = currentSubclass + "|" + line;
 			if (currentSection === "Subclass Features:" && choiceControls[featureKey] && choiceControls[featureKey].length) {
 				choiceControls[featureKey].appendTo(entry);
 				delete choiceControls[featureKey];
@@ -5252,7 +5501,7 @@ $(function () {
 		$("#page1 [name='features']").val(serializedFeatures);
 	}
 
-	var backgroundFeatRules = {
+	const backgroundFeatRules = {
 		"astral drifter": { feat: "Magic Initiate (Cleric)" },
 		"giant foundling": { feat: "Strike of the Giants" },
 		"knight of solamnia": { feat: "Squire of Solamnia" },
@@ -5271,13 +5520,13 @@ $(function () {
 		rewarded: { list: "rewarded-feat-options" },
 		ruined: { list: "ruined-feat-options" },
 	};
-	var backgroundFeatMode = "choice";
-	var backgroundFeatValue = "";
+	let backgroundFeatMode = "choice";
+	let backgroundFeatValue = "";
 
 	function updateBackgroundFeat() {
-		var backgroundName = $("#page1 [name='background']").val().trim().toLowerCase();
-		var rule = backgroundFeatRules[backgroundName];
-		var firstFeat = $("#page1 [name='feat-slot-01']");
+		const backgroundName = $("#page1 [name='background']").val().trim().toLowerCase();
+		const rule = backgroundFeatRules[backgroundName];
+		const firstFeat = $("#page1 [name='feat-slot-01']");
 
 		if (rule && rule.feat) {
 			backgroundFeatMode = "fixed";
@@ -5293,7 +5542,7 @@ $(function () {
 		}
 
 		backgroundFeatMode = "choice";
-		var listId = rule ? rule.list : "feat-options";
+		const listId = rule ? rule.list : "feat-options";
 
 		if (backgroundName === "custom") {
 			firstFeat.attr("placeholder", "Random Feat");
@@ -5307,11 +5556,11 @@ $(function () {
 
 		firstFeat.prop("readOnly", false).attr("data-suggestion-list", listId).removeAttr("aria-readonly");
 
-		var allowedFeats = $("#" + listId + " option").map(function () {
+		const allowedFeats = $("#" + listId + " option").map(function () {
 			return $(this).val();
 		}).get();
-		var currentFeat = firstFeat.val().trim();
-		var nextFeat = allowedFeats.indexOf(currentFeat) === -1 ? "" : currentFeat;
+		const currentFeat = firstFeat.val().trim();
+		const nextFeat = allowedFeats.indexOf(currentFeat) === -1 ? "" : currentFeat;
 		backgroundFeatValue = nextFeat;
 
 		if (currentFeat !== nextFeat) {
@@ -5322,20 +5571,19 @@ $(function () {
 
 
 	// Lineage feat allocation
-	var lineageRace = "";
-	var formerRace = "";
+	let lineageRace = "";
+	let formerRace = "";
 
-	var racialFeatValue = [];
-	var racialFeatCount = 0;
-	var smallSizeFeatSlot = null;
+	let racialFeatCount = 0;
+	let smallSizeFeatSlot = null;
 
-	var lineageRaces = [
+	const lineageRaces = [
 		"dhampir",
 		"reborn",
 		"hexblood"
 	];
 
-	var racialFeatureRules = {
+	const racialFeatureRules = {
 		"Dwarf": {
 			features: ["Darkvision", "Dwarven Resilience", "Stonecunning"],
 			effects: {
@@ -5411,9 +5659,10 @@ $(function () {
 		},
 	};
 
-	var racialFeatureVariantRules = {
+	const racialFeatureVariantRules = {
 		"Hill Dwarf": {
 			features: ["Dwarven Toughness"],
+			effects: { maxHpPerLevel: 1 },
 		},
 		"Mountain Dwarf": {
 			features: ["Dwarven Armor Training"],
@@ -5597,7 +5846,7 @@ $(function () {
 		},
 	};
 
-	var racialFeatureStandaloneRules = {
+	const racialFeatureStandaloneRules = {
 		"Dhampir": {
 			features: ["Darkvision", "Deathless Nature", "Spider Climb", "Vampiric Bite", "Ancestral Legacy"],
 			effects: { walkSpeed: 35, climbSpeed: 35, languages: ["Two languages of your choice"] },
@@ -5862,7 +6111,7 @@ $(function () {
 		},
 	};
 
-	var racialFeatRules = {
+	const racialFeatRules = {
 		"Dwarf": ["Dwarven Fortitude", "Squat Nimbleness"],
 		"Elf": ["Elven Accuracy", "Revenant Blade"],
 		"Halfling": ["Bountiful Luck", "Second Chance"],
@@ -5875,7 +6124,7 @@ $(function () {
 		// Add the rest of your races here
 	};
 
-	var racialFeatVariantRules = {
+	const racialFeatVariantRules = {
 		"High Elf": ["Fey Teleportation"],
 		"Wood Elf": ["Wood Elf Magic"],
 		"Drow": ["Drow High Magic"],
@@ -5885,7 +6134,7 @@ $(function () {
 		"Deep Gnome": ["Svirfneblin Magic"],
 	};
 
-	var racialFeatAliases = {
+	const racialFeatAliases = {
 		"hill dwarf": "Dwarf",
 		"mountain dwarf": "Dwarf",
 		"duergar": "Dwarf",
@@ -5934,14 +6183,14 @@ $(function () {
 		"zariel tiefling": "Tiefling",
 	};
 
-	var smallSizeFeat = "Squat Nimbleness";
+	const smallSizeFeat = "Squat Nimbleness";
 
 	function updateRace() {
-		var raceInput = $("#page1 [name='race']");
-		var selectedRace = raceInput.val().trim();
+		const raceInput = $("#page1 [name='race']");
+		const selectedRace = raceInput.val().trim();
 
-		var selectedRaceLower = selectedRace.toLowerCase();
-		var savedLineageMatch = selectedRace.match(/^(dhampir|reborn|hexblood)\s+\((.+)\)$/i);
+		const selectedRaceLower = selectedRace.toLowerCase();
+		const savedLineageMatch = selectedRace.match(/^(dhampir|reborn|hexblood)\s+\((.+)\)$/i);
 
 		if (savedLineageMatch) {
 			lineageRace = savedLineageMatch[1].toLowerCase();
@@ -5981,10 +6230,10 @@ $(function () {
 
 		// User selected a former race for a lineage
 		if (lineageRace && formerRace) {
-			var lineageName =
+			const lineageName =
 				lineageRace.charAt(0).toUpperCase() + lineageRace.slice(1);
 
-			var formerName = formerRace
+			const formerName = formerRace
 				.split(" ")
 				.map(function (word) {
 					return word.charAt(0).toUpperCase() + word.slice(1);
@@ -6017,27 +6266,27 @@ $(function () {
 
 
 	function updateRacialFeat() {
-		var raceName = $("#page1 [name='race']").val().trim();
+		let raceName = $("#page1 [name='race']").val().trim();
 
 		// Lineages inherit racial feats from their former race
 		if (lineageRace && formerRace) {
 			raceName = formerRace;
 		}
 
-		var normalizedRaceName = raceName.toLowerCase();
-		var racialRuleNames = Object.keys(racialFeatRules).filter(function (key) {
-			var normalizedRuleName = key.toLowerCase();
+		const normalizedRaceName = raceName.toLowerCase();
+		const racialRuleNames = Object.keys(racialFeatRules).filter(function (key) {
+			const normalizedRuleName = key.toLowerCase();
 			return normalizedRaceName === normalizedRuleName
 				|| normalizedRaceName.indexOf(normalizedRuleName + " ") === 0
 				|| normalizedRaceName.endsWith(" " + normalizedRuleName);
 		});
-		var aliasedRule = racialFeatAliases[normalizedRaceName];
+		const aliasedRule = racialFeatAliases[normalizedRaceName];
 
 		if (aliasedRule && racialRuleNames.indexOf(aliasedRule) === -1) {
 			racialRuleNames.push(aliasedRule);
 		}
 
-		var newRacialFeats = [];
+		let newRacialFeats = [];
 		racialRuleNames.forEach(function (ruleName) {
 			newRacialFeats = newRacialFeats.concat(racialFeatRules[ruleName]);
 		});
@@ -6051,17 +6300,17 @@ $(function () {
 		});
 
 		// Remove old racial feats
-		for (var i = 0; i < racialFeatCount; i++) {
-			var slotNumber = i + 2;
-			var slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
-			var slot = $("#page1 [name='" + slotName + "']");
+		for (let i = 0; i < racialFeatCount; i++) {
+			const slotNumber = i + 2;
+			const slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
+			const slot = $("#page1 [name='" + slotName + "']");
 
 			slot.val("").trigger("change");
 		}
 
 		// Remove old Squat Nimbleness
 		if (smallSizeFeatSlot !== null) {
-			var oldSmallSlotName =
+			const oldSmallSlotName =
 				"feat-slot-" + String(smallSizeFeatSlot).padStart(2, "0");
 
 			$("#page1 [name='" + oldSmallSlotName + "']")
@@ -6071,25 +6320,24 @@ $(function () {
 			smallSizeFeatSlot = null;
 		}
 
-		racialFeatValue = newRacialFeats;
 		racialFeatCount = newRacialFeats.length;
 
 		// Add racial feats starting at slot 2
-		for (var i = 0; i < racialFeatCount; i++) {
-			var slotNumber = i + 2;
-			var slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
-			var slot = $("#page1 [name='" + slotName + "']");
+		for (let i = 0; i < racialFeatCount; i++) {
+			const slotNumber = i + 2;
+			const slotName = "feat-slot-" + String(slotNumber).padStart(2, "0");
+			const slot = $("#page1 [name='" + slotName + "']");
 
 			slot.val(newRacialFeats[i]).trigger("change");
 		}
 
 		// Add Squat Nimbleness after all racial feats if the character is Small
-		var sizeValue = $("#page1 [name='charSize']").val().trim().toLowerCase();
+		const sizeValue = $("#page1 [name='charSize']").val().trim().toLowerCase();
 
 		if (sizeValue === "small" && newRacialFeats.indexOf(smallSizeFeat) === -1) {
 			smallSizeFeatSlot = racialFeatCount + 2;
 
-			var smallSlotName =
+			const smallSlotName =
 				"feat-slot-" + String(smallSizeFeatSlot).padStart(2, "0");
 
 			$("#page1 [name='" + smallSlotName + "']")
@@ -6107,19 +6355,19 @@ $(function () {
 	$("#page1 [name='charSize']").on("input change", updateRacialFeat);
 
 
-	var magicItemInput = null;
-	var magicItemSuggestionIndex = -1;
-	var magicItemSuggestions = $("<div class='magic-item-suggestions' role='listbox'></div>").appendTo("body");
+	let magicItemInput = null;
+	let magicItemSuggestionIndex = -1;
+	const magicItemSuggestions = $("<div class='magic-item-suggestions' role='listbox'></div>").appendTo("body");
 
 	function positionMagicItemSuggestions() {
 		if (!magicItemInput) {
 			return;
 		}
 
-		var inputBounds = magicItemInput.getBoundingClientRect();
-		var menuWidth = Math.min(Math.max(inputBounds.width, 240), 360);
-		var left = Math.max(8, Math.min(inputBounds.left, window.innerWidth - menuWidth - 8));
-		var maxHeight = Math.max(80, Math.min(240, window.innerHeight - inputBounds.bottom - 8));
+		const inputBounds = magicItemInput.getBoundingClientRect();
+		const menuWidth = Math.min(Math.max(inputBounds.width, 240), 360);
+		const left = Math.max(8, Math.min(inputBounds.left, window.innerWidth - menuWidth - 8));
+		const maxHeight = Math.max(80, Math.min(240, window.innerHeight - inputBounds.bottom - 8));
 
 		magicItemSuggestions.css({
 			left: left + "px",
@@ -6130,17 +6378,17 @@ $(function () {
 	}
 
 	function showMagicItemSuggestions(input) {
-		var listId = $(input).attr("data-suggestion-list");
-		var inputValue = $(input).val().trim();
-		var query = inputValue.toLowerCase();
-		var list = $("#" + listId);
-		var groups = list.children("optgroup");
-		var suggestionCount = 0;
-		var selectedClasses = [];
-		var allowedSubclasses = null;
+		const listId = $(input).attr("data-suggestion-list");
+		const inputValue = $(input).val().trim();
+		const query = inputValue.toLowerCase();
+		const list = $("#" + listId);
+		const groups = list.children("optgroup");
+		let suggestionCount = 0;
+		let selectedClasses = [];
+		let allowedSubclasses = null;
 
 		if ($(input).hasClass("class-name-input")) {
-			var classOptions = list.find("option").map(function () {
+			const classOptions = list.find("option").map(function () {
 				return $(this).val();
 			}).get();
 			selectedClasses = $("#page1 .class-name-input").not(input).map(function () {
@@ -6157,7 +6405,7 @@ $(function () {
 		magicItemSuggestions.empty();
 
 		function appendSuggestion(option) {
-			var suggestion = $("<button type='button' class='magic-item-suggestion' role='option'></button>")
+			const suggestion = $("<button type='button' class='magic-item-suggestion' role='option'></button>")
 				.text(option.val());
 			magicItemSuggestions.append(suggestion);
 			suggestionCount++;
@@ -6165,8 +6413,8 @@ $(function () {
 
 		if (groups.length > 0) {
 			groups.each(function () {
-				var group = $(this);
-				var options = group.children("option").filter(function () {
+				const group = $(this);
+				const options = group.children("option").filter(function () {
 					return $(this).val().toLowerCase().indexOf(query) !== -1;
 				});
 
@@ -6181,8 +6429,8 @@ $(function () {
 			});
 		} else {
 			list.find("option").filter(function () {
-				var optionValue = $(this).val();
-				var allowedForField = allowedSubclasses === null || allowedSubclasses.indexOf(optionValue) !== -1;
+				const optionValue = $(this).val();
+				const allowedForField = allowedSubclasses === null || allowedSubclasses.indexOf(optionValue) !== -1;
 				return allowedForField
 					&& optionValue.toLowerCase().indexOf(query) !== -1
 					&& selectedClasses.indexOf(optionValue) === -1;
@@ -6206,7 +6454,7 @@ $(function () {
 			return;
 		}
 
-		var input = $(magicItemInput);
+		const input = $(magicItemInput);
 		if (input.hasClass("class-name-input")) {
 			input.val(value);
 		} else {
@@ -6229,7 +6477,7 @@ $(function () {
 	}
 
 	function highlightMagicItemSuggestion(index) {
-		var suggestions = magicItemSuggestions.children("button");
+		const suggestions = magicItemSuggestions.children("button");
 		magicItemSuggestionIndex = Math.max(0, Math.min(index, suggestions.length - 1));
 		suggestions.removeClass("highlighted").attr("aria-selected", "false");
 		suggestions.eq(magicItemSuggestionIndex).addClass("highlighted").attr("aria-selected", "true");
@@ -6238,14 +6486,14 @@ $(function () {
 	$("#page1 [name='background']").on("input change", updateBackgroundFeat);
 	$("#page1").on("input change", "[name^='feat-slot-'], [name^='boon-slot-']", updateFeatures);
 	$("#page1").on("change", ".feature-ability-choice", function () {
-		var choiceKey = $(this).attr("data-ability-choice");
+		const choiceKey = $(this).attr("data-ability-choice");
 		selectedAbilityChoices[choiceKey] = $(this).val();
 		localStorage.setItem(abilityChoiceStorageKey, JSON.stringify(selectedAbilityChoices));
 		updateFeatures();
 	});
 	$("#page1").on("change", "[data-fighting-style-key]", function () {
-		var choiceKey = $(this).attr("data-fighting-style-key");
-		var selectedStyle = $(this).val();
+		const choiceKey = $(this).attr("data-fighting-style-key");
+		const selectedStyle = $(this).val();
 		if (selectedStyle) {
 			selectedFightingStyles[choiceKey] = selectedStyle;
 		} else {
@@ -6263,14 +6511,14 @@ $(function () {
 		updateFeatures();
 	});
 	$("#page1").on("change", "[data-asi-choice-key]", function () {
-		var choiceType = $(this).attr("data-asi-choice-type");
-		var choiceKey = $(this).attr("data-asi-choice-key");
-		var choices = choiceType === "class"
+		const choiceType = $(this).attr("data-asi-choice-type");
+		const choiceKey = $(this).attr("data-asi-choice-key");
+		const choices = choiceType === "class"
 			? classAsiChoices
 			: choiceType === "mentor"
 				? mentorAsiChoices
 				: characterAsiChoices;
-		var choice = choices[choiceKey] || {};
+		const choice = choices[choiceKey] || {};
 		if ($(this).is("[data-asi-feat-toggle]")) {
 			choice.chooseFeat = $(this).prop("checked");
 		} else {
@@ -6297,9 +6545,9 @@ $(function () {
 			return;
 		}
 
-		var selectedFeat = $(this).val().trim();
-		var listId = $(this).attr("data-suggestion-list");
-		var isValidChoice = $("#" + listId + " option").filter(function () {
+		const selectedFeat = $(this).val().trim();
+		const listId = $(this).attr("data-suggestion-list");
+		const isValidChoice = $("#" + listId + " option").filter(function () {
 			return $(this).val() === selectedFeat;
 		}).length > 0;
 
@@ -6310,7 +6558,7 @@ $(function () {
 		}
 	});
 
-	var suggestionFieldSelector = "input[data-suggestion-list], textarea[data-suggestion-list]";
+	const suggestionFieldSelector = "input[data-suggestion-list], textarea[data-suggestion-list]";
 	$("#page1").on("focus", suggestionFieldSelector, function () {
 		showMagicItemSuggestions(this);
 	});
@@ -6318,7 +6566,7 @@ $(function () {
 		showMagicItemSuggestions(this);
 	});
 	$("#page1").on("keydown", suggestionFieldSelector, function (event) {
-		var suggestions = magicItemSuggestions.children("button");
+		let suggestions = magicItemSuggestions.children("button");
 
 		if (event.key === "ArrowDown" || event.key === "ArrowUp") {
 			if (magicItemInput !== this || suggestions.length === 0) {
@@ -6360,8 +6608,8 @@ $(function () {
 
 	$("#page1 .scores").on("input", ".score input", function () {
 		if (!applyingCalculatedScores) {
-			var enteredScore = $(this).val().trim();
-			var scoreNumber = Number(enteredScore);
+			const enteredScore = $(this).val().trim();
+			const scoreNumber = Number(enteredScore);
 			pointBuyBaseScores[this.name.replace("score", "")] = enteredScore === ""
 				? ""
 				: Number.isFinite(scoreNumber)
@@ -6375,20 +6623,23 @@ $(function () {
 		updateSavingThrows();
 		updateSkills();
 		updateArmorCalculations();
-		if (this.name === "Strengthscore") {
+		if (this.name === "Constitutionscore") {
+			updateDisplayedMaxHp();
+		}
+		if (this.name === "Strengthscore" || this.name === "Charismascore" || this.name === "Intelligencescore") {
 			updateFeatures();
 		}
 	});
 	$("#page1 .scores").on("click", ".score-step-button", function () {
-		var ability = $(this).attr("data-score-ability");
-		var change = Number($(this).attr("data-score-change"));
-		var currentScore = Number(pointBuyBaseScores[ability]);
-		var nextScore = currentScore + change;
+		const ability = $(this).attr("data-score-ability");
+		const change = Number($(this).attr("data-score-change"));
+		const currentScore = Number(pointBuyBaseScores[ability]);
+		const nextScore = currentScore + change;
 		if ($(this).prop("disabled") || !Number.isInteger(nextScore) || pointBuyCosts[nextScore] === undefined) {
 			return;
 		}
 		if (change > 0) {
-			var currentSpent = 0;
+			let currentSpent = 0;
 			abilityNames.forEach(function (abilityName) {
 				currentSpent += pointBuyCosts[Number(pointBuyBaseScores[abilityName])] || 0;
 			});
@@ -6438,6 +6689,14 @@ $(function () {
 	$("#page1 .hitdice").on("change", ".hit-die-checks input[type='checkbox']", function () {
 		storeHitDieCheckbox(this);
 	});
+	$("#page1").on("change", ".ability-use-checkbox", function () {
+		const storageKey = $(this).attr("data-ability-use-storage");
+		localStorage.setItem(storageKey, JSON.stringify(this.checked));
+		$(".ability-use-checkbox").filter(function () {
+			return $(this).attr("data-ability-use-storage") === storageKey;
+		}).prop("checked", this.checked);
+	});
+	$("#page1 #long-rest-button").on("click", takeLongRest);
 	$("#page1 [name='armor-type']").on("change", function () {
 		updateArmorCalculations();
 		updateFeatures();
@@ -6452,21 +6711,25 @@ $(function () {
 	});
 	$("#page1 [name='speed']").on("change", updateArmorCalculations);
 	$("#page1 [name='attunement-slots']").on("input change", function () {
-		var manualSlotCount = Number($(this).val());
+		const manualSlotCount = Number($(this).val());
 		if (Number.isInteger(manualSlotCount)) {
 			localStorage.setItem("page1_manualAttunementSlots", String(Math.max(3, Math.min(6, manualSlotCount))));
 		}
 		updateAttunementSlots();
 	});
 	$("#page1 [name='maxhp']").on("input", function () {
-		var enteredMaxHp = $(this).val().trim();
-		var maxHpNumber = Number(enteredMaxHp);
-		baseMaxHpValue = enteredMaxHp === ""
-			? ""
-			: Number.isFinite(maxHpNumber)
-				? maxHpNumber - (characterEffects.maxHpBonus || 0)
-				: enteredMaxHp;
-		localStorage.setItem(maxHpStorageKey, JSON.stringify(baseMaxHpValue));
+		const enteredMaxHp = $(this).val().trim();
+		if (enteredMaxHp === "") {
+			maxHpAdjustment = 0;
+		} else if (Number.isFinite(Number(enteredMaxHp))) {
+			maxHpAdjustment = Number(enteredMaxHp)
+				- getCalculatedMaxHpBeforeAdjustment()
+				- (characterEffects.maxHpBonus || 0);
+		} else {
+			return;
+		}
+		localStorage.setItem(maxHpAdjustmentStorageKey, JSON.stringify(maxHpAdjustment));
+		updateDisplayedMaxHp();
 	});
 	initializeAbilityChoiceSlots();
 	updateBackgroundFeat();

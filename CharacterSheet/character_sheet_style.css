@@ -323,11 +323,13 @@ form.charsheet main > section section.attributes {
 form.charsheet main > section section.attributes div.scores {
   box-sizing: border-box;
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 101px;
-  min-height: 710px;
+  min-height: 690px;
   background-color: #bbb;
   border-radius: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 6px;
 }
 form.charsheet main > section section.attributes div.scores .point-buy-counter {
   padding: 4px 2px 2px;
@@ -378,7 +380,19 @@ form.charsheet main > section section.attributes div.scores ul {
   flex: 1 1 auto;
   min-height: 0;
   height: auto;
-  gap: 12px;
+  gap: 8px;
+}
+form.charsheet main > section section.attributes div.scores .long-rest-button {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-top: 6px;
+  padding: 3px 8px;
+  border: 1px solid #555;
+  border-radius: 3px;
+  background: #eee;
+  font-size: 9px;
+  line-height: 1.2;
+  cursor: pointer;
 }
 form.charsheet main > section section.attributes div.scores ul li {
   box-sizing: border-box;
@@ -1320,6 +1334,38 @@ form.charsheet main section.features .feature-output-entry {
   flex-direction: column;
   gap: 3px;
   padding-left: 8px;
+}
+form.charsheet main section.features .feature-output-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.ability-use-tracker {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 2px;
+  color: #333;
+  font-size: 10px;
+  font-weight: normal;
+}
+.ability-use-label {
+  margin-right: 2px;
+}
+.ability-use-tracker input[type=checkbox] {
+  box-sizing: border-box;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  margin: 0;
+  border: 1px solid #444;
+  border-radius: 2px;
+  background: white;
+  cursor: pointer;
+}
+.ability-use-tracker input[type=checkbox]:checked {
+  background: #333;
 }
 form.charsheet .fighting-style-choice {
   display: flex;
