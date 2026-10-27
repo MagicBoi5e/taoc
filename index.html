@@ -111,15 +111,26 @@
     </a>
   </div>
 
-
+  <button class="sound-toggle" id="soundToggle">🔇 Sound on</button>
 
   <script>
     const VIDEO_ID = "GBYpseHOcq0";
-    const iframe = document.getElementById("bgvideo");
+    let muted = false;
 
-    iframe.src = "https://www.youtube.com/embed/" + VIDEO_ID +
-      "?autoplay=1&mute=0&loop=1&playlist=" + VIDEO_ID +
-      "&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3";
+    const iframe = document.getElementById("bgvideo");
+    const toggle = document.getElementById("soundToggle");
+
+    function loadVideo() {
+      iframe.src = "https://www.youtube.com/embed/" + VIDEO_ID +
+        "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + VIDEO_ID +
+        "&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3";
+    }
+    toggle.addEventListener("click", function () {
+      muted = !muted;
+      toggle.textContent = muted ? "\uD83D\uDD07 Sound on" : "\uD83D\uDD0A Sound off";
+      loadVideo();
+    });
+    loadVideo();
   </script>
 </body>
 </html>
