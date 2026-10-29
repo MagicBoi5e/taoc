@@ -9,6 +9,7 @@
 <meta property="og:description" content="A weathered wooden signpost pointing the way." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 
 <!-- Carved-signpost font -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -258,7 +259,14 @@
       </video>
   </div>
   <!-- Background video -->
-  <div class="video-bg" aria-hidden="true"><iframe id="bgvideo" title="Background video" allow="autoplay; encrypted-media"></iframe></div>
+  <div class="video-bg" aria-hidden="true">
+    <iframe
+      id="bgvideo"
+      title="Background video"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+  </div>
   <div class="video-vignette" aria-hidden="true"></div>
 
   <!-- Signpost. Edit the href of each plank to point at your own pages. -->
@@ -302,6 +310,9 @@
 
     window.onYouTubeIframeAPIReady = function () {
         console.log("YouTube API is ready!");
+        console.log("YT.Player type:", typeof YT.Player);
+
+        console.log("About to create player");
 
         player = new YT.Player("bgvideo", {
             videoId: VIDEO_ID,
@@ -332,6 +343,11 @@
                 }
             }
         });
+
+        console.log("Player constructor finished");
+        console.log("Player object:", player);
+        console.log("playVideo type:", typeof player.playVideo);
+        console.log("getPlayerState type:", typeof player.getPlayerState);
     };
 
 const fogContainer = document.getElementById("fogContainer");
