@@ -124,13 +124,33 @@
       filter: brightness(1.15);
   }
 
-  .intro-overlay.leaving {
-      opacity: 0;
+  #enterButton.leaving {
+      animation: logoFadeIntoFog 3s ease-in forwards;
       pointer-events: none;
   }
 
-  .intro-overlay.leaving #enterButton {
-      animation: logoSwallowed 3s ease-in forwards;
+  .intro-overlay.leaving {
+      animation: logoFadeIntoFog 3s ease-in forwards;
+  }
+
+  @keyframes logoFadeIntoFog {
+      0% {
+          opacity: 1;
+          transform: scale(1);
+          filter: blur(0);
+      }
+
+      50% {
+          opacity: 0.6;
+          transform: scale(1.04);
+          filter: blur(4px);
+      }
+
+      100% {
+          opacity: 0;
+          transform: scale(1.1);
+          filter: blur(12px);
+      }
   }
 
   .fog-container.enveloping {
@@ -354,14 +374,15 @@ const fogContainer = document.getElementById("fogContainer");
 
       // Let the fog move in front of the logo
       fogContainer.classList.add("enveloping");
-      intro.classList.add("leaving");
+      enterButton.classList.add("leaving");
+      console.log("Leaving class:", enterButton.className);
 
       // Once the logo has been swallowed, clear the fog
       setTimeout(function () {
           fogContainer.classList.remove("enveloping");
           fogContainer.classList.add("dissipating");
           intro.remove();
-      }, 3000); // Match the duration of the logoSwallowed animation
+      }, 3000); // Match the duration of the logoFadeIntoFog animation
   });
 </script>
 
