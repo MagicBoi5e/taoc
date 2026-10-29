@@ -81,9 +81,12 @@
 
   /* Hide the scene until the fog starts clearing. */
   .video-bg {
+      position: fixed;
+      inset: 0;
       z-index: 0;
-      opacity: 0;
-      transition: opacity 3s ease;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 1; /* Temporarily keep the video visible for testing */
   }
 
   .video-bg iframe {
@@ -280,6 +283,8 @@
 
 
 <script>
+    console.log("My JavaScript file loaded");
+
     const VIDEO_ID = "GBYpseHOcq0";
 
     let player;
@@ -292,9 +297,12 @@
     // Load the YouTube IFrame Player API.
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
+    console.log("YouTube API script tag reached");
     document.head.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = function () {
+        console.log("YouTube API is ready!");
+
         player = new YT.Player("bgvideo", {
             videoId: VIDEO_ID,
             playerVars: {
@@ -306,10 +314,21 @@
                 playsinline: 1,
                 rel: 0
             },
-            events: {
+              events: {
                 onReady: function (event) {
+                    console.log("Player created successfully");
+                    console.log("Initial player state:", event.target.getPlayerState());
+
                     event.target.mute();
                     event.target.playVideo();
+                },
+
+                onStateChange: function (event) {
+                    console.log("Player state changed:", event.data);
+                },
+
+                onError: function (event) {
+                    console.error("YouTube player error code:", event.data);
                 }
             }
         });
