@@ -43,7 +43,7 @@
   } */
 
   .fog-container.dissipating {
-      animation: dissipate 8s ease 2s forwards;
+      animation: dissipate 5s ease 2s forwards;
   }
 
   @keyframes dissipate {
@@ -80,23 +80,28 @@
   body { background: var(--background); color: var(--foreground); overflow: hidden; }
 
   /* Hide the scene until the fog starts clearing. */
-  .video-bg,
-  .video-vignette {
+  .video-bg {
       z-index: 0;
-  }
-
-  .signpost {
-      z-index: 1;
-  }
-  
-  .video-bg,
-  .video-vignette,
-  .signpost {
       opacity: 0;
       transition: opacity 3s ease;
   }
 
-  /* Reveal the scene gradually. */
+  .video-bg iframe {
+      pointer-events: none;
+  }
+
+  .video-vignette {
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 3s ease;
+  }
+
+  .signpost {
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 3s ease;
+  }
+
   body.entered .video-bg,
   body.entered .video-vignette,
   body.entered .signpost {
@@ -199,6 +204,28 @@
   .intro-overlay.leaving #enterButton {
       animation: logoSwallowed 3s ease-in forwards;
   }
+
+  .fog-container.enveloping {
+      z-index: 1004;
+      animation: fogEnvelop 1.4s ease-in forwards;
+  }
+
+  @keyframes fogEnvelop {
+    0% {
+        filter: brightness(1);
+        opacity: 0.85;
+    }
+
+    45% {
+        filter: brightness(1.8);
+        opacity: 1;
+    }
+
+    100% {
+        filter: brightness(1.5);
+        opacity: 1;
+    }
+}
 
   .fog-container.leaving {
       opacity: 0;
