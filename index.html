@@ -23,7 +23,7 @@
       overflow: hidden;
       pointer-events: none;
       z-index: 1002;
-      mix-blend-mode: screen;
+      mix-blend-mode: normal;
       opacity: 1;
   }
 
@@ -33,18 +33,8 @@
       object-fit: cover;
   }
 
-  /* .fog-logo {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      mix-blend-mode: screen;
-      opacity: 1;
-      animation: loop 10s linear 0s infinite;
-  } */
-
   .fog-container.dissipating {
-      animation: dissipate 5s ease 2s forwards;
+      animation: dissipate 5s ease forwards;
   }
 
   @keyframes dissipate {
@@ -98,6 +88,76 @@
       z-index: 1;
       opacity: 0;
       transition: opacity 3s ease;
+  }
+
+    /* Intro Overlay */
+
+  .intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1003;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      transition: opacity 1s ease;
+  }
+
+  #enterButton {
+      position: relative;
+      width: min(85vw, 1000px);
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      z-index: 1;
+  }
+
+  #enterButton img {
+      display: block;
+      width: 100%;
+      height: auto;
+  }
+
+  #enterButton:hover {
+      transform: scale(1.03);
+      filter: brightness(1.15);
+  }
+
+  .intro-overlay.leaving {
+      opacity: 0;
+      pointer-events: none;
+  }
+
+  .intro-overlay.leaving #enterButton {
+      animation: logoSwallowed 3s ease-in forwards;
+  }
+
+  .fog-container.enveloping {
+      z-index: 1004;
+      animation: fogEnvelop 3s ease-in forwards;
+  }
+
+  @keyframes fogEnvelop {
+    0% {
+        filter: brightness(1);
+        opacity: 1;
+    }
+
+    45% {
+        filter: brightness(1.8);
+        opacity: 1;
+    }
+
+    100% {
+        filter: brightness(1.5);
+        opacity: 1;
+    }
+}
+
+  .fog-container.leaving {
+      opacity: 0;
+      pointer-events: none;
   }
 
   .signpost {
@@ -166,76 +226,6 @@
     border: 1px solid oklch(1 0 0 / 0.2); backdrop-filter: blur(6px); cursor: pointer; }
   .sound-toggle:hover { background: oklch(0.3 0.04 60 / 0.85); }
 
-  /* Intro Overlay */
-
-  .intro-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1003;
-      display: grid;
-      place-items: center;
-      background: transparent;
-      transition: opacity 1s ease;
-  }
-
-  #enterButton {
-      position: relative;
-      width: min(85vw, 1000px);
-      padding: 0;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      transition: transform 0.3s ease, filter 0.3s ease;
-      z-index: 1;
-  }
-
-  #enterButton img {
-      display: block;
-      width: 100%;
-      height: auto;
-  }
-
-  #enterButton:hover {
-      transform: scale(1.03);
-      filter: brightness(1.15);
-  }
-
-  .intro-overlay.leaving {
-      opacity: 0;
-      pointer-events: none;
-  }
-
-  .intro-overlay.leaving #enterButton {
-      animation: logoSwallowed 3s ease-in forwards;
-  }
-
-  .fog-container.enveloping {
-      z-index: 1004;
-      animation: fogEnvelop 1.4s ease-in forwards;
-  }
-
-  @keyframes fogEnvelop {
-    0% {
-        filter: brightness(1);
-        opacity: 0.85;
-    }
-
-    45% {
-        filter: brightness(1.8);
-        opacity: 1;
-    }
-
-    100% {
-        filter: brightness(1.5);
-        opacity: 1;
-    }
-}
-
-  .fog-container.leaving {
-      opacity: 0;
-      pointer-events: none;
-  }
-
   @media (max-width: 640px) {
     .plank { width: 280px; height: 64px; } .carved { font-size: 1.2rem; background-size: 280px 64px; } .signpost { left: 50%; }
     .plank-right { margin-left: 130px; } .plank-left { margin-right: 130px; }
@@ -260,13 +250,9 @@
   </div>
   <!-- Background video -->
   <div class="video-bg" aria-hidden="true">
-    <iframe
-      id="bgvideo"
-      title="Background video"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      referrerpolicy="strict-origin-when-cross-origin">
-    </iframe>
+    <div id="bgvideo"></div>
   </div>
+
   <div class="video-vignette" aria-hidden="true"></div>
 
   <!-- Signpost. Edit the href of each plank to point at your own pages. -->
