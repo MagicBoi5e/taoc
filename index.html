@@ -328,7 +328,6 @@
 
 
 <script>
-    console.log("My JavaScript file loaded");
 
     const VIDEO_ID = "GBYpseHOcq0";
 
@@ -342,14 +341,10 @@
     // Load the YouTube IFrame Player API.
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
-    console.log("YouTube API script tag reached");
+
     document.head.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = function () {
-        console.log("YouTube API is ready!");
-        console.log("YT.Player type:", typeof YT.Player);
-
-        console.log("About to create player");
 
         player = new YT.Player("bgvideo", {
             videoId: VIDEO_ID,
@@ -364,27 +359,14 @@
             },
               events: {
                 onReady: function (event) {
-                    console.log("Player created successfully");
-                    console.log("Initial player state:", event.target.getPlayerState());
 
                     event.target.mute();
                     event.target.playVideo();
                 },
 
-                onStateChange: function (event) {
-                    console.log("Player state changed:", event.data);
-                },
-
-                onError: function (event) {
-                    console.error("YouTube player error code:", event.data);
-                }
             }
         });
 
-        console.log("Player constructor finished");
-        console.log("Player object:", player);
-        console.log("playVideo type:", typeof player.playVideo);
-        console.log("getPlayerState type:", typeof player.getPlayerState);
     };
 
 const fogContainer = document.getElementById("fogContainer");
@@ -392,8 +374,6 @@ const fogContainer = document.getElementById("fogContainer");
 enterButton.addEventListener("click", function () {
     if (entered) return;
     entered = true;
-
-    console.log("1. Click registered");
 
     // Start background video with audio
     if (player && typeof player.unMute === "function") {
@@ -406,8 +386,6 @@ enterButton.addEventListener("click", function () {
     const logo = enterButton.querySelector("img");
 
     logo.style.animation = "logoFadeIntoFog 4s ease-in forwards";
-
-    console.log("2. Animation applied:", logo.style.animation);
 
     // Start fog animation
     fogContainer.classList.add("enveloping");
