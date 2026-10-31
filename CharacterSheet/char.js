@@ -5370,7 +5370,7 @@ $(function () {
 		const previousGenerated = localStorage.getItem("page1_generatedProficiencies")
 			|| localStorage.getItem("page1_racialProficiencies")
 			|| "";
-		if (previousGenerated && existingText.indexOf(previousGenerated) === 0) {
+		while (previousGenerated && existingText.indexOf(previousGenerated) === 0) {
 			existingText = existingText.slice(previousGenerated.length).replace(/^(?:\r?\n)+/, "");
 		}
 		const generatedText = proficiencySections.join("\n");
