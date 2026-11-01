@@ -1776,7 +1776,12 @@ $(function () {
 						replaces: "Ability Score Improvement (2)"
 					}
 				],
-				13: ["Brutal Critical (2 dice)"],
+				13: [
+					{
+						name: "Brutal Critical (2 dice)",
+						replaces: "Brutal Critical (1 die)"
+					}
+				],
 				15: ["Persistent Rage"],
 				16: [
 					{
@@ -1784,7 +1789,12 @@ $(function () {
 						replaces: "Ability Score Improvement (3)"
 					}
 				],
-				17: ["Brutal Critical (3 dice)"],
+				17: [
+					{
+						name: "Brutal Critical (3 dice)",
+						replaces: "Brutal Critical (2 dice)"
+					}
+				],
 				18: ["Indomitable Might"],
 				19: [
 					{
@@ -1800,11 +1810,16 @@ $(function () {
 			savingThrows: ["Dexterity", "Charisma"],
 
 			features: {
-				1: ["Spellcasting", "Additional Bard Spells", "Bardic Inspiration"],
+				1: ["Spellcasting", "Additional Bard Spells", "Bardic Inspiration (d6)"],
 				2: ["Jack of All Trades", "Magical Inspiration", "Song of Rest (d6)"],
-				3: ["Expertise"],
+				3: ["Expertise (2)"],
 				4: ["Ability Score Improvement", "Bardic Versatility"],
-				5: ["Bardic Inspiration (d8)", "Font of Inspiration"],
+				5: [
+					{
+						name: "Bardic Inspiration (d8)",
+						replaces: "Bardic Inspiration (d6)"
+					},
+					"Font of Inspiration"],
 				6: ["Countercharm"],
 				8: [
 					{
@@ -1812,30 +1827,64 @@ $(function () {
 						replaces: "Ability Score Improvement"
 					}
 				],
-				9: ["Song of Rest (d8)"],
-				10: ["Bardic Inspiration (d10)",
+				9: [
 					{
-						name: "Expertise (2)",
-						replaces: "Expertise"
+						name: "Song of Rest (d8)",
+						replaces: "Song of Rest (d6)"
+					}
+				],
+				10: [
+					{
+						name: "Bardic Inspiration (d10)",
+						replaces: "Bardic Inspiration (d8)"
 					},
-					"Magical Secrets"],
+					{
+						name: "Expertise (4)",
+						replaces: "Expertise (2)"
+					},
+					"Magical Secrets (2)"],
 				12: [
 					{
 						name: "Ability Score Improvement (3)",
 						replaces: "Ability Score Improvement (2)"
 					}
 				],
-				13: ["Song of Rest (d10)"],
-				14: ["Magical Secrets"],
-				15: ["Bardic Inspiration (d12)"],
+				13: [
+					{
+						name: "Song of Rest (d10)",
+						replaces: "Song of Rest (d8)"
+					}
+				],
+				14: [
+					{
+						name: "Magical Secrets (4)",
+						replaces: "Magical Secrets (2)"
+					}
+				],
+				15: [
+					{
+						name: "Bardic Inspiration (d12)",
+						replaces: "Bardic Inspiration (d10)"
+					}
+				],
 				16: [
 					{
 						name: "Ability Score Improvement (4)",
 						replaces: "Ability Score Improvement (3)"
 					}
 				],
-				17: ["Song of Rest (d12)"],
-				18: ["Magical Secrets"],
+				17: [
+					{
+						name: "Song of Rest (d12)",
+						replaces: "Song of Rest (d10)"
+					}
+				],
+				18: [
+					{
+						name: "Magical Secrets (6)",
+						replaces: "Magical Secrets (4)"
+					}
+				],
 				19: [
 					{
 						name: "Ability Score Improvement (5)",
@@ -1935,20 +1984,15 @@ $(function () {
 			features: {
 				1: ["Spellcasting", "Additional Druid Spells", "Druidic"],
 				2: ["Wild Companion", "Wild Shape"],
-				4: ["Ability Score Improvement", "Cantrip Versatility",
-					{
-						name: "Wild Shape Improvement (swim speed)",
-						replaces: "Wild Shape"
-					}
-				],
+				4: ["Ability Score Improvement", "Cantrip Versatility", "Wild Shape Improvement (swim speed)"],
 				8: [
 					{
 						name: "Ability Score Improvement (2)",
 						replaces: "Ability Score Improvement"
 					},
 					{
-						name: "Wild Shape Improvement (flight speed)",
-						replaces: "Wild Shape (swim speed)"
+						name: "Wild Shape Improvement (swim and flight speed)",
+						replaces: "Wild Shape Improvement (swim speed)"
 					}
 				],
 				10: ["Druid Circle feature"],
@@ -1980,7 +2024,7 @@ $(function () {
 
 			features: {
 				1: ["Fighting Style", "Fighting Style Options", "Second Wind"],
-				2: ["Action Surge (one use)"],
+				2: ["Action Surge"],
 				4: ["Ability Score Improvement", "Martial Versatility"],
 				5: ["Extra Attack"],
 				6: [
@@ -1995,7 +2039,7 @@ $(function () {
 						replaces: "Ability Score Improvement (2)"
 					}
 				],
-				9: ["Indomitable (one use)"],
+				9: ["Indomitable"],
 				11: [
 					{
 						name: "Extra Attack (2)",
@@ -2010,8 +2054,8 @@ $(function () {
 				],
 				13: [
 					{
-						name: "Indomitable (two uses)",
-						replaces: "Indomitable (one use)"
+						name: "Indomitable (2)",
+						replaces: "Indomitable"
 					}
 				],
 				14: [
@@ -2028,12 +2072,12 @@ $(function () {
 				],
 				17: [
 					{
-						name: "Action Surge (two uses)",
-						replaces: "Action Surge (one use)"
+						name: "Action Surge (2)",
+						replaces: "Action Surge"
 					},
 					{
-						name: "Indomitable (three uses)",
-						replaces: "Indomitable (two uses)"
+						name: "Indomitable (3)",
+						replaces: "Indomitable (2)"
 					}
 				],
 				19: [
@@ -2057,11 +2101,16 @@ $(function () {
 
 			features: {
 				1: ["Unarmored Defense", "Martial Arts"],
-				2: ["Dedicated Weapon", "Ki", "Unarmored Movement"],
+				2: ["Dedicated Weapon", "Ki", "Unarmored Movement (10 ft.)"],
 				3: ["Deflect Missiles", "Ki-Fueled Attack"],
 				4: ["Ability Score Improvement", "Quickened Healing", "Slow Fall"],
 				5: ["Stunning Strike", "Focused Aim", "Extra Attack"],
-				6: ["Ki-Empowered Strikes"],
+				6: ["Ki-Empowered Strikes",
+					{
+						name: "Unarmored Movement (15 ft.)",
+						replaces: "Unarmored Movement (10 ft.)"
+					}
+				],
 				7: ["Evasion", "Stillness of Mind"],
 				8: [
 					{
@@ -2069,8 +2118,13 @@ $(function () {
 						replaces: "Ability Score Improvement"
 					}
 				],
-				9: ["Unarmored Movement Improvement"],
-				10: ["Purity of Body"],
+				9: ["Unarmored Movement (Improvement)"],
+				10: ["Purity of Body",
+					{
+						name: "Unarmored Movement (20 ft.)",
+						replaces: "Unarmored Movement (15 ft.)"
+					}
+				],
 				12: [
 					{
 						name: "Ability Score Improvement (3)",
@@ -2078,7 +2132,12 @@ $(function () {
 					}
 				],
 				13: ["Tongue of the Sun and Moon"],
-				14: ["Diamond Soul"],
+				14: ["Diamond Soul",
+					{
+						name: "Unarmored Movement (25 ft.)",
+						replaces: "Unarmored Movement (20 ft.)"
+					}
+				],
 				15: ["Timeless Body"],
 				16: [
 					{
@@ -2086,7 +2145,12 @@ $(function () {
 						replaces: "Ability Score Improvement (3)"
 					}
 				],
-				18: ["Empty Body"],
+				18: ["Empty Body",
+					{
+						name: "Unarmored Movement (30 ft.)",
+						replaces: "Unarmored Movement (25 ft.)"
+					}
+				],
 				19: [
 					{
 						name: "Ability Score Improvement (5)",
@@ -5300,7 +5364,7 @@ $(function () {
 		mergeEffects(combinedEffects, getSelectedFeatBoonTalentEffects());
 		mergeEffects(combinedEffects, getMentorCombatEffects());
 		Object.keys(combinedEffects).forEach(function (effectName) {
-			if (Array.isArray(combinedEffects[effectName])) {
+			if (Array.isArray(combinedEffects[effectName]) && effectName !== "speedBonuses") {
 				combinedEffects[effectName] = combinedEffects[effectName].filter(function (value, index, values) {
 					const comparable = typeof value === "object" ? JSON.stringify(value) : value;
 					return values.findIndex(function (otherValue) {
@@ -5309,6 +5373,7 @@ $(function () {
 				});
 			}
 		});
+		console.log("Monk speed bonuses:", combinedEffects.speedBonuses);
 		characterEffects = combinedEffects;
 		const mentorCombatBonuses = [];
 		if (isMentorEnabled()
