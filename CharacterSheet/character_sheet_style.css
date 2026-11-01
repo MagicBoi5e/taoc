@@ -571,6 +571,50 @@ form.charsheet main > section section.attributes div.attr-applications div.list-
 form.charsheet main > section section.attributes div.attr-applications div.list-section ul li input[type=checkbox]:checked {
   background-color: black;
 }
+form.charsheet main > section section.attributes div.attr-applications div.skills ul li.skill-expertise input[type=checkbox] {
+  outline: 1px solid #111;
+  outline-offset: 2px;
+}
+form.charsheet .skill-choice-controls {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 10px 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 9px;
+}
+form.charsheet .skill-choice-controls > strong {
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+form.charsheet .skill-choice-controls > button {
+  margin-bottom: 5px;
+  font-size: 9px;
+}
+form.charsheet .skill-choice-group {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 3px;
+  margin-top: 3px;
+}
+form.charsheet .skill-choice-group label {
+  grid-column: 1 / -1;
+  font-weight: bold;
+}
+form.charsheet .skill-choice-group select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  font-size: 9px;
+}
+form.charsheet .skill-choice-group .skill-choice-source {
+  grid-column: 1 / -1;
+  color: #555;
+}
 form.charsheet main > section div.passive-perception {
   display: flex;
   flex-direction: row-reverse;
@@ -910,8 +954,10 @@ form.charsheet main section.attacksandspellcasting > div > table th {
   font-size: 10px;
   color: #ddd;
 }
-form.charsheet main section.attacksandspellcasting > div > table input {
+form.charsheet main section.attacksandspellcasting > div > table input,
+form.charsheet main section.attacksandspellcasting > div > table select {
   width: calc(100% - 4px);
+  box-sizing: border-box;
   border: 0;
   background-color: #eee;
   font-size: 10px;
@@ -1056,6 +1102,14 @@ form.charsheet main section.magic-items .magic-item-category > label {
   margin-bottom: 5px;
   font-size: 9px;
   font-weight: bold;
+}
+form.charsheet main section.magic-items .magic-item-category > .expert-infusion-limit {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 9px;
+}
+form.charsheet main section.magic-items .magic-item-category > .infused-item-label {
+  margin-top: 8px;
 }
 form.charsheet main section.magic-items .magic-item-slots {
   display: grid;
@@ -1355,6 +1409,41 @@ form.charsheet main section.features .feature-output-title-row {
   align-items: center;
   flex-wrap: wrap;
   gap: 4px 8px;
+}
+form.charsheet main section.features .feature-choice-control {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-left: 2px solid #bbb;
+  background: #f7f7f7;
+  font-size: 10px;
+}
+form.charsheet main section.features .feature-choice-label {
+  grid-column: 1 / -1;
+  font-weight: bold;
+}
+form.charsheet main section.features .feature-choice-slot {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+form.charsheet main section.features .feature-choice-slot-label {
+  color: #555;
+  font-size: 9px;
+}
+form.charsheet main section.features .feature-choice-slot select,
+form.charsheet main section.features .feature-choice-slot input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 23px;
+  padding: 3px;
+  border: 1px solid #bbb;
+  background: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
 }
 .ability-use-tracker {
   display: inline-flex;

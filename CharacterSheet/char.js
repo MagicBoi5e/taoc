@@ -1,5 +1,121 @@
 
 $(function () {
+	const weaponCatalog = [
+		{ name: "Club", group: "Simple melee weapons", damage: "1d4 bludgeoning", properties: ["Light"] },
+		{ name: "Dagger", group: "Simple melee weapons", damage: "1d4 piercing", properties: ["Finesse", "Light", "Thrown (20/60)"] },
+		{ name: "Greatclub", group: "Simple melee weapons", damage: "1d8 bludgeoning", properties: ["Two-handed"] },
+		{ name: "Handaxe", group: "Simple melee weapons", damage: "1d6 slashing", properties: ["Light", "Thrown (20/60)"] },
+		{ name: "Javelin", group: "Simple melee weapons", damage: "1d6 piercing", properties: ["Thrown (30/120)"] },
+		{ name: "Light hammer", group: "Simple melee weapons", damage: "1d4 bludgeoning", properties: ["Light", "Thrown (20/60)"] },
+		{ name: "Mace", group: "Simple melee weapons", damage: "1d6 bludgeoning", properties: [] },
+		{ name: "Quarterstaff", group: "Simple melee weapons", damage: "1d6 bludgeoning", properties: ["Versatile (1d8)"] },
+		{ name: "Sickle", group: "Simple melee weapons", damage: "1d4 slashing", properties: ["Light"] },
+		{ name: "Spear", group: "Simple melee weapons", damage: "1d6 piercing", properties: ["Thrown (20/60)", "Versatile (1d8)"] },
+		{ name: "Crossbow, light", group: "Simple ranged weapons", damage: "1d8 piercing", properties: ["Ammunition (80/320)", "Loading", "Two-handed"] },
+		{ name: "Dart", group: "Simple ranged weapons", damage: "1d4 piercing", properties: ["Finesse", "Thrown (20/60)"] },
+		{ name: "Shortbow", group: "Simple ranged weapons", damage: "1d6 piercing", properties: ["Ammunition (80/320)", "Two-handed"] },
+		{ name: "Sling", group: "Simple ranged weapons", damage: "1d4 bludgeoning", properties: ["Ammunition (30/120)"] },
+		{ name: "Battleaxe", group: "Martial melee weapons", damage: "1d8 slashing", properties: ["Versatile (1d10)"] },
+		{ name: "Flail", group: "Martial melee weapons", damage: "1d8 bludgeoning", properties: [] },
+		{ name: "Glaive", group: "Martial melee weapons", damage: "1d10 slashing", properties: ["Heavy", "Reach", "Two-handed"] },
+		{ name: "Greataxe", group: "Martial melee weapons", damage: "1d12 slashing", properties: ["Heavy", "Two-handed"] },
+		{ name: "Greatsword", group: "Martial melee weapons", damage: "2d6 slashing", properties: ["Heavy", "Two-handed"] },
+		{ name: "Halberd", group: "Martial melee weapons", damage: "1d10 slashing", properties: ["Heavy", "Reach", "Two-handed"] },
+		{ name: "Lance", group: "Martial melee weapons", damage: "1d12 piercing", properties: ["Reach", "Special"] },
+		{ name: "Longsword", group: "Martial melee weapons", damage: "1d8 slashing", properties: ["Versatile (1d10)"] },
+		{ name: "Maul", group: "Martial melee weapons", damage: "2d6 bludgeoning", properties: ["Heavy", "Two-handed"] },
+		{ name: "Morningstar", group: "Martial melee weapons", damage: "1d8 piercing", properties: [] },
+		{ name: "Pike", group: "Martial melee weapons", damage: "1d10 piercing", properties: ["Heavy", "Reach", "Two-handed"] },
+		{ name: "Rapier", group: "Martial melee weapons", damage: "1d8 piercing", properties: ["Finesse"] },
+		{ name: "Scimitar", group: "Martial melee weapons", damage: "1d6 slashing", properties: ["Finesse", "Light"] },
+		{ name: "Shortsword", group: "Martial melee weapons", damage: "1d6 piercing", properties: ["Finesse", "Light"] },
+		{ name: "Trident", group: "Martial melee weapons", damage: "1d6 piercing", properties: ["Thrown (20/60)", "Versatile (1d8)"] },
+		{ name: "War pick", group: "Martial melee weapons", damage: "1d8 piercing", properties: [] },
+		{ name: "Warhammer", group: "Martial melee weapons", damage: "1d8 bludgeoning", properties: ["Versatile (1d10)"] },
+		{ name: "Whip", group: "Martial melee weapons", damage: "1d4 slashing", properties: ["Finesse", "Reach"] },
+		{ name: "Blowgun", group: "Martial ranged weapons", damage: "1 piercing", properties: ["Ammunition (25/100)", "Loading"] },
+		{ name: "Crossbow, hand", group: "Martial ranged weapons", damage: "1d6 piercing", properties: ["Ammunition (30/120)", "Light", "Loading"] },
+		{ name: "Crossbow, heavy", group: "Martial ranged weapons", damage: "1d10 piercing", properties: ["Ammunition (100/400)", "Heavy", "Loading", "Two-handed"] },
+		{ name: "Longbow", group: "Martial ranged weapons", damage: "1d8 piercing", properties: ["Ammunition (150/600)", "Heavy", "Two-handed"] },
+		{ name: "Net", group: "Martial ranged weapons", damage: "-", properties: ["Special", "Thrown (5/15)"] },
+	];
+	const srdCantrips = [
+		"Acid Splash", "Blade Ward", "Chill Touch", "Dancing Lights", "Druidcraft",
+		"Eldritch Blast", "Fire Bolt", "Friends", "Guidance", "Light", "Mage Hand",
+		"Mending", "Message", "Minor Illusion", "Poison Spray", "Prestidigitation",
+		"Produce Flame", "Ray of Frost", "Resistance", "Sacred Flame", "Shillelagh",
+		"Shocking Grasp", "Spare the Dying", "Thaumaturgy", "Thorn Whip",
+		"True Strike", "Vicious Mockery",
+	];
+	const otherAttackNames = ["Beast Bite", "Beast Claws (two attacks)", "Beast Tail"];
+
+	function populateAttackChoices() {
+		const attackSelects = $("#page1 select[name^='atkname']");
+		const savedAttackNames = {};
+		attackSelects.each(function () {
+			const storedValue = localStorage.getItem("page1_" + this.name);
+			if (storedValue === null) {
+				return;
+			}
+			try {
+				savedAttackNames[this.name] = JSON.parse(storedValue);
+			} catch (error) {
+				console.error("Unable to restore saved attack name for " + this.name + ".", error);
+			}
+		});
+
+		attackSelects.each(function () {
+			const select = this;
+			const groups = {};
+			weaponCatalog.forEach(function (weapon) {
+				if (!groups[weapon.group]) {
+					groups[weapon.group] = document.createElement("optgroup");
+					groups[weapon.group].label = weapon.group;
+					select.appendChild(groups[weapon.group]);
+				}
+				const option = document.createElement("option");
+				option.value = weapon.name;
+				option.textContent = weapon.name;
+				option.dataset.damage = weapon.damage;
+				option.dataset.properties = JSON.stringify(weapon.properties);
+				groups[weapon.group].appendChild(option);
+			});
+
+			const cantrips = document.createElement("optgroup");
+			cantrips.label = "SRD 5.1 cantrips";
+			srdCantrips.forEach(function (cantrip) {
+				const option = document.createElement("option");
+				option.value = cantrip;
+				option.textContent = cantrip;
+				option.dataset.attackType = "cantrip";
+				cantrips.appendChild(option);
+			});
+			select.appendChild(cantrips);
+
+			const otherAttacks = document.createElement("optgroup");
+			otherAttacks.label = "Other attacks";
+			otherAttackNames.forEach(function (name) {
+				const option = document.createElement("option");
+				option.value = name;
+				option.textContent = name;
+				otherAttacks.appendChild(option);
+			});
+
+			const catalogNames = weaponCatalog.map(function (weapon) { return weapon.name; })
+				.concat(srdCantrips, otherAttackNames);
+			const savedName = savedAttackNames[select.name];
+			if (typeof savedName === "string" && savedName !== "" && catalogNames.indexOf(savedName) === -1) {
+				const legacyOption = document.createElement("option");
+				legacyOption.value = savedName;
+				legacyOption.textContent = savedName;
+				otherAttacks.appendChild(legacyOption);
+			}
+			if (otherAttacks.children.length > 0) {
+				select.appendChild(otherAttacks);
+			}
+		});
+	}
+
 	const savedClass = localStorage.getItem("page1_characterclass");
 	const savedClassLevel = localStorage.getItem("page1_classlevel");
 
@@ -121,6 +237,7 @@ $(function () {
 		}
 	}
 
+	populateAttackChoices();
 	$("#page1").saveMyForm(
 		{
 			loadInputs: true,
@@ -129,6 +246,7 @@ $(function () {
 
 	const talentStorageKey = "taoc_selected_talents";
 	const fightingStyleStorageKey = "page1_fightingStyleChoices";
+	const featureChoiceStorageKey = "page1_featureChoiceSelections";
 	const fightingStyleChoices = {
 		"Archery": {
 			sources: ["fighter", "ranger", "all"],
@@ -203,6 +321,25 @@ $(function () {
 	}
 
 	const selectedFightingStyles = readFightingStyleChoices();
+	function readFeatureChoiceSelections() {
+		const storedChoices = localStorage.getItem(featureChoiceStorageKey);
+		if (storedChoices === null) {
+			return {};
+		}
+
+		try {
+			const parsedChoices = JSON.parse(storedChoices);
+			if (parsedChoices && typeof parsedChoices === "object" && !Array.isArray(parsedChoices)) {
+				return parsedChoices;
+			}
+			console.error("Unable to restore class feature choices: saved data is not an object.");
+		} catch (error) {
+			console.error("Unable to restore class feature choices.", error);
+		}
+		return {};
+	}
+
+	const featureChoiceSelections = readFeatureChoiceSelections();
 
 	function createFightingStyleControl(choiceKey, source) {
 		const control = $("<div>", { class: "fighting-style-choice" });
@@ -242,6 +379,476 @@ $(function () {
 			"aria-live": "polite",
 		}).appendTo(control);
 		return control;
+	}
+
+	const pactBoonOptions = ["Pact of the Chain", "Pact of the Blade", "Pact of the Tome", "Pact of the Talisman"];
+	const eldritchInvocationOptions = [
+		{ value: "Agonizing Blast", requires: "eldritch blast cantrip" },
+		"Armor of Shadows",
+		{ value: "Ascendant Step", minLevel: 9 },
+		"Beast Speech",
+		"Beguiling Influence",
+		{ value: "Bewitching Whispers", minLevel: 7 },
+		{ value: "Book of Ancient Secrets", pact: "Pact of the Tome" },
+		{ value: "Chains of Carceri", minLevel: 15, pact: "Pact of the Chain" },
+		{ value: "Cloak of Flies", minLevel: 5 },
+		"Devil's Sight",
+		{ value: "Dreadful Word", minLevel: 7 },
+		{ value: "Eldritch Mind" },
+		{ value: "Eldritch Smite", minLevel: 5, pact: "Pact of the Blade" },
+		{ value: "Eldritch Sight" },
+		{ value: "Eldritch Spear", requires: "eldritch blast cantrip" },
+		{ value: "Eyes of the Rune Keeper" },
+		{ value: "Far Scribe", minLevel: 5, pact: "Pact of the Tome" },
+		{ value: "Fiendish Vigor" },
+		{ value: "Gaze of Two Minds" },
+		{ value: "Ghostly Gaze", minLevel: 7 },
+		{ value: "Gift of the Depths", minLevel: 5 },
+		{ value: "Gift of the Ever-Living Ones", pact: "Pact of the Chain" },
+		{ value: "Gift of the Protectors", minLevel: 9, pact: "Pact of the Tome" },
+		{ value: "Grasp of Hadar", requires: "eldritch blast cantrip" },
+		{ value: "Improved Pact Weapon", pact: "Pact of the Blade" },
+		{ value: "Investment of the Chain Master", pact: "Pact of the Chain" },
+		{ value: "Lance of Lethargy", requires: "eldritch blast cantrip" },
+		{ value: "Lifedrinker", minLevel: 12, pact: "Pact of the Blade" },
+		{ value: "Maddening Hex", minLevel: 5 },
+		{ value: "Mask of Many Faces" },
+		{ value: "Master of Myriad Forms", minLevel: 15 },
+		{ value: "Minions of Chaos", minLevel: 9 },
+		{ value: "Mire the Mind", minLevel: 5 },
+		{ value: "Misty Visions" },
+		{ value: "One with Shadows", minLevel: 5 },
+		{ value: "Otherworldly Leap", minLevel: 9 },
+		{ value: "Protection of the Talisman", minLevel: 7, pact: "Pact of the Talisman" },
+		{ value: "Rebuke of the Talisman", pact: "Pact of the Talisman" },
+		{ value: "Relentless Hex", minLevel: 7 },
+		{ value: "Repelling Blast", requires: "eldritch blast cantrip" },
+		{ value: "Sculptor of Flesh", minLevel: 7 },
+		{ value: "Shroud of Shadow", minLevel: 15 },
+		{ value: "Sign of Ill Omen", minLevel: 5 },
+		{ value: "Thief of Five Fates" },
+		{ value: "Thirsting Blade", minLevel: 5, pact: "Pact of the Blade" },
+		{ value: "Tomb of Levistus", minLevel: 5 },
+		{ value: "Trickster's Escape", minLevel: 7 },
+		{ value: "Undying Servitude", minLevel: 5 },
+		{ value: "Visions of Distant Realms", minLevel: 15 },
+		{ value: "Voice of the Chain Master", pact: "Pact of the Chain" },
+		{ value: "Whispers of the Grave", minLevel: 9 },
+		{ value: "Witch Sight", minLevel: 15 },
+		{ value: "Bond of the Talisman", minLevel: 12, pact: "Pact of the Talisman" },
+		{ value: "Aspect of the Moon", pact: "Pact of the Tome" },
+	];
+	const metamagicOptions = [
+		"Careful Spell", "Distant Spell", "Empowered Spell", "Extended Spell",
+		"Heightened Spell", "Quickened Spell", "Seeking Spell", "Subtle Spell",
+		"Transmuted Spell", "Twinned Spell",
+	];
+	const battleMasterManeuvers = [
+		"Ambush", "Bait and Switch", "Brace", "Commander's Strike",
+		"Commanding Presence", "Disarming Attack", "Distracting Strike",
+		"Evasive Footwork", "Feinting Attack", "Goading Attack",
+		"Grappling Strike", "Lunging Attack", "Maneuvering Attack",
+		"Menacing Attack", "Parry", "Precision Attack", "Pushing Attack",
+		"Quick Toss", "Rally", "Riposte", "Sweeping Attack",
+		"Tactical Assessment", "Trip Attack",
+	];
+	const arcaneShotOptions = [
+		"Banishing Arrow", "Beguiling Arrow", "Bursting Arrow",
+		"Enfeebling Arrow", "Grasping Arrow", "Piercing Arrow",
+		"Seeking Arrow", "Shadow Arrow",
+	];
+	const runeOptions = [
+		"Cloud Rune", "Fire Rune", "Frost Rune", "Stone Rune",
+		{ value: "Hill Rune", minLevel: 7 },
+		{ value: "Storm Rune", minLevel: 7 },
+	];
+	const elementalDisciplines = [
+		"Elemental Attunement",
+		"Fangs of the Fire Snake",
+		"Fist of Four Thunders",
+		"Fist of Unbroken Air",
+		{ value: "Gong of the Summit", minLevel: 6 },
+		{ value: "Rush of the Gale Spirits", minLevel: 6 },
+		{ value: "Shape the Flowing River", minLevel: 6 },
+		{ value: "Sweeping Cinder Strike", minLevel: 6 },
+		{ value: "Flames of the Phoenix", minLevel: 11 },
+		{ value: "Mist Stance", minLevel: 11 },
+		{ value: "Ride the Wind", minLevel: 11 },
+		{ value: "Breath of Winter", minLevel: 17 },
+		{ value: "Eternal Mountain Defense", minLevel: 17 },
+		{ value: "River of Hungry Flame", minLevel: 17 },
+		{ value: "Wave of Rolling Earth", minLevel: 17 },
+		"Water Whip",
+	];
+	const artisanToolOptions = [
+		"Alchemist's supplies", "Brewer's supplies", "Calligrapher's supplies",
+		"Carpenter's tools", "Cartographer's tools", "Cobbler's tools",
+		"Cook's utensils", "Glassblower's tools", "Jeweler's tools",
+		"Leatherworker's tools", "Mason's tools", "Painter's supplies",
+		"Potter's tools", "Smith's tools", "Tinker's tools", "Weaver's tools",
+		"Woodcarver's tools",
+	];
+	const artificerInfusions = [
+		{ value: "Arcane Propulsion Armor", minLevel: 14 },
+		"Armor of Magical Strength",
+		{ value: "Boots of the Winding Path", minLevel: 6 },
+		"Enhanced Arcane Focus",
+		"Enhanced Defense",
+		"Enhanced Weapon",
+		{ value: "Helm of Awareness", minLevel: 10 },
+		{ value: "Homunculus Servant", minLevel: 6 },
+		"Mind Sharpener",
+		{ value: "Radiant Weapon", minLevel: 6 },
+		"Repeating Shot",
+		{ value: "Repulsion Shield", minLevel: 6 },
+		{ value: "Resistant Armor", minLevel: 6 },
+		"Returning Weapon",
+		{ value: "Spell-Refueling Ring", minLevel: 6 },
+		{ value: "Replicate Magic Item: Alchemy jug", minLevel: 2 },
+		{ value: "Replicate Magic Item: Bag of holding", minLevel: 2 },
+		{ value: "Replicate Magic Item: Cap of water breathing", minLevel: 2 },
+		{ value: "Replicate Magic Item: Goggles of night", minLevel: 2 },
+		{ value: "Replicate Magic Item: Rope of climbing", minLevel: 2 },
+		{ value: "Replicate Magic Item: Sending stones", minLevel: 2 },
+		{ value: "Replicate Magic Item: Wand of magic detection", minLevel: 2 },
+		{ value: "Replicate Magic Item: Wand of secrets", minLevel: 2 },
+		{ value: "Replicate Magic Item: Boots of elvenkind", minLevel: 6 },
+		{ value: "Replicate Magic Item: Cloak of elvenkind", minLevel: 6 },
+		{ value: "Replicate Magic Item: Cloak of the manta ray", minLevel: 6 },
+		{ value: "Replicate Magic Item: Eyes of charming", minLevel: 6 },
+		{ value: "Replicate Magic Item: Gloves of thievery", minLevel: 6 },
+		{ value: "Replicate Magic Item: Lantern of revealing", minLevel: 6 },
+		{ value: "Replicate Magic Item: Pipes of haunting", minLevel: 6 },
+		{ value: "Replicate Magic Item: Ring of water walking", minLevel: 6 },
+		{ value: "Replicate Magic Item: Boots of striding and springing", minLevel: 10 },
+		{ value: "Replicate Magic Item: Boots of the winterlands", minLevel: 10 },
+		{ value: "Replicate Magic Item: Bracers of archery", minLevel: 10 },
+		{ value: "Replicate Magic Item: Brooch of shielding", minLevel: 10 },
+		{ value: "Replicate Magic Item: Cloak of protection", minLevel: 10 },
+		{ value: "Replicate Magic Item: Eyes of the eagle", minLevel: 10 },
+		{ value: "Replicate Magic Item: Gauntlets of ogre power", minLevel: 10 },
+		{ value: "Replicate Magic Item: Gloves of missile snaring", minLevel: 10 },
+		{ value: "Replicate Magic Item: Gloves of swimming and climbing", minLevel: 10 },
+		{ value: "Replicate Magic Item: Hat of disguise", minLevel: 10 },
+		{ value: "Replicate Magic Item: Headband of intellect", minLevel: 10 },
+		{ value: "Replicate Magic Item: Helm of telepathy", minLevel: 10 },
+		{ value: "Replicate Magic Item: Medallion of thoughts", minLevel: 10 },
+		{ value: "Replicate Magic Item: Necklace of adaptation", minLevel: 10 },
+		{ value: "Replicate Magic Item: Periapt of wound closure", minLevel: 10 },
+		{ value: "Replicate Magic Item: Pipes of the sewers", minLevel: 10 },
+		{ value: "Replicate Magic Item: Quiver of Ehlonna", minLevel: 10 },
+		{ value: "Replicate Magic Item: Ring of jumping", minLevel: 10 },
+		{ value: "Replicate Magic Item: Ring of mind shielding", minLevel: 10 },
+		{ value: "Replicate Magic Item: Slippers of spider climbing", minLevel: 10 },
+		{ value: "Replicate Magic Item: Winged boots", minLevel: 10 },
+		{ value: "Replicate Magic Item: Amulet of health", minLevel: 14 },
+		{ value: "Replicate Magic Item: Belt of hill giant strength", minLevel: 14 },
+		{ value: "Replicate Magic Item: Boots of levitation", minLevel: 14 },
+		{ value: "Replicate Magic Item: Boots of speed", minLevel: 14 },
+		{ value: "Replicate Magic Item: Bracers of defense", minLevel: 14 },
+		{ value: "Replicate Magic Item: Cloak of the bat", minLevel: 14 },
+		{ value: "Replicate Magic Item: Dimensional shackles", minLevel: 14 },
+		{ value: "Replicate Magic Item: Gem of seeing", minLevel: 14 },
+		{ value: "Replicate Magic Item: Horn of blasting", minLevel: 14 },
+		{ value: "Replicate Magic Item: Ring of free action", minLevel: 14 },
+		{ value: "Replicate Magic Item: Ring of protection", minLevel: 14 },
+		{ value: "Replicate Magic Item: Ring of the ram", minLevel: 14 },
+	];
+	const dragonAncestries = [
+		"Black (acid)", "Blue (lightning)", "Brass (fire)", "Bronze (lightning)",
+		"Copper (acid)", "Gold (fire)", "Green (poison)", "Red (fire)",
+		"Silver (cold)", "White (cold)",
+	];
+
+	function getFeatureChoiceCount(rule, level, featureName) {
+		return typeof rule.count === "function" ? rule.count(level, featureName) : rule.count;
+	}
+
+	function getFeatureChoiceKey(rule, context, featureName) {
+		if (rule.key) {
+			return rule.key;
+		}
+		const instanceKey = context.choiceInstanceKey || (context.scope + ":" + context.owner);
+		return instanceKey + ":" + rule.id + (rule.keyByFeatureName ? ":" + featureName : "");
+	}
+
+	function getFeatureChoiceRules(context, featureName) {
+		return featureChoiceRules.filter(function (rule) {
+			return rule.scope === context.scope
+				&& (!rule.owner || rule.owner === context.owner)
+				&& rule.matches(featureName)
+				&& (!rule.visibleWhen || rule.visibleWhen(context));
+		});
+	}
+
+	function getEligibleFeatureChoiceOptions(rule, level, context) {
+		const selectedPact = featureChoiceSelections["class:Warlock:warlock-pact-boon"] || [];
+		return (rule.options || []).map(function (option) {
+			return typeof option === "string" ? { value: option, label: option } : option;
+		}).filter(function (option) {
+			return (!option.minLevel || level >= option.minLevel)
+				&& (!option.pact || (context.scope === "class" && context.owner === "Warlock"
+					&& selectedPact.indexOf(option.pact) !== -1))
+				&& (!rule.optionFilter || rule.optionFilter(option, context));
+		});
+	}
+
+	function createFeatureChoiceControl(rule, context, featureName, choiceKey) {
+		const optionList = Array.isArray(rule.options) ? getEligibleFeatureChoiceOptions(rule, context.level, context) : null;
+		const selections = Array.isArray(featureChoiceSelections[choiceKey])
+			? featureChoiceSelections[choiceKey]
+			: [];
+		const count = Math.max(0, getFeatureChoiceCount(rule, context.level, featureName));
+		if (count === 0) {
+			return $();
+		}
+
+		const control = $("<div>", { class: "feature-choice-control" });
+		$("<div>", { class: "feature-choice-label", text: rule.label }).appendTo(control);
+		for (let choiceIndex = 0; choiceIndex < count; choiceIndex++) {
+			const value = selections[choiceIndex] || "";
+			const slot = $("<label>", { class: "feature-choice-slot" }).appendTo(control);
+			$("<span>", {
+				class: "feature-choice-slot-label",
+				text: (rule.choiceLabels && rule.choiceLabels[choiceIndex]) || ("Choice " + (choiceIndex + 1)),
+			}).appendTo(slot);
+			if (optionList) {
+				const select = $("<select>", {
+					"aria-label": rule.label + " choice " + (choiceIndex + 1),
+					"data-feature-choice-key": choiceKey,
+					"data-feature-choice-index": choiceIndex,
+				}).appendTo(slot);
+				$("<option>", { value: "", text: "Choose an option" }).appendTo(select);
+				optionList.forEach(function (option) {
+					const otherSelections = selections.filter(function (selected, selectedIndex) {
+						return selectedIndex !== choiceIndex && selected !== "";
+					});
+					const optionElement = $("<option>", {
+						value: option.value,
+						text: option.label || option.value,
+						disabled: rule.allowDuplicates !== true
+							&& otherSelections.indexOf(option.value) !== -1
+							&& value !== option.value,
+					});
+					const prerequisite = option.prerequisite || option.requires
+						|| (option.minLevel ? "Requires level " + option.minLevel : "")
+						|| (option.pact ? "Requires " + option.pact : "");
+					if (prerequisite) {
+						optionElement.attr("title", prerequisite);
+					}
+					optionElement.appendTo(select);
+				});
+				if (value && !optionList.some(function (option) { return option.value === value; })) {
+					$("<option>", {
+						value: value,
+						text: value + " (previously selected; no longer available)",
+					}).appendTo(select);
+				}
+				select.val(value);
+			} else {
+				$("<input>", {
+					type: "text",
+					value: value,
+					placeholder: rule.placeholder || "Enter choice",
+					"aria-label": rule.label + " choice " + (choiceIndex + 1),
+					"data-feature-choice-key": choiceKey,
+					"data-feature-choice-index": choiceIndex,
+				}).appendTo(slot);
+			}
+		}
+		return control;
+	}
+
+	const featureChoiceRules = [
+		{
+			id: "warlock-pact-boon", scope: "class", owner: "Warlock",
+			label: "Pact Boon", matches: function (name) { return name === "Pact Boon"; },
+			count: function (level) { return level >= 3 ? 1 : 0; }, options: pactBoonOptions,
+		},
+		{
+			id: "warlock-tome-cantrips", scope: "class", owner: "Warlock",
+			label: "Pact of the Tome cantrips", matches: function (name) { return name === "Pact Boon"; },
+			count: function (level) { return level >= 3 ? 3 : 0; }, options: srdCantrips,
+			visibleWhen: function () {
+				return (featureChoiceSelections["class:Warlock:warlock-pact-boon"] || []).indexOf("Pact of the Tome") !== -1;
+			},
+		},
+		{
+			id: "warlock-invocations", scope: "class", owner: "Warlock",
+			label: "Eldritch Invocations",
+			matches: function (name) { return name === "Eldritch Invocations"; },
+			count: function (level) {
+				return [0, 0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8][level] || 0;
+			},
+			options: eldritchInvocationOptions,
+		},
+		{
+			id: "warlock-mystic-arcanum", scope: "class", owner: "Warlock",
+			label: "Mystic Arcanum spell",
+			matches: function (name) { return name.indexOf("Mystic Arcanum") === 0; },
+			count: 1, placeholder: "Enter the chosen warlock spell", keyByFeatureName: true,
+		},
+		{
+			id: "sorcerer-metamagic", scope: "class", owner: "Sorcerer",
+			label: "Metamagic options",
+			matches: function (name) { return /^Metamagic(?:\s+\(\d+\))?$/.test(name); },
+			count: function (level) { return level >= 17 ? 4 : level >= 10 ? 3 : level >= 3 ? 2 : 0; },
+			options: metamagicOptions,
+		},
+		{
+			id: "bard-magical-secrets", scope: "class", owner: "Bard",
+			label: "Magical Secrets spells",
+			matches: function (name) { return /^Magical Secrets/.test(name); },
+			count: function (level) { return level >= 18 ? 6 : level >= 14 ? 4 : level >= 10 ? 2 : 0; },
+			placeholder: "Enter the chosen spell",
+		},
+		{
+			id: "wizard-spell-mastery", scope: "class", owner: "Wizard",
+			label: "Spell Mastery spells",
+			matches: function (name) { return name === "Spell Mastery"; },
+			count: 2, choiceLabels: ["1st-level spell", "2nd-level spell"],
+			placeholder: "Enter a spell in your spellbook",
+		},
+		{
+			id: "wizard-signature-spells", scope: "class", owner: "Wizard",
+			label: "Signature Spells",
+			matches: function (name) { return name === "Signature Spells"; },
+			count: 2, placeholder: "Enter a 3rd-level spell in your spellbook",
+		},
+		{
+			id: "artificer-infusions", scope: "class", owner: "Artificer",
+			label: "Infusions Known",
+			matches: function (name) { return name === "Infuse Item"; },
+			count: function (level) { return level >= 18 ? 12 : level >= 14 ? 10 : level >= 10 ? 8 : level >= 6 ? 6 : level >= 2 ? 4 : 0; },
+			options: artificerInfusions,
+		},
+		{
+			id: "battle-master-maneuvers", scope: "subclass", owner: "Battle Master",
+			label: "Maneuvers",
+			matches: function (name) { return name === "Combat Superiority"; },
+			count: function (level) { return level >= 15 ? 9 : level >= 10 ? 7 : level >= 7 ? 5 : level >= 3 ? 3 : 0; },
+			options: battleMasterManeuvers,
+		},
+		{
+			id: "battle-master-tools", scope: "subclass", owner: "Battle Master",
+			label: "Student of War tool proficiency",
+			matches: function (name) { return name === "Student of War"; },
+			count: function (level) { return level >= 3 ? 1 : 0; }, options: artisanToolOptions,
+		},
+		{
+			id: "arcane-archer-options", scope: "subclass", owner: "Arcane Archer",
+			label: "Arcane Shot options",
+			matches: function (name) { return /^Arcane Shot Options/.test(name); },
+			count: function (level) { return level >= 18 ? 6 : level >= 15 ? 5 : level >= 10 ? 4 : level >= 7 ? 3 : level >= 3 ? 2 : 0; },
+			options: arcaneShotOptions,
+		},
+		{
+			id: "arcane-archer-cantrip", scope: "subclass", owner: "Arcane Archer",
+			label: "Arcane Archer Lore cantrip",
+			matches: function (name) { return name === "Arcane Archer Lore"; },
+			count: function (level) { return level >= 3 ? 1 : 0; }, options: ["Druidcraft", "Prestidigitation"],
+		},
+		{
+			id: "ranger-canny-language", scope: "class", owner: "Ranger",
+			label: "Deft Explorer (Canny) language",
+			matches: function (name) { return name.indexOf("Deft Explorer (Canny)") !== -1; },
+			count: function (level) { return level >= 1 ? 1 : 0; },
+			placeholder: "Enter the chosen language",
+		},
+		{
+			id: "rune-knight-runes", scope: "subclass", owner: "Rune Knight",
+			label: "Runes known",
+			matches: function (name) { return /^Runes Known/.test(name); },
+			count: function (level) { return level >= 15 ? 5 : level >= 10 ? 4 : level >= 7 ? 3 : level >= 3 ? 2 : 0; },
+			options: runeOptions,
+		},
+		{
+			id: "four-elements-disciplines", scope: "subclass", owner: "Way of the Four Elements",
+			label: "Elemental Disciplines",
+			matches: function (name) { return /^Elemental Disciplines/.test(name); },
+			count: function (level) { return level >= 17 ? 5 : level >= 11 ? 4 : level >= 6 ? 3 : level >= 3 ? 2 : 0; },
+			options: elementalDisciplines,
+		},
+		{
+			id: "land-circle-terrain", scope: "subclass", owner: "Circle of Land",
+			label: "Circle of the Land terrain",
+			matches: function (name) { return name === "Circle Spells"; },
+			count: function (level) { return level >= 2 ? 1 : 0; },
+			options: ["Arctic", "Coast", "Desert", "Forest", "Grassland", "Mountain", "Swamp", "Underdark"],
+		},
+		{
+			id: "hunter-prey", scope: "subclass", owner: "Hunter",
+			label: "Hunter's Prey",
+			matches: function (name) { return name === "Hunter’s Prey"; },
+			count: function (level) { return level >= 3 ? 1 : 0; },
+			options: ["Colossus Slayer", "Giant Killer", "Horde Breaker"],
+		},
+		{
+			id: "hunter-defense", scope: "subclass", owner: "Hunter",
+			label: "Defensive Tactics",
+			matches: function (name) { return name === "Defensive Tactics"; },
+			count: function (level) { return level >= 7 ? 1 : 0; },
+			options: ["Escape the Horde", "Multiattack Defense", "Steel Will"],
+		},
+		{
+			id: "hunter-multiattack", scope: "subclass", owner: "Hunter",
+			label: "Multiattack",
+			matches: function (name) { return name === "Multiattack"; },
+			count: function (level) { return level >= 11 ? 1 : 0; },
+			options: ["Volley", "Whirlwind Attack"],
+		},
+		{
+			id: "hunter-defense-superior", scope: "subclass", owner: "Hunter",
+			label: "Superior Hunter's Defense",
+			matches: function (name) { return name === "Superior Hunter’s Defense"; },
+			count: function (level) { return level >= 15 ? 1 : 0; },
+			options: ["Evasion", "Stand Against the Tide", "Uncanny Dodge"],
+		},
+		{
+			id: "lore-magical-secrets", scope: "subclass", owner: "College of Lore",
+			label: "Additional Magical Secrets spells",
+			matches: function (name) { return name === "Additional Magical Secrets"; },
+			count: function (level) { return level >= 6 ? 2 : 0; },
+			placeholder: "Enter a spell from any class",
+		},
+		{
+			id: "dragonborn-ancestry", scope: "race", owner: "Dragonborn",
+			label: "Draconic Ancestry",
+			matches: function (name) { return name === "Draconic Ancestry"; },
+			count: 1, options: dragonAncestries,
+		},
+		{
+			id: "draconic-bloodline-ancestor", scope: "subclass", owner: "Draconic Bloodline",
+			label: "Dragon Ancestor",
+			matches: function (name) { return name === "Dragon Ancestor"; },
+			count: 1, options: dragonAncestries,
+		},
+		{
+			id: "eldritch-adept-feat", scope: "feat", owner: "Eldritch Adept",
+			label: "Eldritch Adept invocation",
+			matches: function (name) { return name === "Eldritch Adept"; },
+			count: 1, options: eldritchInvocationOptions,
+			optionFilter: function (option) { return !option.minLevel && !option.pact && !option.requires; },
+		},
+		{
+			id: "metamagic-adept-feat", scope: "feat", owner: "Metamagic Adept",
+			label: "Metamagic Adept options",
+			matches: function (name) { return name === "Metamagic Adept"; },
+			count: 2, options: metamagicOptions,
+		},
+		{
+			id: "martial-adept-feat", scope: "feat", owner: "Martial Adept",
+			label: "Martial Adept maneuvers",
+			matches: function (name) { return name === "Martial Adept"; },
+			count: 2, options: battleMasterManeuvers,
+		},
+	];
+
+	function renderFeatureChoiceControls(context, featureName, parent) {
+		getFeatureChoiceRules(context, featureName).forEach(function (rule) {
+			const choiceKey = getFeatureChoiceKey(rule, context, featureName);
+			createFeatureChoiceControl(rule, context, featureName, choiceKey).appendTo(parent);
+		});
 	}
 
 	function syncTalentTreeLevel() {
@@ -345,11 +952,19 @@ $(function () {
 
 	function renderFeatBoonDescriptions(descriptions) {
 		$("#page1 .feat-boon-slots input[name^='feat-slot-'], #page1 .feat-boon-slots input[name^='boon-slot-']").each(function () {
+			const featureName = $(this).val().trim();
 			const description = (descriptions[this.name] || []).join(" ");
-			$(this).closest(".ability-choice-slot").find(".feature-description")
-				.text(description)
-				.prop("hidden", description === "");
-			$(this).closest(".ability-choice-slot").toggleClass("has-description", description !== "");
+			const descriptionBox = $(this).closest(".ability-choice-slot").find(".feature-description")
+				.text(description);
+			renderFeatureChoiceControls({
+				scope: "feat",
+				owner: featureName,
+				level: 0,
+				choiceInstanceKey: "feat:" + this.name,
+			}, featureName, descriptionBox);
+			const hasDescription = description !== "" || descriptionBox.children(".feature-choice-control").length > 0;
+			descriptionBox.prop("hidden", !hasDescription);
+			$(this).closest(".ability-choice-slot").toggleClass("has-description", hasDescription);
 		});
 	}
 
@@ -380,7 +995,10 @@ $(function () {
 		localStorage.removeItem(mentorRoleStorageKey);
 		localStorage.removeItem(mentorSpellStorageKey);
 		localStorage.removeItem(attackBonusBaseStorageKey);
+		localStorage.removeItem(skillChoiceStorageKey);
+		localStorage.removeItem(manualSkillProficiencyStorageKey);
 		localStorage.removeItem(fightingStyleStorageKey);
+		localStorage.removeItem(featureChoiceStorageKey);
 		localStorage.removeItem("page1_manualAttunementSlots");
 		localStorage.removeItem(maxHpStorageKey);
 		localStorage.removeItem("page1_racialProficiencies");
@@ -398,6 +1016,35 @@ $(function () {
 		: JSON.parse(storedBaseSpeedManual);
 	let raceEffects = {};
 	let characterEffects = {};
+	const skillChoiceStorageKey = "page1_skillChoices";
+	const manualSkillProficiencyStorageKey = "page1_manualSkillProficiencies";
+	let skillChoices = {};
+	let skillChoiceEditMode = false;
+	let manualSkillProficiencies = null;
+	const storedSkillChoices = localStorage.getItem(skillChoiceStorageKey);
+	if (storedSkillChoices) {
+		try {
+			const parsedSkillChoices = JSON.parse(storedSkillChoices);
+			if (parsedSkillChoices && typeof parsedSkillChoices === "object" && !Array.isArray(parsedSkillChoices)) {
+				skillChoices = parsedSkillChoices;
+			}
+		} catch (error) {
+			console.error("Unable to restore skill choices.", error);
+		}
+	}
+	const storedManualSkillProficiencies = localStorage.getItem(manualSkillProficiencyStorageKey);
+	if (storedManualSkillProficiencies) {
+		try {
+			const parsedManualSkillProficiencies = JSON.parse(storedManualSkillProficiencies);
+			if (Array.isArray(parsedManualSkillProficiencies)) {
+				manualSkillProficiencies = parsedManualSkillProficiencies.filter(function (skillName) {
+					return typeof skillName === "string";
+				});
+			}
+		} catch (error) {
+			console.error("Unable to restore manual skill proficiencies.", error);
+		}
+	}
 	const abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
 	const pointBuyCosts = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
 	const characterFeatRewardLevels = [1, 3, 6, 9, 12, 15, 18];
@@ -1338,6 +1985,286 @@ $(function () {
 		updatePassivePerception();
 	}
 
+	const classSkillChoices = {
+		Barbarian: { count: 2, options: ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"] },
+		Bard: { count: 3, options: "all" },
+		Cleric: { count: 2, options: ["History", "Insight", "Medicine", "Persuasion", "Religion"] },
+		Druid: { count: 2, options: ["Animal Handling", "Arcana", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"] },
+		Fighter: { count: 2, options: ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"] },
+		Monk: { count: 2, options: ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"] },
+		Paladin: { count: 2, options: ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"] },
+		Ranger: { count: 3, options: ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"] },
+		Rogue: { count: 4, options: ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"] },
+		Sorcerer: { count: 2, options: ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"] },
+		Warlock: { count: 2, options: ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"] },
+		Wizard: { count: 2, options: ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"] },
+		Artificer: { count: 2, options: ["Arcana", "History", "Investigation", "Medicine", "Nature", "Perception", "Sleight of Hand"] },
+	};
+	const druidSkillChoices = ["Animal Handling", "Arcana", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"];
+	const allSkillNames = $("#page1 .skills ul li").map(function () {
+		return $(this).find("input[type='checkbox']").attr("name").replace(/-prof$/, "");
+	}).get();
+
+	function addSkillChoiceDefinition(definitions, type, key, label, count, options, gainsProficiency) {
+		const normalizedOptions = options === "all"
+			? allSkillNames.slice()
+			: options === "proficient"
+				? "proficient"
+				: options.slice();
+		if ((Array.isArray(normalizedOptions) && normalizedOptions.length === 0) || count < 1) {
+			return;
+		}
+		definitions[type].push({
+			key: key,
+			label: label,
+			count: count,
+			options: normalizedOptions,
+			gainsProficiency: !!gainsProficiency,
+		});
+	}
+
+	function getSkillChoiceDefinitions() {
+		const definitions = { proficiency: [], expertise: [] };
+		$("#page1 .class-pair").each(function (pairIndex) {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			if (!className || !Number.isInteger(level) || level < 1 || level > 20) {
+				return;
+			}
+			const classChoices = classSkillChoices[className];
+			if (classChoices) {
+				addSkillChoiceDefinition(
+					definitions,
+					"proficiency",
+					"class-" + pairIndex + "-skills",
+					className + " skills",
+					classChoices.count,
+					classChoices.options,
+					true
+				);
+			}
+			if (className === "Bard" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "expertise", "class-" + pairIndex + "-expertise-1", "Bard Expertise", 2, "proficient", false);
+			}
+			if (className === "Bard" && level >= 10) {
+				addSkillChoiceDefinition(definitions, "expertise", "class-" + pairIndex + "-expertise-2", "Additional Bard Expertise", 2, "proficient", false);
+			}
+			if (className === "Rogue" && level >= 1) {
+				addSkillChoiceDefinition(definitions, "expertise", "class-" + pairIndex + "-expertise-1", "Rogue Expertise", 2, "proficient", false);
+			}
+			if (className === "Rogue" && level >= 6) {
+				addSkillChoiceDefinition(definitions, "expertise", "class-" + pairIndex + "-expertise-2", "Additional Rogue Expertise", 2, "proficient", false);
+			}
+			if (className === "Ranger" && level >= 1) {
+				addSkillChoiceDefinition(definitions, "expertise", "class-" + pairIndex + "-canny", "Deft Explorer (Canny) Expertise", 1, "all", true);
+			}
+
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			if (subclassName === "College of Lore" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-lore", "College of Lore Bonus Proficiencies", 3, "all", true);
+			} else if (subclassName === "Nature Domain" && level >= 1) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-nature-domain", "Nature Domain Druid Skill", 1, druidSkillChoices, true);
+			} else if (subclassName === "Arcane Archer" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-arcane-archer", "Arcane Archer Lore Skill", 1, ["Arcana", "Nature"], true);
+			} else if (subclassName === "Knowledge Domain" && level >= 1) {
+				addSkillChoiceDefinition(definitions, "expertise", "subclass-" + pairIndex + "-knowledge-domain", "Knowledge Domain Expertise", 2, ["Arcana", "History", "Nature", "Religion"], true);
+			} else if (subclassName === "Cavalier" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-cavalier", "Cavalier Bonus Proficiency", 1, ["Animal Handling", "History"], true);
+			} else if (subclassName === "Fey Wanderer" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-fey-wanderer", "Otherworldly Glamour", 1, ["Deception", "Performance", "Persuasion"], true);
+			} else if (subclassName === "Samurai" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-samurai", "Samurai Bonus Proficiency", 1, ["History", "Insight", "Performance", "Persuasion"], true);
+			} else if (subclassName === "Purple Dragon Knight" && level >= 3) {
+				addSkillChoiceDefinition(definitions, "proficiency", "subclass-" + pairIndex + "-purple-dragon-knight", "Purple Dragon Knight Bonus Proficiency", 1, ["Animal Handling", "Insight", "Performance", "Persuasion"], true);
+			}
+		});
+
+		if (isMentorEnabled()) {
+			const mentorType = $("#page1 [name='mentor-type']").val();
+			if (mentorType === "Expert") {
+				addSkillChoiceDefinition(definitions, "proficiency", "mentor-expert-skills", "Expert Mentor skill proficiencies", 5, "all", true);
+			} else if (mentorType === "Spellcaster") {
+				addSkillChoiceDefinition(definitions, "proficiency", "mentor-spellcaster-skills", "Spellcaster Mentor skill proficiencies", 2, ["Arcana", "History", "Insight", "Investigation", "Medicine", "Performance", "Persuasion", "Religion"], true);
+			} else if (mentorType === "Warrior") {
+				addSkillChoiceDefinition(definitions, "proficiency", "mentor-warrior-skills", "Warrior Mentor skill proficiencies", 2, ["Acrobatics", "Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], true);
+			}
+		}
+
+		const raceName = $("#page1 [name='race']").val().trim();
+		const raceFamily = racialFeatAliases[raceName.toLowerCase()] || raceName;
+		const racialSkillChoices = {
+			"Half-Elf": { count: 2, options: "all" },
+			"Variant Human": { count: 1, options: "all" },
+			"Centaur": { count: 1, options: ["Animal Handling", "Survival"] },
+			"Githyanki": { count: 1, options: "all" },
+			"Kender": { count: 1, options: ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"] },
+			"Kenku": { count: 2, options: "all" },
+			"Leonin": { count: 1, options: ["Athletics", "Intimidation", "Perception", "Survival"] },
+			"Lizardfolk": { count: 2, options: ["Animal Handling", "Nature", "Perception", "Stealth", "Survival"] },
+			"Shifter": { count: 1, options: ["Athletics", "Acrobatics", "Intimidation", "Survival"] },
+			"Vedalken": { count: 1, options: "all" },
+			"Warforged": { count: 1, options: "all" },
+		};
+		const racialChoice = racialSkillChoices[raceName] || racialSkillChoices[raceFamily];
+		if (racialChoice) {
+			addSkillChoiceDefinition(definitions, "proficiency", "race-" + raceName.toLowerCase().replace(/[^a-z0-9]+/g, "-"), raceName + " skill proficiencies", racialChoice.count, racialChoice.options, true);
+		}
+
+		$("#page1 [name^='feat-slot-']").each(function () {
+			const featName = getBaseSelectedFeatureName($(this).val()).toLowerCase();
+			if (featName === "skill expert" || featName === "prodigy") {
+				const slotKey = this.name;
+				addSkillChoiceDefinition(definitions, "proficiency", "feat-" + slotKey + "-skill", featName + " skill proficiency", 1, "all", true);
+				addSkillChoiceDefinition(definitions, "expertise", "feat-" + slotKey + "-expertise", featName + " Expertise", 1, "proficient", false);
+			} else if (featName === "squat nimbleness") {
+				addSkillChoiceDefinition(definitions, "proficiency", "feat-" + this.name + "-skill", "Squat Nimbleness skill proficiency", 1, ["Athletics", "Acrobatics"], true);
+			}
+		});
+		return definitions;
+	}
+
+	function getManualSkillProficiencies(definitions, fixedSkills) {
+		if (manualSkillProficiencies === null) {
+			const generatedSkills = (fixedSkills || []).slice();
+			(definitions.proficiency || []).forEach(function (definition) {
+				if (definition.gainsProficiency) {
+					generatedSkills.push.apply(generatedSkills, getValidSkillChoiceValues(definition));
+				}
+			});
+			(definitions.expertise || []).forEach(function (definition) {
+				if (definition.gainsProficiency) {
+					generatedSkills.push.apply(generatedSkills, getValidSkillChoiceValues(definition));
+				}
+			});
+			manualSkillProficiencies = $("#page1 .skills input[type='checkbox']").map(function () {
+				const skillName = this.name.replace(/-prof$/, "");
+				return this.checked && generatedSkills.indexOf(skillName) === -1 ? skillName : null;
+			}).get();
+			localStorage.setItem(manualSkillProficiencyStorageKey, JSON.stringify(manualSkillProficiencies));
+		}
+
+		$("#page1 .skills input[type='checkbox']").each(function () {
+			const skillName = this.name.replace(/-prof$/, "");
+			$(this).data("manualRacialProficiency", manualSkillProficiencies.indexOf(skillName) !== -1);
+		});
+		return manualSkillProficiencies.slice();
+	}
+
+	function getValidSkillChoiceValues(definition, allowedOptions) {
+		const selected = Array.isArray(skillChoices[definition.key]) ? skillChoices[definition.key] : [];
+		const options = allowedOptions || (definition.options === "proficient" ? allSkillNames : definition.options);
+		return selected.slice(0, definition.count).map(function (skillName) {
+			return options.indexOf(skillName) !== -1 ? skillName : "";
+		});
+	}
+
+	function getSkillChoiceEffects(definitions, fixedSkills) {
+		const effects = { skills: [], expertiseSkills: [] };
+		const manualSkills = getManualSkillProficiencies(definitions, fixedSkills);
+		const proficiencyGroups = definitions.proficiency;
+		proficiencyGroups.forEach(function (definition) {
+			if (!definition.gainsProficiency) {
+				return;
+			}
+			getValidSkillChoiceValues(definition).forEach(function (skillName) {
+				if (skillName) {
+					effects.skills.push(skillName);
+				}
+			});
+		});
+		const proficientSkills = manualSkills.concat(fixedSkills || [], effects.skills)
+			.filter(function (skillName, index, skills) {
+				return allSkillNames.indexOf(skillName) !== -1 && skills.indexOf(skillName) === index;
+			});
+		definitions.expertise.forEach(function (definition) {
+			const availableExpertiseSkills = definition.options === "proficient"
+				? proficientSkills
+				: definition.options;
+			getValidSkillChoiceValues(definition, definition.gainsProficiency ? definition.options : availableExpertiseSkills).forEach(function (skillName) {
+				if (!skillName) {
+					return;
+				}
+				if (!definition.gainsProficiency && proficientSkills.indexOf(skillName) === -1) {
+					return;
+				}
+				if (definition.gainsProficiency) {
+					effects.skills.push(skillName);
+					proficientSkills.push(skillName);
+				}
+				effects.expertiseSkills.push(skillName);
+			});
+		});
+		return {
+			skills: effects.skills.filter(function (skillName, index, skills) {
+				return skills.indexOf(skillName) === index;
+			}),
+			expertiseSkills: effects.expertiseSkills.filter(function (skillName, index, skills) {
+				return skills.indexOf(skillName) === index;
+			}),
+			proficientSkills: proficientSkills,
+		};
+	}
+
+	function renderSkillChoiceControls(definitions, proficientSkills) {
+		const proficiencyList = $("#page1 #skill-choice-list").empty();
+		const expertiseList = $("#page1 #skill-expertise-list").empty();
+		const allDefinitions = definitions.proficiency.concat(definitions.expertise);
+		const hasDefinitions = allDefinitions.length > 0;
+		const hasSelectedChoices = allDefinitions.some(function (definition) {
+			return getValidSkillChoiceValues(definition).some(Boolean);
+		});
+		$("#page1 .skill-choice-controls").prop("hidden", !hasDefinitions);
+		$("#page1 #skill-choice-edit")
+			.text(skillChoiceEditMode ? "Done" : "Edit choices")
+			.prop("hidden", !hasSelectedChoices);
+		function renderGroups(groups, container, type) {
+			groups.forEach(function (definition) {
+				const group = $("<div>", { class: "skill-choice-group" }).appendTo(container);
+				$("<label>", { text: definition.label }).appendTo(group);
+				const availableOptions = definition.options === "proficient"
+					? proficientSkills
+					: definition.options;
+				const selectedValues = getValidSkillChoiceValues(definition, availableOptions);
+				for (let index = 0; index < definition.count; index++) {
+					if (!skillChoiceEditMode && selectedValues[index]) {
+						continue;
+					}
+					const select = $("<select>", {
+						"data-skill-choice-key": definition.key,
+						"data-skill-choice-type": type,
+						"data-skill-choice-index": index,
+						"aria-label": definition.label + " " + (index + 1),
+					}).appendTo(group);
+					$("<option>", { value: "", text: "Choose skill" }).appendTo(select);
+					availableOptions.forEach(function (skillName) {
+						const duplicate = selectedValues.some(function (selectedSkill, selectedIndex) {
+							return selectedIndex !== index && selectedSkill === skillName;
+						});
+						$("<option>", { value: skillName, text: skillName })
+							.prop("disabled", duplicate)
+							.appendTo(select);
+					});
+					select.val(selectedValues[index] || "");
+				}
+				if (group.find("select").length === 0) {
+					group.remove();
+				} else {
+					const selectCount = group.find("select").length;
+					const availableWidth = group.width();
+					const columnCount = Math.max(1, Math.min(selectCount, Math.floor(availableWidth / 70)));
+					group.css("grid-template-columns", "repeat(" + columnCount + ", minmax(0, 1fr))");
+				}
+			});
+		}
+		renderGroups(definitions.proficiency, proficiencyList, "proficiency");
+		renderGroups(definitions.expertise, expertiseList, "expertise");
+		const expertiseSkills = characterEffects.expertiseSkills || [];
+		$("#page1 .skills ul li").each(function () {
+			const skillName = $(this).find("input[type='checkbox']").attr("name").replace(/-prof$/, "");
+			$(this).toggleClass("skill-expertise", expertiseSkills.indexOf(skillName) !== -1);
+		});
+	}
+
 	function getRollAdvantageReasons(effects, rollType, rollName, abilityName) {
 		return getRollEffectReasons(effects, "advantage", rollType, rollName, abilityName)
 			.concat(rollType === "check"
@@ -1536,15 +2463,32 @@ $(function () {
 			return;
 		}
 
+		const armorType = $("#page1 [name='armor-type']").val();
+		const isUnarmored = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(armorType) !== -1;
 		const speedBonus = (characterEffects.speedBonuses || []).reduce(function (total, bonus) {
 			const meetsArmorRequirement = !bonus.notWearingHeavyArmor || !armor.heavy;
-			const armorType = $("#page1 [name='armor-type']").val();
-			const isUnarmored = ["unarmored", "unarmored-barbarian", "unarmored-monk"].indexOf(armorType) !== -1;
 			const meetsUnarmoredRequirement = !bonus.unarmored || isUnarmored;
 			const meetsShieldRequirement = !bonus.noShield || !$("#page1 [name='armor-shield']").is(":checked");
 			return total + (meetsArmorRequirement && meetsUnarmoredRequirement && meetsShieldRequirement ? bonus.value : 0);
 		}, 0);
-		speedInput.val(speed + speedBonus - heavyArmorSpeedPenalty);
+		let monkLevel = 0;
+		$("#page1 .class-pair").each(function () {
+			if ($(this).find(".class-name-input").val().trim() === "Monk") {
+				const level = Number($(this).find(".class-level-input").val());
+				if (Number.isInteger(level) && level > 0) {
+					monkLevel += level;
+				}
+			}
+		});
+		monkLevel = Math.min(20, monkLevel);
+		const monkMovementBonus = monkLevel >= 18 ? 30
+			: monkLevel >= 14 ? 25
+				: monkLevel >= 10 ? 20
+					: monkLevel >= 6 ? 15
+						: monkLevel >= 2 ? 10
+							: 0;
+		const hasShield = $("#page1 [name='armor-shield']").is(":checked");
+		speedInput.val(speed + speedBonus + (isUnarmored && !hasShield ? monkMovementBonus : 0) - heavyArmorSpeedPenalty);
 	}
 
 	function updateAttunementSlots() {
@@ -1607,7 +2551,7 @@ $(function () {
 	}
 
 	function isGestaltEnabled() {
-		return $("#page1 [name='gestalt-enabled']").is(":checked");
+		return isMentorEnabled();
 	}
 
 	function isSinglePointClassAsi(level) {
@@ -1706,7 +2650,7 @@ $(function () {
 				+ (mentorLevel >= 9 ? 1 : 0)
 				+ (mentorLevel >= 13 ? 1 : 0)
 				+ (mentorLevel >= 17 ? 1 : 0);
-		$("#page1 [name^='magic-infusion-']").each(function (index) {
+		$("#page1 input[name^='magic-infusion-']:not([name^='magic-infusion-item-'])").each(function (index) {
 			const unlocked = index < infusionCount;
 			if (!unlocked && magicItemInput === this) {
 				closeMagicItemSuggestions();
@@ -1721,6 +2665,19 @@ $(function () {
 				$(this).removeAttr("data-suggestion-list").attr("aria-readonly", "true");
 			}
 		});
+		$("#page1 [name^='magic-infusion-item-']").each(function (index) {
+			const unlocked = index < infusionCount;
+			$(this)
+				.prop("readOnly", !unlocked)
+				.toggleClass("locked-magic-item-slot", !unlocked)
+				.attr("placeholder", unlocked ? "Infused item " + (index + 1) : "Unlocks with infusion " + (index + 1));
+			if (unlocked) {
+				$(this).removeAttr("aria-readonly");
+			}
+		});
+		$("#page1 #expert-infusion-limit").text(
+			infusionCount + " infusion" + (infusionCount === 1 ? "" : "s") + " known; up to " + infusionCount + " item" + (infusionCount === 1 ? "" : "s") + " can be infused."
+		);
 	}
 
 	function getGestaltFeatureName(feature) {
@@ -3814,11 +4771,6 @@ $(function () {
 		],
 		Monk: [
 			{ level: 1, effects: { classArmor: { base: 10, dexterity: true, ability: "Wisdom", requiresNoShield: true } } },
-			{ level: 2, effects: { speedBonuses: [{ value: 10, unarmored: true, noShield: true }] } },
-			{ level: 6, effects: { speedBonuses: [{ value: 5, unarmored: true, noShield: true }] } },
-			{ level: 10, effects: { speedBonuses: [{ value: 5, unarmored: true, noShield: true }] } },
-			{ level: 14, effects: { speedBonuses: [{ value: 5, unarmored: true, noShield: true }] } },
-			{ level: 18, effects: { speedBonuses: [{ value: 5, unarmored: true, noShield: true }] } },
 			{ level: 14, effects: { savingThrows: ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"] } },
 			{ level: 10, effects: { damageImmunities: ["Poison"], conditionImmunities: ["Poisoned"] } },
 		],
@@ -3913,6 +4865,9 @@ $(function () {
 			{ level: 3, effects: { choiceNotes: ["Choose one proficiency in History, Insight, Performance, Persuasion, or a language"] } },
 			{ level: 7, effects: { savingThrows: ["Wisdom"], skills: ["Persuasion"], checkBonuses: ["Add your Wisdom modifier to Persuasion checks"] } },
 		],
+		"Purple Dragon Knight": [
+			{ level: 7, effects: { skills: ["Persuasion"] } },
+		],
 		"Way of Mercy": [
 			{ level: 3, effects: { skills: ["Insight", "Medicine"], toolProficiencies: ["Herbalism kit"] } },
 		],
@@ -3964,7 +4919,7 @@ $(function () {
 			{ level: 7, effects: { checkBonuses: ["Add 1d6 to saving throws or ability checks contested by the target of Slayer's Prey (Supernatural Defense)"] } },
 		],
 		"Scout": [
-			{ level: 3, effects: { skills: ["Nature", "Survival"], choiceNotes: ["Gain Expertise in Nature and Survival; choose these proficiencies if not already proficient"] } },
+			{ level: 3, effects: { skills: ["Nature", "Survival"], expertiseSkills: ["Nature", "Survival"] } },
 		],
 		"Assassin": [
 			{ level: 3, effects: { toolProficiencies: ["Disguise kit", "Poisoner's kit"] } },
@@ -4226,6 +5181,7 @@ $(function () {
 	function createEmptyEffects() {
 		return {
 			skills: [],
+			expertiseSkills: [],
 			languages: [],
 			armorProficiencies: [],
 			weaponProficiencies: [],
@@ -5363,6 +6319,12 @@ $(function () {
 		mergeEffects(combinedEffects, getClassModifierEffects());
 		mergeEffects(combinedEffects, getSelectedFeatBoonTalentEffects());
 		mergeEffects(combinedEffects, getMentorCombatEffects());
+		const skillChoiceDefinitions = getSkillChoiceDefinitions();
+		const skillChoiceEffects = getSkillChoiceEffects(skillChoiceDefinitions, combinedEffects.skills);
+		mergeEffects(combinedEffects, {
+			skills: skillChoiceEffects.skills,
+			expertiseSkills: skillChoiceEffects.expertiseSkills,
+		});
 		Object.keys(combinedEffects).forEach(function (effectName) {
 			if (Array.isArray(combinedEffects[effectName]) && effectName !== "speedBonuses") {
 				combinedEffects[effectName] = combinedEffects[effectName].filter(function (value, index, values) {
@@ -5373,8 +6335,8 @@ $(function () {
 				});
 			}
 		});
-		console.log("Monk speed bonuses:", combinedEffects.speedBonuses);
 		characterEffects = combinedEffects;
+		renderSkillChoiceControls(skillChoiceDefinitions, skillChoiceEffects.proficientSkills);
 		const mentorCombatBonuses = [];
 		if (isMentorEnabled()
 			&& $("#page1 [name='mentor-type']").val() === "Warrior"
@@ -5427,6 +6389,21 @@ $(function () {
 		const proficiencySections = proficiencyCategories.map(function (section) {
 			return section.label + ": " + (section.entries.length > 0 ? section.entries.join(", ") : "None");
 		});
+		const selectedSkillChoices = [];
+		[
+			{ type: "proficiency", label: "Skill proficiencies" },
+			{ type: "expertise", label: "Skill Expertise" },
+		].forEach(function (choiceType) {
+			skillChoiceDefinitions[choiceType.type].forEach(function (definition) {
+				const choices = getValidSkillChoiceValues(definition).filter(Boolean);
+				if (choices.length > 0) {
+					selectedSkillChoices.push(definition.label + ": " + choices.join(", "));
+				}
+			});
+		});
+		if (selectedSkillChoices.length > 0) {
+			proficiencySections.push("Skill choices: " + selectedSkillChoices.join("; "));
+		}
 		if (choiceNotes.length > 0) {
 			proficiencySections.push("Other: " + choiceNotes.join(", "));
 		}
@@ -5837,6 +6814,24 @@ $(function () {
 			if (currentSection === "Subclass Features:" && choiceControls[featureKey] && choiceControls[featureKey].length) {
 				choiceControls[featureKey].appendTo(entry);
 				delete choiceControls[featureKey];
+			}
+			const choiceScope = currentSection === "Race Features:"
+				? "race"
+				: currentSection === "Class Features:"
+					? "class"
+					: currentSection === "Subclass Features:"
+						? "subclass"
+						: "";
+			if (choiceScope) {
+				renderFeatureChoiceControls({
+					scope: choiceScope,
+					owner: choiceScope === "race"
+						? $("#page1 [name='race']").val().trim()
+						: choiceScope === "class"
+							? currentClass
+							: currentSubclass,
+					level: trackerLevel,
+				}, line, entry);
 			}
 			lastEntry = entry;
 		});
@@ -6842,6 +7837,36 @@ $(function () {
 		localStorage.setItem(abilityChoiceStorageKey, JSON.stringify(selectedAbilityChoices));
 		updateFeatures();
 	});
+	$("#page1").on("change", "[data-feature-choice-key]", function () {
+		const choiceKey = $(this).attr("data-feature-choice-key");
+		const choiceIndex = Number($(this).attr("data-feature-choice-index"));
+		if (!Number.isInteger(choiceIndex) || choiceIndex < 0) {
+			return;
+		}
+		const selectedValues = Array.isArray(featureChoiceSelections[choiceKey])
+			? featureChoiceSelections[choiceKey]
+			: [];
+		selectedValues[choiceIndex] = $(this).val();
+		featureChoiceSelections[choiceKey] = selectedValues;
+		localStorage.setItem(featureChoiceStorageKey, JSON.stringify(featureChoiceSelections));
+		updateFeatures();
+	});
+	$("#page1").on("change", "[data-skill-choice-key]", function () {
+		const choiceKey = $(this).attr("data-skill-choice-key");
+		const choiceIndex = Number($(this).attr("data-skill-choice-index"));
+		if (!Number.isInteger(choiceIndex) || choiceIndex < 0) {
+			return;
+		}
+		const selectedValues = Array.isArray(skillChoices[choiceKey]) ? skillChoices[choiceKey] : [];
+		selectedValues[choiceIndex] = $(this).val();
+		skillChoices[choiceKey] = selectedValues;
+		localStorage.setItem(skillChoiceStorageKey, JSON.stringify(skillChoices));
+		updateFeatures();
+	});
+	$("#page1").on("click", "#skill-choice-edit", function () {
+		skillChoiceEditMode = !skillChoiceEditMode;
+		updateFeatures();
+	});
 	$("#page1").on("change", "[data-fighting-style-key]", function () {
 		const choiceKey = $(this).attr("data-fighting-style-key");
 		const selectedStyle = $(this).val();
@@ -6854,9 +7879,6 @@ $(function () {
 		updateFeatures();
 	});
 	$("#page1 [name='mentor-enabled'], #page1 [name='mentor-type']").on("input change", function () {
-		updateFeatures();
-	});
-	$("#page1 [name='gestalt-enabled']").on("input change", function () {
 		updateProficiencyBonus();
 		updateFeatures();
 	});
@@ -7042,7 +8064,16 @@ $(function () {
 
 	$("#page1 .saves").on("change", "input[type='checkbox']", updateSavingThrows);
 	$("#page1 .skills").on("change", "input[type='checkbox']", function () {
+		const skillName = this.name.replace(/-prof$/, "");
+		const manualSkills = getManualSkillProficiencies(getSkillChoiceDefinitions(), characterEffects.skills);
+		manualSkillProficiencies = manualSkills.filter(function (name) {
+			return name !== skillName;
+		});
+		if (this.checked) {
+			manualSkillProficiencies.push(skillName);
+		}
 		$(this).data("manualRacialProficiency", this.checked);
+		localStorage.setItem(manualSkillProficiencyStorageKey, JSON.stringify(manualSkillProficiencies));
 		updateCharacterEffects(raceEffects);
 	});
 	$("#page1 .class-level-pairs").on("input change", ".class-name-input", function () {

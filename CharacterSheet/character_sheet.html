@@ -25,7 +25,6 @@
       <div class="character-header-controls">
         <button id="reset-character" type="button">Reset Character</button>
         <label class="mentor-toggle"><input name="mentor-enabled" type="checkbox" /> Mentor</label>
-        <label class="mentor-toggle"><input name="gestalt-enabled" type="checkbox" /> Gestalt</label>
       </div>
       <select class="mentor-type-select" name="mentor-type" aria-label="Mentor type" hidden>
         <option value="">Choose mentor</option>
@@ -362,6 +361,12 @@
               Skills
             </div>
           </div>
+          <div class="skill-choice-controls box">
+            <strong>Skill choices</strong>
+            <button id="skill-choice-edit" type="button" hidden>Edit choices</button>
+            <div id="skill-choice-list"></div>
+            <div id="skill-expertise-list"></div>
+          </div>
         </div>
       </section>
       <div class="passive-perception box">
@@ -518,7 +523,7 @@
                   Weapon/Cantrip
                 </th>
                 <th>
-                  Hit
+                  Hit/DC
                 </th>
                 <th>
                   Damage/Type
@@ -528,7 +533,9 @@
             <tbody>
               <tr>
                 <td>
-                  <input name="atkname1" type="text" />
+                  <select name="atkname1" aria-label="Weapon or cantrip 1">
+                    <option value="">Choose</option>
+                  </select>
                 </td>
                 <td>
                   <input name="atkbonus1" type="text" />
@@ -539,7 +546,9 @@
               </tr>
               <tr>
                 <td>
-                  <input name="atkname2" type="text" />
+                  <select name="atkname2" aria-label="Weapon or cantrip 2">
+                    <option value="">Choose</option>
+                  </select>
                 </td>
                 <td>
                   <input name="atkbonus2" type="text" />
@@ -550,7 +559,9 @@
               </tr>
               <tr>
                 <td>
-                  <input name="atkname3" type="text" />
+                  <select name="atkname3" aria-label="Weapon or cantrip 3">
+                    <option value="">Choose</option>
+                  </select>
                 </td>
                 <td>
                   <input name="atkbonus3" type="text" />
@@ -561,7 +572,9 @@
               </tr>
                <tr>
                 <td>
-                  <input name="atkname4" type="text" />
+                  <select name="atkname4" aria-label="Weapon or cantrip 4">
+                    <option value="">Choose</option>
+                  </select>
                 </td>
                 <td>
                   <input name="atkbonus4" type="text" />
@@ -572,7 +585,9 @@
               </tr>
                <tr>
                 <td>
-                  <input name="atkname5" type="text" />
+                  <select name="atkname5" aria-label="Weapon or cantrip 5">
+                    <option value="">Choose</option>
+                  </select>
                 </td>
                 <td>
                   <input name="atkbonus5" type="text" />
@@ -935,11 +950,19 @@
             </div>
             <div class="magic-item-category">
               <label>Infusions</label>
+              <span id="expert-infusion-limit" class="expert-infusion-limit" aria-live="polite"></span>
               <div class="magic-item-slots">
                 <input name="magic-infusion-1" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 3" />
                 <input name="magic-infusion-2" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 9" />
                 <input name="magic-infusion-3" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 13" />
                 <input name="magic-infusion-4" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 17" />
+              </div>
+              <label class="infused-item-label">Infused item for each known infusion</label>
+              <div class="magic-item-slots">
+                <input name="magic-infusion-item-1" autocomplete="off" aria-label="Item infused with infusion 1" placeholder="Infused item 1" />
+                <input name="magic-infusion-item-2" autocomplete="off" aria-label="Item infused with infusion 2" placeholder="Infused item 2" />
+                <input name="magic-infusion-item-3" autocomplete="off" aria-label="Item infused with infusion 3" placeholder="Infused item 3" />
+                <input name="magic-infusion-item-4" autocomplete="off" aria-label="Item infused with infusion 4" placeholder="Infused item 4" />
               </div>
             </div>
           </div>
