@@ -39,17 +39,146 @@ $(function () {
 		{ name: "Longbow", group: "Martial ranged weapons", damage: "1d8 piercing", properties: ["Ammunition (150/600)", "Heavy", "Two-handed"] },
 		{ name: "Net", group: "Martial ranged weapons", damage: "-", properties: ["Special", "Thrown (5/15)"] },
 	];
-	const srdCantrips = [
-		"Acid Splash", "Blade Ward", "Chill Touch", "Dancing Lights", "Druidcraft",
-		"Eldritch Blast", "Fire Bolt", "Friends", "Guidance", "Light", "Mage Hand",
-		"Mending", "Message", "Minor Illusion", "Poison Spray", "Prestidigitation",
-		"Produce Flame", "Ray of Frost", "Resistance", "Sacred Flame", "Shillelagh",
-		"Shocking Grasp", "Spare the Dying", "Thaumaturgy", "Thorn Whip",
-		"True Strike", "Vicious Mockery",
-	];
+	const cantripAttackRules = {
+		"Acid Splash": { saveAbility: "Dexterity", die: "d6", damageType: "acid", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Wizard"] },
+		"Booming Blade": { weaponAttack: true, damageType: "thunder", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"] },
+		"Chill Touch": { attack: true, die: "d8", damageType: "necrotic", scalesWithLevel: true, classes: ["Sorcerer", "Warlock", "Wizard"] },
+		"Create Bonfire": { saveAbility: "Dexterity", die: "d8", damageType: "fire", scalesWithLevel: true, classes: ["Artificer", "Druid", "Sorcerer", "Warlock", "Wizard"] },
+		"Eldritch Blast": { attack: true, die: "d10", damageType: "force", beams: true, classes: ["Warlock"] },
+		"Fire Bolt": { attack: true, die: "d10", damageType: "fire", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Wizard"] },
+		"Frostbite": { saveAbility: "Constitution", die: "d6", damageType: "cold", scalesWithLevel: true, classes: ["Artificer", "Bard", "Druid", "Sorcerer", "Warlock", "Wizard"] },
+		"Green-Flame Blade": { weaponAttack: true, damageType: "fire", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"] },
+		"Infestation": { saveAbility: "Constitution", die: "d6", damageType: "poison", scalesWithLevel: true, classes: ["Druid", "Sorcerer", "Warlock", "Wizard"] },
+		"Lightning Lure": { saveAbility: "Strength", die: "d8", damageType: "lightning", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"] },
+		"Magic Stone": { attack: true, die: "d6", damageType: "bludgeoning", addAbilityDamage: true, classes: ["Artificer", "Druid", "Warlock"] },
+		"Mind Sliver": { saveAbility: "Intelligence", die: "d6", damageType: "psychic", scalesWithLevel: true, classes: ["Sorcerer", "Warlock", "Wizard"] },
+		"Poison Spray": { saveAbility: "Constitution", die: "d12", damageType: "poison", scalesWithLevel: true, classes: ["Artificer", "Druid", "Sorcerer", "Warlock", "Wizard"] },
+		"Produce Flame": { attack: true, die: "d8", damageType: "fire", scalesWithLevel: true, classes: ["Druid"] },
+		"Primal Savagery": { attack: true, die: "d10", damageType: "acid", scalesWithLevel: true, classes: ["Druid"] },
+		"Ray of Frost": { attack: true, die: "d8", damageType: "cold", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Wizard"] },
+		"Sacred Flame": { saveAbility: "Dexterity", die: "d8", damageType: "radiant", scalesWithLevel: true, classes: ["Cleric"] },
+		"Sapping Sting": { saveAbility: "Constitution", die: "d4", damageType: "necrotic", scalesWithLevel: true, classes: ["Wizard"] },
+		"Shocking Grasp": { attack: true, die: "d8", damageType: "lightning", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Wizard"] },
+		"Sword Burst": { saveAbility: "Dexterity", die: "d6", damageType: "force", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"] },
+		"Thorn Whip": { attack: true, die: "d6", damageType: "piercing", classes: ["Artificer", "Druid", "Ranger"] },
+		"Thunderclap": { saveAbility: "Constitution", die: "d6", damageType: "thunder", scalesWithLevel: true, classes: ["Artificer", "Bard", "Druid", "Sorcerer", "Warlock", "Wizard"] },
+		"Toll the Dead": { saveAbility: "Wisdom", die: "d8", missingHitPointsDie: "d12", damageType: "necrotic", scalesWithLevel: true, classes: ["Cleric", "Warlock", "Wizard"] },
+		"Vicious Mockery": { saveAbility: "Wisdom", die: "d4", damageType: "psychic", scalesWithLevel: true, classes: ["Bard"] },
+		"Word of Radiance": { saveAbility: "Constitution", die: "d6", damageType: "radiant", scalesWithLevel: true, classes: ["Cleric"] },
+	};
+	const cantripAttackOptionPrefix = "__spellcantrip__:";
+	function getCantripRule(name) {
+		const normalizedName = String(name || "").trim().toLowerCase();
+		const cantripName = Object.keys(cantripAttackRules).find(function (candidate) {
+			return candidate.toLowerCase() === normalizedName;
+		});
+		return cantripName ? { name: cantripName, rule: cantripAttackRules[cantripName] } : null;
+	}
+
+	function parseCantripAttackOption(value) {
+		if (typeof value !== "string" || value.indexOf(cantripAttackOptionPrefix) !== 0) {
+			return null;
+		}
+		try {
+			const selection = JSON.parse(value.slice(cantripAttackOptionPrefix.length));
+			if (Array.isArray(selection) && selection.length >= 3
+				&& selection.every(function (part) { return typeof part === "string"; })) {
+				return { name: selection[0], sourceName: selection[1], ability: selection[2] };
+			}
+		} catch (error) {
+			console.error("Unable to restore saved cantrip attack choice.", error);
+		}
+		return null;
+	}
+
+	function parseSavedAttackName(inputName) {
+		const storedValue = localStorage.getItem("page1_" + inputName);
+		if (storedValue === null) {
+			return null;
+		}
+		try {
+			const parsedValue = JSON.parse(storedValue);
+			return typeof parsedValue === "string" ? parsedValue : null;
+		} catch (error) {
+			console.error("Unable to restore saved attack name for " + inputName + ".", error);
+			return null;
+		}
+	}
+
+	function getSrdSpellCatalog() {
+		if (!Array.isArray(window.srdSpellCatalog)) {
+			console.error("The SRD spell catalog did not load.");
+			return [];
+		}
+		return window.srdSpellCatalog.filter(function (spell) {
+			return spell
+				&& typeof spell.name === "string"
+				&& Number.isInteger(spell.level)
+				&& spell.level >= 0
+				&& spell.level <= 9
+				&& Array.isArray(spell.classes)
+				&& spell.classes.every(function (className) { return typeof className === "string"; });
+		});
+	}
+
+	function populateSrdSpellCatalogOptions() {
+		const spells = getSrdSpellCatalog();
+		$("#page1 [data-spell-catalog-level]").each(function () {
+			const level = Number($(this).attr("data-spell-catalog-level"));
+			if (!Number.isInteger(level) || level < 0 || level > 9) {
+				console.error("Unable to populate an SRD spell selector with an invalid level.");
+				return;
+			}
+			const select = $(this).empty();
+			$("<option>", {
+				value: "",
+				text: level === 0 ? "Add an SRD cantrip" : "Add an SRD spell",
+			}).appendTo(select);
+			spells.filter(function (spell) {
+				return spell.level === level;
+			}).forEach(function (spell) {
+				const sourceClasses = spell.classes.length > 0
+					? " — " + spell.classes.join(", ")
+					: "";
+				$("<option>", {
+					value: spell.name,
+					text: spell.name + sourceClasses,
+				}).appendTo(select);
+			});
+		});
+	}
+
+	function addSelectedSrdSpell(level, select) {
+		const spellName = $(select).val();
+		if (!spellName) {
+			return;
+		}
+		const spell = getSrdSpellCatalog().find(function (entry) {
+			return entry.level === level && entry.name === spellName;
+		});
+		if (!spell) {
+			console.error("The selected spell is not in the SRD catalog for level " + level + ".");
+			return;
+		}
+		const spellList = $("#page1 #spell-list-level-" + level);
+		if (spellList.length !== 1) {
+			console.error("Unable to find the spell list for level " + level + ".");
+			return;
+		}
+		const currentSpells = spellList.val().split(/\r?\n/);
+		if (currentSpells.some(function (name) { return name.trim().toLowerCase() === spell.name.toLowerCase(); })) {
+			$(select).val("");
+			return;
+		}
+		const currentValue = spellList.val().trimEnd();
+		spellList.val(currentValue ? currentValue + "\n" + spell.name : spell.name).trigger("input");
+		$(select).val("");
+	}
+
+	const initialSavedAttackNames = {};
 	const otherAttackNames = ["Beast Bite", "Beast Claws (two attacks)", "Beast Tail"];
 
-	function populateAttackChoices() {
+	function populateAttackChoices(knownCantrips) {
 		const attackSelects = $("#page1 select[name^='atkname']");
 		const savedAttackNames = {};
 		attackSelects.each(function () {
@@ -59,6 +188,7 @@ $(function () {
 			}
 			try {
 				savedAttackNames[this.name] = JSON.parse(storedValue);
+				initialSavedAttackNames[this.name] = savedAttackNames[this.name];
 			} catch (error) {
 				console.error("Unable to restore saved attack name for " + this.name + ".", error);
 			}
@@ -81,17 +211,6 @@ $(function () {
 				groups[weapon.group].appendChild(option);
 			});
 
-			const cantrips = document.createElement("optgroup");
-			cantrips.label = "SRD 5.1 cantrips";
-			srdCantrips.forEach(function (cantrip) {
-				const option = document.createElement("option");
-				option.value = cantrip;
-				option.textContent = cantrip;
-				option.dataset.attackType = "cantrip";
-				cantrips.appendChild(option);
-			});
-			select.appendChild(cantrips);
-
 			const otherAttacks = document.createElement("optgroup");
 			otherAttacks.label = "Other attacks";
 			otherAttackNames.forEach(function (name) {
@@ -102,9 +221,14 @@ $(function () {
 			});
 
 			const catalogNames = weaponCatalog.map(function (weapon) { return weapon.name; })
-				.concat(srdCantrips, otherAttackNames);
+				.concat(otherAttackNames);
 			const savedName = savedAttackNames[select.name];
-			if (typeof savedName === "string" && savedName !== "" && catalogNames.indexOf(savedName) === -1) {
+			const isKnownCantrip = !!getCantripRule(savedName) || !!parseCantripAttackOption(savedName)
+				|| (Array.isArray(knownCantrips) && knownCantrips.some(function (name) {
+					return name.toLowerCase() === String(savedName || "").trim().toLowerCase();
+				}));
+			if (typeof savedName === "string" && savedName !== ""
+				&& catalogNames.indexOf(savedName) === -1 && !isKnownCantrip) {
 				const legacyOption = document.createElement("option");
 				legacyOption.value = savedName;
 				legacyOption.textContent = savedName;
@@ -112,6 +236,9 @@ $(function () {
 			}
 			if (otherAttacks.children.length > 0) {
 				select.appendChild(otherAttacks);
+			}
+			if (typeof savedName === "string" && !isKnownCantrip) {
+				select.value = savedName;
 			}
 		});
 	}
@@ -236,13 +363,6 @@ $(function () {
 			}
 		}
 	}
-
-	populateAttackChoices();
-	$("#page1").saveMyForm(
-		{
-			loadInputs: true,
-		}
-	);
 
 	const talentStorageKey = "taoc_selected_talents";
 	const fightingStyleStorageKey = "page1_fightingStyleChoices";
@@ -668,7 +788,7 @@ $(function () {
 		{
 			id: "warlock-tome-cantrips", scope: "class", owner: "Warlock",
 			label: "Pact of the Tome cantrips", matches: function (name) { return name === "Pact Boon"; },
-			count: function (level) { return level >= 3 ? 3 : 0; }, options: srdCantrips,
+			count: function (level) { return level >= 3 ? 3 : 0; }, options: [],
 			visibleWhen: function () {
 				return (featureChoiceSelections["class:Warlock:warlock-pact-boon"] || []).indexOf("Pact of the Tome") !== -1;
 			},
@@ -746,7 +866,8 @@ $(function () {
 			id: "arcane-archer-cantrip", scope: "subclass", owner: "Arcane Archer",
 			label: "Arcane Archer Lore cantrip",
 			matches: function (name) { return name === "Arcane Archer Lore"; },
-			count: function (level) { return level >= 3 ? 1 : 0; }, options: ["Druidcraft", "Prestidigitation"],
+			count: function (level) { return level >= 3 ? 1 : 0; },
+			options: ["Mage Hand", "Mending", "Message", "Prestidigitation"],
 		},
 		{
 			id: "ranger-canny-language", scope: "class", owner: "Ranger",
@@ -999,6 +1120,7 @@ $(function () {
 		localStorage.removeItem(manualSkillProficiencyStorageKey);
 		localStorage.removeItem(fightingStyleStorageKey);
 		localStorage.removeItem(featureChoiceStorageKey);
+		localStorage.removeItem(spellSlotUsageStorageKey);
 		localStorage.removeItem("page1_manualAttunementSlots");
 		localStorage.removeItem(maxHpStorageKey);
 		localStorage.removeItem("page1_racialProficiencies");
@@ -1723,6 +1845,11 @@ $(function () {
 			});
 			saveMentorSpellChoices();
 		}
+		Object.keys(spellSlotUsage).forEach(function (key) {
+			spellSlotUsage[key] = spellSlotUsage[key].map(function () { return false; });
+		});
+		saveSpellSlotUsage();
+		renderSpellcasting();
 
 		const maximumHp = Number($("#page1 [name='maxhp']").val());
 		if (Number.isFinite(maximumHp)) {
@@ -2764,6 +2891,12 @@ $(function () {
 		},
 
 		"Bard": {
+			spellcasting: { type: "fullCaster", ability: "Charisma" },
+			cantrips: [
+				"Blade Ward", "Dancing Lights", "Friends", "Light", "Mage Hand",
+				"Mending", "Message", "Minor Illusion", "Prestidigitation",
+				"True Strike", "Vicious Mockery",
+			],
 			savingThrows: ["Dexterity", "Charisma"],
 
 			features: {
@@ -2853,6 +2986,11 @@ $(function () {
 		},
 
 		"Cleric": {
+			spellcasting: { type: "fullCaster", ability: "Wisdom" },
+			cantrips: [
+				"Guidance", "Light", "Mending", "Resistance", "Sacred Flame",
+				"Spare the Dying", "Thaumaturgy",
+			],
 			savingThrows: ["Wisdom", "Charisma"],
 
 			features: {
@@ -2936,6 +3074,11 @@ $(function () {
 		},
 
 		"Druid": {
+			spellcasting: { type: "fullCaster", ability: "Wisdom" },
+			cantrips: [
+				"Druidcraft", "Guidance", "Mending", "Poison Spray", "Produce Flame",
+				"Resistance", "Shillelagh", "Thorn Whip",
+			],
 			savingThrows: ["Intelligence", "Wisdom"],
 
 			features: {
@@ -2977,6 +3120,9 @@ $(function () {
 		},
 
 		"Fighter": {
+			subclassSpellcasting: {
+				"Eldritch Knight": { type: "thirdCaster", ability: "Intelligence" },
+			},
 			savingThrows: ["Strength", "Constitution"],
 
 			features: {
@@ -3119,6 +3265,7 @@ $(function () {
 		},
 
 		"Paladin": {
+			spellcasting: { type: "halfCaster", ability: "Charisma" },
 			savingThrows: ["Wisdom", "Charisma"],
 
 			features: {
@@ -3160,6 +3307,7 @@ $(function () {
 		},
 
 		"Ranger": {
+			spellcasting: { type: "halfCaster", ability: "Wisdom" },
 			savingThrows: ["Strength", "Dexterity"],
 
 			features: {
@@ -3220,6 +3368,9 @@ $(function () {
 		},
 
 		"Rogue": {
+			subclassSpellcasting: {
+				"Arcane Trickster": { type: "thirdCaster", ability: "Intelligence" },
+			},
 			savingThrows: ["Dexterity", "Intelligence"],
 
 			features: {
@@ -3274,6 +3425,13 @@ $(function () {
 		},
 
 		"Sorcerer": {
+			spellcasting: { type: "fullCaster", ability: "Charisma" },
+			cantrips: [
+				"Acid Splash", "Blade Ward", "Chill Touch", "Dancing Lights",
+				"Fire Bolt", "Friends", "Light", "Mage Hand", "Mending", "Message",
+				"Minor Illusion", "Poison Spray", "Prestidigitation", "Ray of Frost",
+				"Shocking Grasp", "True Strike",
+			],
 			savingThrows: ["Constitution", "Charisma"],
 
 			features: {
@@ -3322,6 +3480,11 @@ $(function () {
 		},
 
 		"Warlock": {
+			spellcasting: { type: "pactCaster", ability: "Charisma" },
+			cantrips: [
+				"Blade Ward", "Chill Touch", "Eldritch Blast", "Friends", "Mage Hand",
+				"Minor Illusion", "Poison Spray", "Prestidigitation", "True Strike",
+			],
 			savingThrows: ["Wisdom", "Charisma"],
 
 			features: {
@@ -3362,6 +3525,13 @@ $(function () {
 		},
 
 		"Wizard": {
+			spellcasting: { type: "fullCaster", ability: "Intelligence" },
+			cantrips: [
+				"Acid Splash", "Blade Ward", "Chill Touch", "Dancing Lights",
+				"Fire Bolt", "Friends", "Light", "Mage Hand", "Mending", "Message",
+				"Minor Illusion", "Poison Spray", "Prestidigitation", "Ray of Frost",
+				"Shocking Grasp", "True Strike",
+			],
 			savingThrows: ["Intelligence", "Wisdom"],
 
 			features: {
@@ -3397,6 +3567,12 @@ $(function () {
 		},
 
 		"Artificer": {
+			spellcasting: { type: "artiCaster", ability: "Intelligence" },
+			cantrips: [
+				"Guidance", "Light", "Mage Hand", "Mending", "Message", "Poison Spray",
+				"Ray of Frost", "Resistance", "Shocking Grasp", "Spare the Dying",
+				"Thorn Whip",
+			],
 			savingThrows: ["Constitution", "Intelligence"],
 
 			features: {
@@ -3443,6 +3619,27 @@ $(function () {
 			}
 		},
 	};
+
+	const cantrips = [];
+	Object.keys(classRules).forEach(function (className) {
+		(classRules[className].cantrips || []).forEach(function (cantrip) {
+			if (cantrips.indexOf(cantrip) === -1) {
+				cantrips.push(cantrip);
+			}
+		});
+	});
+	featureChoiceRules.forEach(function (rule) {
+		if (rule.id === "warlock-tome-cantrips") {
+			rule.options = cantrips;
+		}
+	});
+	populateAttackChoices(cantrips);
+	populateSrdSpellCatalogOptions();
+	$("#page1").saveMyForm(
+		{
+			loadInputs: true,
+		}
+	);
 
 	const subclassLevels = {
 		"Barbarian": 3,
@@ -4754,6 +4951,439 @@ $(function () {
 		}
 		localStorage.setItem(rageAttackStorageKey, JSON.stringify({ slot: slot, values: attackValues }));
 		return "";
+	}
+
+	const spellSlotsByCasterLevel = [
+		[],
+		[2],
+		[3],
+		[4, 2],
+		[4, 3],
+		[4, 3, 2],
+		[4, 3, 3],
+		[4, 3, 3, 1],
+		[4, 3, 3, 2],
+		[4, 3, 3, 3, 1],
+		[4, 3, 3, 3, 2],
+		[4, 3, 3, 3, 2, 1],
+		[4, 3, 3, 3, 2, 1],
+		[4, 3, 3, 3, 2, 1, 1],
+		[4, 3, 3, 3, 2, 1, 1],
+		[4, 3, 3, 3, 2, 1, 1, 1],
+		[4, 3, 3, 3, 2, 1, 1, 1],
+		[4, 3, 3, 3, 2, 1, 1, 1, 1],
+		[4, 3, 3, 3, 2, 1, 1, 1, 1],
+		[4, 3, 3, 3, 3, 1, 1, 1, 1],
+		[4, 3, 3, 3, 3, 2, 1, 1, 1],
+		[4, 3, 3, 3, 3, 2, 2, 1, 1],
+	];
+	const spellSlotUsageStorageKey = "page1_spellSlotUsage";
+	let spellSlotUsage = {};
+	const storedSpellSlotUsage = localStorage.getItem(spellSlotUsageStorageKey);
+	if (storedSpellSlotUsage !== null) {
+		try {
+			const parsedSpellSlotUsage = JSON.parse(storedSpellSlotUsage);
+			if (parsedSpellSlotUsage && typeof parsedSpellSlotUsage === "object" && !Array.isArray(parsedSpellSlotUsage)) {
+				Object.keys(parsedSpellSlotUsage).forEach(function (key) {
+					if (Array.isArray(parsedSpellSlotUsage[key])
+						&& parsedSpellSlotUsage[key].every(function (used) { return typeof used === "boolean"; })) {
+						spellSlotUsage[key] = parsedSpellSlotUsage[key];
+					} else {
+						console.error("Unable to restore spell slot usage for " + key + ": saved data is invalid.");
+					}
+				});
+			} else {
+				console.error("Unable to restore spell slot usage: saved data is not an object.");
+			}
+		} catch (error) {
+			console.error("Unable to restore spell slot usage.", error);
+		}
+	}
+
+	function saveSpellSlotUsage() {
+		localStorage.setItem(spellSlotUsageStorageKey, JSON.stringify(spellSlotUsage));
+	}
+
+	function getSpellcastingEntries() {
+		const entries = [];
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			if (!className || !Number.isInteger(level) || level < 1 || level > 20) {
+				return;
+			}
+			const classRule = classRules[className];
+			if (!classRule) {
+				return;
+			}
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			let spellcasting = classRule.spellcasting || null;
+			let spellcastingName = className;
+			if (!spellcasting && classRule.subclassSpellcasting && classRule.subclassSpellcasting[subclassName]
+				&& level >= subclassLevels[className]) {
+				spellcasting = classRule.subclassSpellcasting[subclassName];
+				spellcastingName = subclassName;
+			}
+			if (!spellcasting
+				|| (spellcasting.type === "halfCaster" && level < 2)
+				|| (spellcasting.type === "artiCaster" && level < 1)) {
+				return;
+			}
+			entries.push({
+				className: className,
+				subclassName: subclassName,
+				name: spellcastingName,
+				level: level,
+				type: spellcasting.type,
+				ability: spellcasting.ability,
+			});
+		});
+		return entries;
+	}
+
+	function isMysticTheurgeSelected() {
+		return readSelectedTalents().some(function (talent) {
+			return talent.trim().toLowerCase() === "mystic theurge";
+		});
+	}
+
+	function getHighestMentalAbility() {
+		return ["Intelligence", "Wisdom", "Charisma"].reduce(function (highest, ability) {
+			const modifier = Number($("#page1 [name='" + ability + "mod']").val()) || 0;
+			return !highest || modifier > highest.modifier
+				? { name: ability, modifier: modifier }
+				: highest;
+		}, null);
+	}
+
+	function getCantripAbility(sourceAbility) {
+		return isMysticTheurgeSelected()
+			? getHighestMentalAbility().name
+			: sourceAbility;
+	}
+
+	function getCantripAbilityModifier(ability) {
+		return Number($("#page1 [name='" + ability + "mod']").val()) || 0;
+	}
+
+	function isAgonizingBlastSelected() {
+		const selections = featureChoiceSelections["class:Warlock:warlock-invocations"];
+		return Array.isArray(selections) && selections.indexOf("Agonizing Blast") !== -1;
+	}
+
+	function cantripCanComeFromEntry(cantrip, entry) {
+		const sourceClass = entry.name === "Eldritch Knight" || entry.name === "Arcane Trickster"
+			? "Wizard"
+			: entry.className;
+		const hasEligibleClass = cantrip.rule.classes.indexOf(sourceClass) !== -1;
+		const hasTomeCantrip = entry.className === "Warlock"
+			&& (featureChoiceSelections["class:Warlock:warlock-pact-boon"] || []).indexOf("Pact of the Tome") !== -1;
+		return hasEligibleClass || hasTomeCantrip;
+	}
+
+	function getCantripDamage(name, characterLevel, abilityModifier) {
+		const cantrip = getCantripRule(name);
+		if (!cantrip) {
+			return "";
+		}
+		const rule = cantrip.rule;
+		const tier = characterLevel >= 17 ? 4 : characterLevel >= 11 ? 3 : characterLevel >= 5 ? 2 : 1;
+		if (cantrip.name === "Eldritch Blast") {
+			const agonizingModifier = isAgonizingBlastSelected() ? abilityModifier : 0;
+			const perBeam = "1d10" + (agonizingModifier > 0
+				? " + " + agonizingModifier
+				: agonizingModifier < 0 ? " - " + Math.abs(agonizingModifier) : "") + " force";
+			return tier + " x (" + perBeam + ")";
+		}
+		if (cantrip.name === "Booming Blade") {
+			const hitDice = characterLevel >= 17 ? 3 : characterLevel >= 11 ? 2 : characterLevel >= 5 ? 1 : 0;
+			const moveDice = characterLevel >= 17 ? 4 : characterLevel >= 11 ? 3 : characterLevel >= 5 ? 2 : 1;
+			const extraHit = hitDice ? "; +" + hitDice + "d8 thunder on hit" : "";
+			const extraMove = "; " + moveDice + "d8 thunder if target moves";
+			return "Weapon damage" + extraHit + extraMove;
+		}
+		if (cantrip.name === "Green-Flame Blade") {
+			const hitDice = characterLevel >= 17 ? 3 : characterLevel >= 11 ? 2 : characterLevel >= 5 ? 1 : 0;
+			const secondaryDice = characterLevel >= 17 ? 2 : characterLevel >= 11 ? 1 : 0;
+			const secondaryMod = abilityModifier > 0
+				? "+" + abilityModifier
+				: abilityModifier < 0 ? "-" + Math.abs(abilityModifier) : "";
+			return "Weapon damage" + (hitDice ? "; +" + hitDice + "d8 fire on hit" : "")
+				+ "; " + (secondaryDice ? secondaryDice + "d8" : "") + secondaryMod
+				+ " fire to a second target";
+		}
+		const numberOfDice = rule.scalesWithLevel ? tier : 1;
+		const die = rule.die;
+		if (cantrip.name === "Toll the Dead") {
+			return numberOfDice + die + " or " + numberOfDice + rule.missingHitPointsDie + " " + rule.damageType
+				+ " (target missing hit points)";
+		}
+		const abilityDamage = rule.addAbilityDamage && abilityModifier !== 0
+			? (abilityModifier > 0 ? " + " : " - ") + Math.abs(abilityModifier)
+			: "";
+		return numberOfDice + die + abilityDamage + " " + rule.damageType;
+	}
+
+	function applyCantripAttackValues(select) {
+		const option = select.selectedOptions[0];
+		if (!option || !option.dataset.cantripName) {
+			return;
+		}
+		const cantrip = getCantripRule(option.dataset.cantripName);
+		if (!cantrip) {
+			return;
+		}
+		const ability = getCantripAbility(option.dataset.spellcastingAbility);
+		const abilityModifier = getCantripAbilityModifier(ability);
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const saveBonus = Number(characterEffects.spellSaveBonus) || 0;
+		const spellAttackBonus = Number(characterEffects.spellAttackBonus) || 0;
+		const fieldIndex = select.name.slice("atkname".length);
+		const hitField = $("#page1 [name='atkbonus" + fieldIndex + "']");
+		const damageField = $("#page1 [name='atkdamage" + fieldIndex + "']");
+		let hitValue = "Weapon hit";
+		if (cantrip.rule.saveAbility) {
+			const dc = 8 + proficiencyBonus + abilityModifier + saveBonus;
+			hitValue = "DC " + dc + " (" + cantrip.rule.saveAbility.slice(0, 3).toUpperCase() + ")";
+		} else if (cantrip.rule.attack) {
+			const attackBonus = proficiencyBonus + abilityModifier + spellAttackBonus;
+			hitValue = (attackBonus >= 0 ? "+" : "") + attackBonus;
+		}
+		const baseAttackValue = cantrip.rule.attack
+			? (proficiencyBonus + abilityModifier + spellAttackBonus)
+			: null;
+		if (baseAttackValue !== null) {
+			hitField.val((baseAttackValue >= 0 ? "+" : "") + baseAttackValue).trigger("change");
+		} else {
+			hitField.val(hitValue).trigger("change");
+		}
+		damageField.val(getCantripDamage(
+			cantrip.name,
+			Math.max(1, getTotalClassLevels()),
+			abilityModifier
+		)).trigger("change");
+	}
+
+	function refreshCantripAttackChoices(entries) {
+		const listedCantrips = ($("#page1 #spell-list-level-0").val() || "")
+			.split(/\r?\n/)
+			.map(function (name) { return name.trim(); })
+			.filter(Boolean)
+			.map(getCantripRule)
+			.filter(Boolean)
+			.filter(function (cantrip, index, cantrips) {
+				return cantrips.findIndex(function (candidate) {
+					return candidate.name === cantrip.name;
+				}) === index;
+			});
+		$("#page1 select[name^='atkname']").each(function () {
+			const select = this;
+			const selectedOption = select.selectedOptions[0];
+			const previousSelection = selectedOption && selectedOption.dataset.cantripName
+				? {
+					name: selectedOption.dataset.cantripName,
+					sourceName: selectedOption.dataset.spellcastingClass,
+				}
+				: parseCantripAttackOption(select.value);
+			const savedName = parseSavedAttackName(select.name) || initialSavedAttackNames[select.name];
+			delete initialSavedAttackNames[select.name];
+			const savedSelection = parseCantripAttackOption(savedName);
+			const desiredName = previousSelection ? previousSelection.name
+				: savedSelection ? savedSelection.name
+					: getCantripRule(savedName) ? getCantripRule(savedName).name : "";
+			const desiredSource = previousSelection ? previousSelection.sourceName
+				: savedSelection ? savedSelection.sourceName : "";
+			$(select).find("optgroup[data-cantrip-options]").remove();
+			if (listedCantrips.length > 0 && entries.length > 0) {
+				const group = document.createElement("optgroup");
+				group.label = "Cantrips from Spellcasting";
+				group.dataset.cantripOptions = "true";
+				listedCantrips.forEach(function (cantrip) {
+					entries.forEach(function (entry, entryIndex) {
+						if (!cantripCanComeFromEntry(cantrip, entry)) {
+							return;
+						}
+						const option = document.createElement("option");
+						option.value = cantripAttackOptionPrefix + JSON.stringify([
+							cantrip.name, entry.name, entry.ability, String(entryIndex),
+						]);
+						option.textContent = cantrip.name + " (" + entry.name + ")";
+						option.dataset.cantripName = cantrip.name;
+						option.dataset.spellcastingAbility = entry.ability;
+						option.dataset.spellcastingClass = entry.name;
+						group.appendChild(option);
+					});
+				});
+				if (group.children.length > 0) {
+					select.appendChild(group);
+				}
+			}
+			if (desiredName && listedCantrips.some(function (cantrip) { return cantrip.name === desiredName; })) {
+				const matchingOption = Array.from(select.options).find(function (option) {
+					return option.dataset.cantripName === desiredName
+						&& (!desiredSource || option.dataset.spellcastingClass === desiredSource);
+				}) || Array.from(select.options).find(function (option) {
+					return option.dataset.cantripName === desiredName;
+				});
+				select.value = matchingOption ? matchingOption.value : "";
+				if (matchingOption) {
+					select.dataset.cantripValuesFilled = "true";
+					applyCantripAttackValues(select);
+				} else if (previousSelection || savedSelection || getCantripRule(savedName)) {
+					delete select.dataset.cantripValuesFilled;
+					const fieldIndex = select.name.slice("atkname".length);
+					$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
+						.val("").trigger("change");
+				}
+			} else if (previousSelection || savedSelection || getCantripRule(savedName)) {
+				select.value = "";
+				delete select.dataset.cantripValuesFilled;
+				const fieldIndex = select.name.slice("atkname".length);
+				$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
+					.val("").trigger("change");
+			}
+		});
+	}
+
+	function getMulticlassCasterLevel(entry) {
+		if (entry.type === "fullCaster") {
+			return entry.level;
+		}
+		if (entry.type === "artiCaster") {
+			return Math.ceil(entry.level / 2);
+		}
+		if (entry.type === "halfCaster") {
+			return Math.floor(entry.level / 2);
+		}
+		if (entry.type === "thirdCaster") {
+			return Math.floor(entry.level / 3);
+		}
+		return 0;
+	}
+
+	function getSpellSlotProgression(entries) {
+		const spellcasters = entries.filter(function (entry) { return entry.type !== "pactCaster"; });
+		if (spellcasters.length === 0) {
+			return [];
+		}
+
+		let casterLevel = 0;
+		if (spellcasters.length === 1) {
+			const entry = spellcasters[0];
+			if (entry.type === "fullCaster") {
+				casterLevel = entry.level;
+			} else if (entry.type === "artiCaster") {
+				casterLevel = Math.ceil(entry.level / 2);
+			} else if (entry.type === "halfCaster") {
+				casterLevel = entry.level >= 2 ? Math.ceil(entry.level / 2) : 0;
+			} else if (entry.type === "thirdCaster") {
+				casterLevel = Math.floor((entry.level - 1) / 3) + 1;
+			}
+		} else {
+			casterLevel = spellcasters.reduce(function (total, entry) {
+				return total + getMulticlassCasterLevel(entry);
+			}, 0);
+		}
+
+		return spellSlotsByCasterLevel[Math.max(0, Math.min(20, casterLevel))] || [];
+	}
+
+	function getPactMagicProgression(level) {
+		if (level < 1) {
+			return null;
+		}
+		return {
+			slotLevel: level >= 9 ? 5 : level >= 7 ? 4 : level >= 5 ? 3 : level >= 3 ? 2 : 1,
+			count: level >= 17 ? 4 : level >= 11 ? 3 : level >= 2 ? 2 : 1,
+		};
+	}
+
+	function renderSpellSlotBoxes(container, storageKey, count, label) {
+		const usedSlots = spellSlotUsage[storageKey] || [];
+		const boxes = $("<div>", { class: "spell-slot-boxes" }).appendTo(container);
+		for (let index = 0; index < count; index++) {
+			$("<input>", {
+				type: "checkbox",
+				class: "spell-slot-used",
+				"data-spell-slot-key": storageKey,
+				"data-spell-slot-index": index,
+				"aria-label": label + " slot " + (index + 1) + " expended",
+			}).prop("checked", !!usedSlots[index]).appendTo(boxes);
+		}
+	}
+
+	function renderSpellcasting() {
+		const entries = getSpellcastingEntries();
+		const classList = $("#page1 #spellcasting-class-list").empty();
+		const standardEntries = entries.filter(function (entry) { return entry.type !== "pactCaster"; });
+		const pactEntries = entries.filter(function (entry) { return entry.type === "pactCaster"; });
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const mysticAbility = isMysticTheurgeSelected() ? getHighestMentalAbility().name : "";
+		entries.forEach(function (entry) {
+			const ability = mysticAbility || entry.ability;
+			const abilityModifier = getCantripAbilityModifier(ability);
+			const row = $("<div>", { class: "spellcasting-class-row" }).appendTo(classList);
+			$("<span>", { text: entry.name + " " + entry.level }).appendTo(row);
+			$("<span>", { text: ability }).appendTo(row);
+			$("<span>", {
+				text: 8 + proficiencyBonus + abilityModifier + (Number(characterEffects.spellSaveBonus) || 0),
+			}).appendTo(row);
+			const attackBonus = proficiencyBonus + abilityModifier + (Number(characterEffects.spellAttackBonus) || 0);
+			$("<span>", { text: (attackBonus >= 0 ? "+" : "") + attackBonus }).appendTo(row);
+		});
+		if (entries.length === 0) {
+			$("<div>", {
+				class: "spellcasting-empty",
+				text: "Add a spellcasting class or a spellcasting subclass to show its ability and slot progression.",
+			}).appendTo(classList);
+		}
+
+		const slotTracker = $("#page1 #spell-slot-tracker").empty();
+		const slotProgression = getSpellSlotProgression(entries);
+		if (slotProgression.length > 0) {
+			const levels = $("<div>", { class: "spell-slot-levels" }).appendTo(slotTracker);
+			const levelNames = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
+			slotProgression.forEach(function (count, index) {
+				if (!count) {
+					return;
+				}
+				const level = index + 1;
+				const group = $("<div>", { class: "spell-slot-group" }).appendTo(levels);
+				$("<span>", {
+					class: "spell-slot-level-label",
+					text: levelNames[index] + " (" + count + ")",
+				}).appendTo(group);
+				renderSpellSlotBoxes(group, "standard:" + level, count, levelNames[index] + "-level");
+			});
+		} else if (standardEntries.length === 0) {
+			$("<div>", {
+				class: "spellcasting-empty",
+				text: "No standard spell slots. Pact Magic is tracked separately when applicable.",
+			}).appendTo(slotTracker);
+		}
+
+		const pactTracker = $("#page1 #pact-magic-slot-tracker").empty();
+		$("#page1 #spell-short-rest-button").prop("hidden", pactEntries.length === 0);
+		pactEntries.forEach(function (entry) {
+			const progression = getPactMagicProgression(entry.level);
+			const group = $("<div>", { class: "pact-magic-slot-group" }).appendTo(pactTracker);
+			$("<strong>", {
+				text: "Pact Magic — " + progression.count + " " + (progression.count === 1 ? "slot" : "slots")
+					+ ", " + progression.slotLevel + (progression.slotLevel === 1 ? "st" : progression.slotLevel === 2 ? "nd" : progression.slotLevel === 3 ? "rd" : "th") + "-level",
+			}).appendTo(group);
+			renderSpellSlotBoxes(group, "pact:" + entry.className, progression.count, "Pact Magic");
+		});
+		refreshCantripAttackChoices(entries);
+	}
+
+	function resetPactMagicSlots() {
+		Object.keys(spellSlotUsage).forEach(function (key) {
+			if (key.indexOf("pact:") === 0) {
+				spellSlotUsage[key] = spellSlotUsage[key].map(function () { return false; });
+			}
+		});
+		saveSpellSlotUsage();
+		renderSpellcasting();
 	}
 
 	const classModifierRules = {
@@ -6570,6 +7200,7 @@ $(function () {
 		renderCharacterLevelRewards(characterLevel);
 		renderMentorProgression(characterLevel);
 		updateCharacterEffects(raceRule.effects);
+		renderSpellcasting();
 
 		// Apply feature replacements
 		Object.keys(classFeatures).forEach(function (className) {
@@ -7831,6 +8462,20 @@ $(function () {
 		localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
 		updateCalculatedAttackBonuses();
 	});
+	$("#page1").on("change", "select[name^='atkname']", function () {
+		const option = this.selectedOptions[0];
+		if (option && option.dataset.cantripName) {
+			this.dataset.cantripValuesFilled = "true";
+			applyCantripAttackValues(this);
+		} else if (this.dataset.cantripValuesFilled === "true") {
+			const fieldIndex = this.name.slice("atkname".length);
+			$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
+				.val("").trigger("change");
+			delete attackBonusBaseValues["atkbonus" + fieldIndex];
+			localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
+			delete this.dataset.cantripValuesFilled;
+		}
+	});
 	$("#page1").on("change", ".feature-ability-choice", function () {
 		const choiceKey = $(this).attr("data-ability-choice");
 		selectedAbilityChoices[choiceKey] = $(this).val();
@@ -7902,6 +8547,41 @@ $(function () {
 		mentorSpellChoices.usedSlots[level][index] = $(this).prop("checked");
 		saveMentorSpellChoices();
 	});
+	$("#page1").on("change", ".spell-slot-used", function () {
+		const key = $(this).attr("data-spell-slot-key");
+		const index = Number($(this).attr("data-spell-slot-index"));
+		if (!key || !Number.isInteger(index) || index < 0) {
+			return;
+		}
+		spellSlotUsage[key] = spellSlotUsage[key] || [];
+		spellSlotUsage[key][index] = $(this).prop("checked");
+		saveSpellSlotUsage();
+	});
+	$("#page1").on("input", ".spell-list-level textarea", function () {
+		localStorage.setItem("page1_" + this.name, JSON.stringify($(this).val()));
+		if (this.name === "spell-list-level-0") {
+			renderSpellcasting();
+		}
+	});
+	$("#page1").on("click", "[data-add-srd-spell]", function () {
+		const level = Number($(this).attr("data-add-srd-spell"));
+		if (!Number.isInteger(level) || level < 0 || level > 9) {
+			console.error("Unable to add an SRD spell: the selected spell level is invalid.");
+			return;
+		}
+		const select = $("#page1 [data-spell-catalog-level='" + level + "']");
+		if (select.length !== 1) {
+			console.error("Unable to add an SRD spell: its catalog selector is missing.");
+			return;
+		}
+		addSelectedSrdSpell(level, select[0]);
+	});
+	$("#page1 #spell-short-rest-button").on("click", resetPactMagicSlots);
+	$("#page1").on("input change", [
+		"[name='Strengthmod']", "[name='Dexteritymod']", "[name='Constitutionmod']",
+		"[name='Intelligencemod']", "[name='Wisdommod']", "[name='Charismamod']",
+		"[name='proficiencybonus']",
+	].join(", "), renderSpellcasting);
 	$("#page1").on("change", "[name='mentor-role']", function () {
 		selectedMentorRole = $(this).val();
 		localStorage.setItem(mentorRoleStorageKey, selectedMentorRole);

@@ -1803,6 +1803,176 @@ form.charsheet .mentor-combat-bonus {
 form.charsheet .mentor-combat-bonus[hidden] {
   display: none;
 }
+form.charsheet section.spellcasting {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #fff;
+}
+form.charsheet section.spellcasting > label {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+form.charsheet .spellcasting-class-summary,
+form.charsheet .spell-slot-section {
+  margin-bottom: 10px;
+  padding: 6px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+form.charsheet .spellcasting-class-heading,
+form.charsheet .spellcasting-class-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+form.charsheet .spellcasting-class-heading {
+  padding-bottom: 4px;
+  border-bottom: 1px solid #bbb;
+  text-align: center;
+}
+form.charsheet .spellcasting-class-heading strong:first-child,
+form.charsheet .spellcasting-class-row > :first-child {
+  text-align: left;
+}
+form.charsheet .spellcasting-class-row {
+  padding-top: 4px;
+  text-align: center;
+}
+form.charsheet .spellcasting-empty {
+  padding-top: 4px;
+  color: #555;
+  font-size: 10px;
+}
+form.charsheet .spell-slot-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+form.charsheet .spell-slot-section-heading button {
+  font-size: 9px;
+}
+form.charsheet .spell-slot-levels {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 4px;
+}
+form.charsheet .spell-slot-group {
+  min-width: 0;
+  padding: 4px 2px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 9px;
+}
+form.charsheet .spell-slot-level-label {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+form.charsheet .spell-slot-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+form.charsheet .spell-slot-boxes input[type=checkbox] {
+  box-sizing: border-box;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  margin: 0;
+  border: 1px solid #222;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+form.charsheet .spell-slot-boxes input[type=checkbox]:checked {
+  background: #222;
+}
+form.charsheet .pact-magic-slot-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  font-size: 10px;
+}
+form.charsheet .pact-magic-slot-group .spell-slot-boxes {
+  justify-content: flex-start;
+}
+form.charsheet .spell-list-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 8px;
+}
+form.charsheet .spell-list-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+form.charsheet .spell-list-level {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+form.charsheet .spell-list-level > label {
+  padding: 4px;
+  border: 1px solid #bbb;
+  border-bottom: 0;
+  background: #eee;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+form.charsheet .spell-catalog-picker {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #bbb;
+  border-bottom: 0;
+  background: #fff;
+}
+form.charsheet .spell-catalog-picker select {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+}
+form.charsheet .spell-catalog-picker button {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  font-size: 10px;
+}
+form.charsheet .spell-list-level > textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 120px;
+  min-height: 120px;
+  padding: 5px;
+  border: 1px solid #bbb;
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  background: #fff;
+  font-size: 10px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  overflow-y: auto;
+  resize: vertical;
+}
 form.charsheet .character-level-reward-list {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
