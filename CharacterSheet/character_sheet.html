@@ -517,6 +517,12 @@
                 <option value="tail">Tail</option>
               </select>
             </div>
+            <div class="shillelagh-toggle">
+              <label id="shillelagh-active-label" for="shillelagh-active" hidden>
+                <input id="shillelagh-active" name="shillelagh-active" type="checkbox" />
+                Shillelagh active (clubs and quarterstaffs)
+              </label>
+            </div>
             <table>
             <thead>
               <tr>
@@ -902,7 +908,7 @@
             </div>
           </div>
           <div class="magic-item-groups">
-            <div class="magic-item-category">
+            <div class="magic-item-category magic-item-category-uncommon">
               <label>Uncommon</label>
               <div class="magic-item-slots">
                 <input name="magic-uncommon-1" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 1" />
@@ -913,7 +919,7 @@
                 <input name="magic-uncommon-6" data-suggestion-list="magic-uncommon-options" autocomplete="off" aria-label="Uncommon magic item 6" />
               </div>
             </div>
-            <div class="magic-item-category">
+            <div class="magic-item-category magic-item-category-rare">
               <label>Rare</label>
               <div class="magic-item-slots">
                 <input name="magic-rare-1" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 1" />
@@ -924,7 +930,7 @@
                 <input name="magic-rare-6" data-suggestion-list="magic-rare-options" autocomplete="off" aria-label="Rare magic item 6" />
               </div>
             </div>
-            <div class="magic-item-category">
+            <div class="magic-item-category magic-item-category-very-rare">
               <label>Very Rare</label>
               <div class="magic-item-slots">
                 <input name="magic-very-rare-1" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 1" />
@@ -935,35 +941,51 @@
                 <input name="magic-very-rare-6" data-suggestion-list="magic-very-rare-options" autocomplete="off" aria-label="Very Rare magic item 6" />
               </div>
             </div>
-            <div class="magic-item-category">
-              <label>Legendary</label>
-              <div class="magic-item-slots">
-                <input name="magic-legendary-1" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 1" />
-                <input name="magic-legendary-2" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 2" />
+            <div class="magic-item-rarity-pair">
+              <div class="magic-item-category">
+                <label>Legendary</label>
+                <div class="magic-item-slots">
+                  <input name="magic-legendary-1" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 1" />
+                  <input name="magic-legendary-2" data-suggestion-list="magic-legendary-options" autocomplete="off" aria-label="Legendary magic item 2" />
+                </div>
+              </div>
+              <div class="magic-item-category">
+                <label>Artifact</label>
+                <div class="magic-item-slots">
+                  <input name="magic-artifact-1" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 1" />
+                  <input name="magic-artifact-2" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 2" />
+                </div>
               </div>
             </div>
-            <div class="magic-item-category">
-              <label>Artifact</label>
-              <div class="magic-item-slots">
-                <input name="magic-artifact-1" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 1" />
-                <input name="magic-artifact-2" data-suggestion-list="magic-artifact-options" autocomplete="off" aria-label="Artifact magic item 2" />
+            <div class="magic-item-category magic-item-category-infusions">
+              <label>Infused Items</label>
+              <span id="infused-item-limit" class="infused-item-limit" aria-live="polite"></span>
+              <div class="infusion-source-group">
+                <label>Artificer infusions</label>
+                <div class="magic-item-slots">
+                  <select name="magic-artificer-infusion-item-1" aria-label="Artificer infused item slot 1"></select>
+                  <select name="magic-artificer-infusion-item-2" aria-label="Artificer infused item slot 2"></select>
+                  <select name="magic-artificer-infusion-item-3" aria-label="Artificer infused item slot 3"></select>
+                  <select name="magic-artificer-infusion-item-4" aria-label="Artificer infused item slot 4"></select>
+                  <select name="magic-artificer-infusion-item-5" aria-label="Artificer infused item slot 5"></select>
+                  <select name="magic-artificer-infusion-item-6" aria-label="Artificer infused item slot 6"></select>
+                </div>
               </div>
-            </div>
-            <div class="magic-item-category">
-              <label>Infusions</label>
-              <span id="expert-infusion-limit" class="expert-infusion-limit" aria-live="polite"></span>
-              <div class="magic-item-slots">
-                <input name="magic-infusion-1" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 3" />
-                <input name="magic-infusion-2" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 9" />
-                <input name="magic-infusion-3" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 13" />
-                <input name="magic-infusion-4" data-suggestion-list="magic-infusion-options" autocomplete="off" aria-label="Expert infusion known at level 17" />
+              <div class="infusion-source-group">
+                <label>Expert infusions</label>
+                <div class="magic-item-slots">
+                  <select name="magic-expert-infusion-item-1" aria-label="Expert infused item slot 1"></select>
+                  <select name="magic-expert-infusion-item-2" aria-label="Expert infused item slot 2"></select>
+                  <select name="magic-expert-infusion-item-3" aria-label="Expert infused item slot 3"></select>
+                  <select name="magic-expert-infusion-item-4" aria-label="Expert infused item slot 4"></select>
+                </div>
               </div>
-              <label class="infused-item-label">Infused item for each known infusion</label>
-              <div class="magic-item-slots">
-                <input name="magic-infusion-item-1" autocomplete="off" aria-label="Item infused with infusion 1" placeholder="Infused item 1" />
-                <input name="magic-infusion-item-2" autocomplete="off" aria-label="Item infused with infusion 2" placeholder="Infused item 2" />
-                <input name="magic-infusion-item-3" autocomplete="off" aria-label="Item infused with infusion 3" placeholder="Infused item 3" />
-                <input name="magic-infusion-item-4" autocomplete="off" aria-label="Item infused with infusion 4" placeholder="Infused item 4" />
+              <div class="infusion-source-group">
+                <label>Borrowed infusions</label>
+                <div class="magic-item-slots">
+                  <input name="magic-borrowed-infusion-1" autocomplete="off" aria-label="Borrowed infusion 1" placeholder="Borrowed infusion 1" />
+                  <input name="magic-borrowed-infusion-2" autocomplete="off" aria-label="Borrowed infusion 2" placeholder="Borrowed infusion 2" />
+                </div>
               </div>
             </div>
           </div>
@@ -1216,82 +1238,6 @@
           <option value="Teeth of Dahlver-Nar"></option>
           <option value="Wand of Orcus"></option>
         </datalist>
-        <datalist id="magic-infusion-options">
-          <optgroup>
-            <option value="Arcane Propulsion Armor"></option>
-            <option value="Armor of Magical Strength"></option>
-            <option value="Boots of the Winding Path"></option>
-            <option value="Enhanced Arcane Focus"></option>
-            <option value="Enhanced Defense"></option>
-            <option value="Enhanced Weapon"></option>
-            <option value="Helm of Awareness"></option>
-            <option value="Homunculus Servant"></option>
-            <option value="Mind Sharpener"></option>
-            <option value="Radiant Weapon"></option>
-            <option value="Repeating Shot"></option>
-            <option value="Repulsion Shield"></option>
-            <option value="Resistant Armor"></option>
-            <option value="Returning Weapon"></option>
-            <option value="Spell-Refueling Ring"></option>
-          </optgroup>
-          <optgroup label="Replicate Magic Item (2nd-level/3rd-level)">
-            <option value="Alchemy Jug"></option>
-            <option value="Bag of Holding"></option>
-            <option value="Cap of Water Breathing"></option>
-            <option value="Goggles of Night"></option>
-            <option value="Rope of Climbing"></option>
-            <option value="Sending Stones"></option>
-            <option value="Wand of Magic Detection"></option>
-            <option value="Wand of Secrets"></option>
-          </optgroup>
-          <optgroup label="Replicate Magic Item (6th-level/9th-level)">
-            <option value="Boots of Elvenkind"></option>
-            <option value="Cloak of Elvenkind"></option>
-            <option value="Cloak of the Manta Ray"></option>
-            <option value="Eyes of Charming"></option>
-            <option value="Gloves of Thievery"></option>
-            <option value="Lantern of Revealing"></option>
-            <option value="Pipes of Haunting"></option>
-            <option value="Ring of Water Walking"></option>
-          </optgroup>
-          <optgroup label="Replicate Magic Item (10th-level/13th-level)">
-            <option value="Boots of Striding and Springing"></option>
-            <option value="Boots of the Winterlands"></option>
-            <option value="Bracers of Archery"></option>
-            <option value="Brooch of Shielding"></option>
-            <option value="Cloak of Protection"></option>
-            <option value="Eyes of the Eagle"></option>
-            <option value="Gauntlets of Ogre Power"></option>
-            <option value="Gloves of Missile Snaring"></option>
-            <option value="Gloves of Swimming and Climbing"></option>
-            <option value="Hat of Disguise"></option>
-            <option value="Headband of Intellect"></option>
-            <option value="Helm of Telepathy"></option>
-            <option value="Medallion of Thoughts"></option>
-            <option value="Necklace of Adaptation"></option>
-            <option value="Periapt of Wound Closure"></option>
-            <option value="Pipes of the Sewers"></option>
-            <option value="Quiver of Ehlonna"></option>
-            <option value="Ring of Jumping"></option>
-            <option value="Ring of Mind Shielding"></option>
-            <option value="Slippers of Spider Climbing"></option>
-            <option value="Winged Boots"></option>
-          </optgroup>
-          <optgroup label="Replicate Magic Item (14th-level/17th-level)">
-            <option value="Amulet of health"></option>
-            <option value="Belt of hill giant strength"></option>
-            <option value="Boots of levitation"></option>
-            <option value="Boots of speed"></option>
-            <option value="Bracers of defense"></option>
-            <option value="Cloak of the bat"></option>
-            <option value="Dimensional shackle"></option>
-            <option value="Gem of seeing"></option>
-            <option value="Horn of blastin"></option>
-            <option value="Ring of free action"></option>
-            <option value="Ring of protection"></option>
-            <option value="Ring of the ram"></option>
-          </optgroup>
-        </datalist>
       </section>
            
     </section>
@@ -1371,8 +1317,10 @@
     <section class="feats-boons">
       <div class="feat-boon-layout">
         <div class="feat-boon-category feats-category">
-          <label>Feats</label>
-          <div id="gestalt-asi-bank-status" class="gestalt-asi-bank-status" hidden></div>
+          <div class="feats-category-header">
+            <label>Feats</label>
+            <div id="gestalt-asi-bank-status" class="gestalt-asi-bank-status" hidden></div>
+          </div>
           <div class="feat-boon-slots feat-slots">
             <input name="feat-slot-01" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 1" placeholder="Background Feat" />
             <input name="feat-slot-02" data-suggestion-list="feat-options" autocomplete="off" aria-label="Feat slot 2" />

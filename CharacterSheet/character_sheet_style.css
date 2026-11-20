@@ -964,6 +964,34 @@ form.charsheet main section.attacksandspellcasting > div > table select {
   padding: 3px;
   font-family: 'Roboto', sans-serif;
 }
+form.charsheet main .weapon-attack-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 3px 4px;
+}
+form.charsheet main .weapon-attack-options label,
+form.charsheet main .shillelagh-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  font-size: 9px;
+  text-transform: none;
+}
+form.charsheet main .weapon-attack-options label[hidden],
+form.charsheet main .shillelagh-toggle label[hidden] {
+  display: none;
+}
+form.charsheet main .weapon-attack-options input[type=checkbox],
+form.charsheet main .shillelagh-toggle input[type=checkbox] {
+  width: auto;
+  margin: 0;
+}
+form.charsheet main .shillelagh-toggle {
+  min-height: 0;
+  padding: 2px 0;
+}
 form.charsheet main section.attacksandspellcasting > div textarea {
   border: 0;
   flex: 1 1 0;
@@ -1088,6 +1116,30 @@ form.charsheet main section.magic-items .magic-item-groups {
   gap: 8px;
   min-width: 0;
 }
+form.charsheet main section.magic-items .magic-item-category-uncommon {
+  grid-column: 1;
+  grid-row: 1;
+}
+form.charsheet main section.magic-items .magic-item-category-rare {
+  grid-column: 2;
+  grid-row: 1;
+}
+form.charsheet main section.magic-items .magic-item-category-very-rare {
+  grid-column: 1;
+  grid-row: 2;
+}
+form.charsheet main section.magic-items .magic-item-rarity-pair {
+  display: grid;
+  grid-column: 2;
+  grid-row: 2;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+form.charsheet main section.magic-items .magic-item-category-infusions {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
 form.charsheet main section.magic-items .magic-item-category {
   position: relative;
   z-index: 10;
@@ -1103,20 +1155,27 @@ form.charsheet main section.magic-items .magic-item-category > label {
   font-size: 9px;
   font-weight: bold;
 }
-form.charsheet main section.magic-items .magic-item-category > .expert-infusion-limit {
+form.charsheet main section.magic-items .magic-item-category > .infused-item-limit {
   display: block;
   margin-bottom: 5px;
   font-size: 9px;
 }
-form.charsheet main section.magic-items .magic-item-category > .infused-item-label {
-  margin-top: 8px;
+form.charsheet main section.magic-items .infusion-source-group {
+  margin-top: 5px;
+}
+form.charsheet main section.magic-items .infusion-source-group > label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 8px;
+  font-weight: bold;
 }
 form.charsheet main section.magic-items .magic-item-slots {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 5px;
 }
-form.charsheet main section.magic-items .magic-item-slots input {
+form.charsheet main section.magic-items .magic-item-slots input,
+form.charsheet main section.magic-items .magic-item-slots select {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
@@ -1585,8 +1644,20 @@ form.charsheet section.feats-boons .feat-boon-category > label {
   font-size: 10px;
   font-weight: bold;
 }
+form.charsheet section.feats-boons .feats-category-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+form.charsheet section.feats-boons .feats-category-header > label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: bold;
+}
 form.charsheet .gestalt-asi-bank-status {
-  margin: 0 5px 5px;
+  flex: 1;
+  margin: 0;
   font-size: 10px;
   text-align: center;
 }
@@ -1738,8 +1809,38 @@ form.charsheet .mentor-role-choice {
   background: #fff;
   font-size: 10px;
 }
-form.charsheet .mentor-role-choice select {
+form.charsheet .mentor-role-choice > select {
   min-width: 140px;
+}
+form.charsheet .mentor-role-choice .expert-infusion-choice-control {
+  display: grid;
+  flex: 1 1 100%;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-left: 2px solid #bbb;
+  background: #f7f7f7;
+}
+form.charsheet .expert-infusion-choice-control .feature-choice-label {
+  grid-column: 1 / -1;
+  font-weight: bold;
+}
+form.charsheet .expert-infusion-choice-control .feature-choice-slot {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+form.charsheet .expert-infusion-choice-control .feature-choice-slot-label {
+  color: #555;
+  font-size: 9px;
+}
+form.charsheet .expert-infusion-choice-control .feature-choice-slot select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 23px;
+  font-size: 10px;
 }
 form.charsheet .mentor-role-description {
   flex: 1 1 180px;

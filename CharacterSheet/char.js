@@ -1,5 +1,9 @@
 
 $(function () {
+	let magicItemInput = null;
+	let magicItemSuggestionIndex = -1;
+	const magicItemSuggestions = $("<div class='magic-item-suggestions' role='listbox'></div>").appendTo("body");
+
 	const weaponCatalog = [
 		{ name: "Club", group: "Simple melee weapons", damage: "1d4 bludgeoning", properties: ["Light"] },
 		{ name: "Dagger", group: "Simple melee weapons", damage: "1d4 piercing", properties: ["Finesse", "Light", "Thrown (20/60)"] },
@@ -60,11 +64,12 @@ $(function () {
 		"Sapping Sting": { saveAbility: "Constitution", die: "d4", damageType: "necrotic", scalesWithLevel: true, classes: ["Wizard"] },
 		"Shocking Grasp": { attack: true, die: "d8", damageType: "lightning", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Wizard"] },
 		"Sword Burst": { saveAbility: "Dexterity", die: "d6", damageType: "force", scalesWithLevel: true, classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"] },
-		"Thorn Whip": { attack: true, die: "d6", damageType: "piercing", classes: ["Artificer", "Druid", "Ranger"] },
+		"Thorn Whip": { attack: true, die: "d6", damageType: "piercing", scalesWithLevel: true, classes: ["Artificer", "Druid", "Ranger"] },
 		"Thunderclap": { saveAbility: "Constitution", die: "d6", damageType: "thunder", scalesWithLevel: true, classes: ["Artificer", "Bard", "Druid", "Sorcerer", "Warlock", "Wizard"] },
 		"Toll the Dead": { saveAbility: "Wisdom", die: "d8", missingHitPointsDie: "d12", damageType: "necrotic", scalesWithLevel: true, classes: ["Cleric", "Warlock", "Wizard"] },
 		"Vicious Mockery": { saveAbility: "Wisdom", die: "d4", damageType: "psychic", scalesWithLevel: true, classes: ["Bard"] },
 		"Word of Radiance": { saveAbility: "Constitution", die: "d6", damageType: "radiant", scalesWithLevel: true, classes: ["Cleric"] },
+		"Shillelagh": { buff: true, classes: ["Druid"] },
 	};
 	const cantripAttackOptionPrefix = "__spellcantrip__:";
 	function getCantripRule(name) {
@@ -176,7 +181,15 @@ $(function () {
 	}
 
 	const initialSavedAttackNames = {};
-	const otherAttackNames = ["Beast Bite", "Beast Claws (two attacks)", "Beast Tail"];
+	const otherAttackNames = [
+		"Beast Bite", "Beast Claws (two attacks)", "Beast Tail", "Battlerager Spiked Armor",
+		"Soulknife Psychic Blade", "Soulknife Psychic Blade (Bonus Action)",
+		"Starry Form: Archer", "Wildfire Spirit: Flame Seed", "Radiant Sun Bolt", "Halo of Spores",
+		"Dhampir Vampiric Bite", "Aarakocra Talons", "Centaur Hooves", "Leonin Claws",
+		"Lizardfolk Bite", "Lizardfolk Hungry Jaws", "Minotaur Horns", "Minotaur Goring Rush",
+		"Minotaur Hammering Horns", "Satyr Ram", "Tabaxi Cat's Claws", "Tortle Claws",
+		"Dragonborn Breath Weapon", "Longtooth Shifter Bite (while shifted)",
+	];
 
 	function populateAttackChoices(knownCantrips) {
 		const attackSelects = $("#page1 select[name^='atkname']");
@@ -213,13 +226,6 @@ $(function () {
 
 			const otherAttacks = document.createElement("optgroup");
 			otherAttacks.label = "Other attacks";
-			otherAttackNames.forEach(function (name) {
-				const option = document.createElement("option");
-				option.value = name;
-				option.textContent = name;
-				otherAttacks.appendChild(option);
-			});
-
 			const catalogNames = weaponCatalog.map(function (weapon) { return weapon.name; })
 				.concat(otherAttackNames);
 			const savedName = savedAttackNames[select.name];
@@ -674,6 +680,28 @@ $(function () {
 		{ value: "Replicate Magic Item: Ring of protection", minLevel: 14 },
 		{ value: "Replicate Magic Item: Ring of the ram", minLevel: 14 },
 	];
+	const expertInfusionMinimumLevels = { 2: 3, 6: 9, 10: 13, 14: 17 };
+	const expertInfusions = artificerInfusions
+		.filter(function (option) {
+			return typeof option === "string" || option.value !== "Homunculus Servant";
+		})
+		.map(function (option) {
+			if (typeof option === "string") {
+				return option;
+			}
+			const expertMinimumLevel = option.minLevel
+				? expertInfusionMinimumLevels[option.minLevel]
+				: undefined;
+			if (option.minLevel && !expertMinimumLevel) {
+				throw new Error("Missing Expert infusion level for Artificer prerequisite " + option.minLevel);
+			}
+			return {
+				value: option.value,
+				minLevel: expertMinimumLevel,
+			};
+		});
+	const artificerInfusionChoiceLevels = [2, 2, 2, 2, 6, 6, 10, 10, 14, 14, 18, 18];
+	const expertInfusionChoiceLevels = [3, 9, 13, 17];
 	const dragonAncestries = [
 		"Black (acid)", "Blue (lightning)", "Brass (fire)", "Bronze (lightning)",
 		"Copper (acid)", "Gold (fire)", "Green (poison)", "Red (fire)",
@@ -714,7 +742,6 @@ $(function () {
 	}
 
 	function createFeatureChoiceControl(rule, context, featureName, choiceKey) {
-		const optionList = Array.isArray(rule.options) ? getEligibleFeatureChoiceOptions(rule, context.level, context) : null;
 		const selections = Array.isArray(featureChoiceSelections[choiceKey])
 			? featureChoiceSelections[choiceKey]
 			: [];
@@ -732,6 +759,13 @@ $(function () {
 				class: "feature-choice-slot-label",
 				text: (rule.choiceLabels && rule.choiceLabels[choiceIndex]) || ("Choice " + (choiceIndex + 1)),
 			}).appendTo(slot);
+			const choiceLevel = typeof rule.choiceLevelForIndex === "function"
+				? rule.choiceLevelForIndex(choiceIndex, context)
+				: context.level;
+			const choiceContext = $.extend({}, context, { level: choiceLevel });
+			const optionList = Array.isArray(rule.options)
+				? getEligibleFeatureChoiceOptions(rule, choiceLevel, choiceContext)
+				: null;
 			if (optionList) {
 				const select = $("<select>", {
 					"aria-label": rule.label + " choice " + (choiceIndex + 1),
@@ -840,6 +874,8 @@ $(function () {
 			label: "Infusions Known",
 			matches: function (name) { return name === "Infuse Item"; },
 			count: function (level) { return level >= 18 ? 12 : level >= 14 ? 10 : level >= 10 ? 8 : level >= 6 ? 6 : level >= 2 ? 4 : 0; },
+			choiceLevelForIndex: function (index) { return artificerInfusionChoiceLevels[index]; },
+			choiceLabels: artificerInfusionChoiceLevels.map(function (level) { return "Level " + level; }),
 			options: artificerInfusions,
 		},
 		{
@@ -2770,41 +2806,174 @@ $(function () {
 		});
 	}
 
-	function updateExpertInfusionSlots(mentorType, mentorLevel) {
-		const infusionCount = mentorType !== "Expert"
-			? 0
-			: (mentorLevel >= 3 ? 1 : 0)
-				+ (mentorLevel >= 9 ? 1 : 0)
-				+ (mentorLevel >= 13 ? 1 : 0)
-				+ (mentorLevel >= 17 ? 1 : 0);
-		$("#page1 input[name^='magic-infusion-']:not([name^='magic-infusion-item-'])").each(function (index) {
-			const unlocked = index < infusionCount;
-			if (!unlocked && magicItemInput === this) {
-				closeMagicItemSuggestions();
-			}
-			$(this)
-				.prop("readOnly", !unlocked)
-				.toggleClass("locked-magic-item-slot", !unlocked)
-				.attr("placeholder", unlocked ? "Infusion " + (index + 1) : "Unlocks at Expert level " + [3, 9, 13, 17][index]);
-			if (unlocked) {
-				$(this).attr("data-suggestion-list", "magic-infusion-options").removeAttr("aria-readonly");
-			} else {
-				$(this).removeAttr("data-suggestion-list").attr("aria-readonly", "true");
+	const artificerInfusionChoiceKey = "class:Artificer:artificer-infusions";
+	const expertInfusionChoiceKey = "mentor:Expert:expert-infusions";
+
+	function getInfusionOptionValues(level, infusionOptions, scope, owner) {
+		return getEligibleFeatureChoiceOptions(
+			{ options: infusionOptions },
+			level,
+			{ scope: scope, owner: owner }
+		).map(function (option) {
+			return option.value;
+		});
+	}
+
+	function initializeInfusionItemSelects() {
+		[
+			{
+				selector: "select[name^='magic-artificer-infusion-item-']",
+				options: getInfusionOptionValues(20, artificerInfusions, "class", "Artificer"),
+			},
+			{
+				selector: "select[name^='magic-expert-infusion-item-']",
+				options: getInfusionOptionValues(20, expertInfusions, "mentor", "Expert"),
+			},
+		].forEach(function (group) {
+			$("#page1 " + group.selector).each(function () {
+				const select = $(this);
+				$("<option>", { value: "", text: "Choose an infusion" }).appendTo(select);
+				group.options.forEach(function (name) {
+					$("<option>", { value: name, text: name }).appendTo(select);
+				});
+			});
+		});
+	}
+
+	function getChosenInfusions(selections, choiceCount, choiceLevels, infusionOptions, scope, owner) {
+		const knownInfusions = [];
+		selections.slice(0, choiceCount).forEach(function (name, index) {
+			const availableOptions = getInfusionOptionValues(
+				choiceLevels[index],
+				infusionOptions,
+				scope,
+				owner
+			);
+			if (name && availableOptions.indexOf(name) !== -1 && knownInfusions.indexOf(name) === -1) {
+				knownInfusions.push(name);
 			}
 		});
-		$("#page1 [name^='magic-infusion-item-']").each(function (index) {
-			const unlocked = index < infusionCount;
-			$(this)
-				.prop("readOnly", !unlocked)
-				.toggleClass("locked-magic-item-slot", !unlocked)
-				.attr("placeholder", unlocked ? "Infused item " + (index + 1) : "Unlocks with infusion " + (index + 1));
-			if (unlocked) {
-				$(this).removeAttr("aria-readonly");
+		return knownInfusions;
+	}
+
+	function updateInfusionItemSelects(selector, slotCount, optionValues) {
+		const uniqueOptions = optionValues.filter(function (name, index) {
+			return optionValues.indexOf(name) === index;
+		});
+		$("#page1 " + selector).each(function (index) {
+			const select = $(this);
+			const currentValue = select.val();
+			const unlocked = index < slotCount;
+			select.empty();
+			$("<option>", {
+				value: "",
+				text: unlocked ? "Choose an infusion" : "Locked",
+			}).appendTo(select);
+			uniqueOptions.forEach(function (name) {
+				$("<option>", { value: name, text: name }).appendTo(select);
+			});
+			select.val(uniqueOptions.indexOf(currentValue) !== -1 ? currentValue : "");
+			select
+				.prop("disabled", !unlocked || uniqueOptions.length === 0)
+				.toggleClass("locked-magic-item-slot", !unlocked || uniqueOptions.length === 0);
+		});
+	}
+
+	function updateInfusedItemSlots(mentorType, mentorLevel) {
+		let artificerLevel = 0;
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			if (className === "Artificer" && Number.isInteger(level) && level > 0) {
+				artificerLevel += level;
 			}
 		});
-		$("#page1 #expert-infusion-limit").text(
-			infusionCount + " infusion" + (infusionCount === 1 ? "" : "s") + " known; up to " + infusionCount + " item" + (infusionCount === 1 ? "" : "s") + " can be infused."
+		artificerLevel = Math.min(20, artificerLevel);
+		const artificerItemCount = artificerLevel >= 18 ? 6
+			: artificerLevel >= 14 ? 5
+				: artificerLevel >= 10 ? 4
+					: artificerLevel >= 6 ? 3
+						: artificerLevel >= 2 ? 2 : 0;
+		const expertItemCount = mentorType === "Expert"
+			? (mentorLevel >= 17 ? 4 : mentorLevel >= 13 ? 3 : mentorLevel >= 9 ? 2 : mentorLevel >= 3 ? 1 : 0)
+			: 0;
+		const artificerKnownCount = artificerLevel >= 18 ? 12
+			: artificerLevel >= 14 ? 10
+				: artificerLevel >= 10 ? 8
+					: artificerLevel >= 6 ? 6
+						: artificerLevel >= 2 ? 4 : 0;
+		const artificerSelections = Array.isArray(featureChoiceSelections[artificerInfusionChoiceKey])
+			? featureChoiceSelections[artificerInfusionChoiceKey]
+			: [];
+		const artificerKnownInfusions = getChosenInfusions(
+			artificerSelections,
+			artificerKnownCount,
+			artificerInfusionChoiceLevels,
+			artificerInfusions,
+			"class",
+			"Artificer"
 		);
+		const expertKnownCount = expertItemCount;
+		const expertSelections = Array.isArray(featureChoiceSelections[expertInfusionChoiceKey])
+			? featureChoiceSelections[expertInfusionChoiceKey]
+			: [];
+		const expertKnownInfusions = getChosenInfusions(
+			expertSelections,
+			expertKnownCount,
+			expertInfusionChoiceLevels,
+			expertInfusions,
+			"mentor",
+			"Expert"
+		);
+
+		updateInfusionItemSelects(
+			"select[name^='magic-artificer-infusion-item-']",
+			artificerItemCount,
+			artificerKnownInfusions
+		);
+		updateInfusionItemSelects(
+			"select[name^='magic-expert-infusion-item-']",
+			expertItemCount,
+			expertKnownInfusions
+		);
+
+		const availableSources = [];
+		if (artificerLevel > 0) {
+			availableSources.push("Artificer " + artificerItemCount + "/6");
+		}
+		if (mentorType === "Expert") {
+			availableSources.push("Expert " + expertItemCount + "/4");
+		}
+		$("#page1 #infused-item-limit").text(
+			(availableSources.length ? availableSources.join("; ") + "; " : "")
+				+ "2 borrowed slots always open."
+		);
+	}
+
+	function renderExpertInfusionChoices(mentorLevel, parent) {
+		const choiceCount = mentorLevel >= 17 ? 4
+			: mentorLevel >= 13 ? 3
+				: mentorLevel >= 9 ? 2
+					: mentorLevel >= 3 ? 1 : 0;
+		if (!choiceCount) {
+			return;
+		}
+		const rule = {
+			label: "Expert Infusions Known",
+			options: expertInfusions,
+			count: choiceCount,
+			choiceLevelForIndex: function (index) { return expertInfusionChoiceLevels[index]; },
+			choiceLabels: expertInfusionChoiceLevels.map(function (level) { return "Level " + level; }),
+		};
+		const context = {
+			scope: "mentor",
+			owner: "Expert",
+			level: mentorLevel,
+			choiceInstanceKey: "mentor:Expert",
+		};
+		createFeatureChoiceControl(rule, context, "Infuse Item", expertInfusionChoiceKey)
+			.addClass("expert-infusion-choice-control")
+			.appendTo(parent);
 	}
 
 	function getGestaltFeatureName(feature) {
@@ -3635,6 +3804,7 @@ $(function () {
 	});
 	populateAttackChoices(cantrips);
 	populateSrdSpellCatalogOptions();
+	initializeInfusionItemSelects();
 	$("#page1").saveMyForm(
 		{
 			loadInputs: true,
@@ -4890,6 +5060,7 @@ $(function () {
 
 		const barbarianContext = getBarbarianContext();
 		const form = $("#page1 [name='rage-beast-form']").val();
+		refreshFeatureAttackChoices();
 		if (!barbarianContext
 			|| barbarianContext.subclass !== "Path of the Beast"
 			|| barbarianContext.level < 3
@@ -5149,6 +5320,9 @@ $(function () {
 			const attackBonus = proficiencyBonus + abilityModifier + spellAttackBonus;
 			hitValue = (attackBonus >= 0 ? "+" : "") + attackBonus;
 		}
+		if (cantrip.rule.buff) {
+			hitValue = "—";
+		}
 		const baseAttackValue = cantrip.rule.attack
 			? (proficiencyBonus + abilityModifier + spellAttackBonus)
 			: null;
@@ -5157,11 +5331,13 @@ $(function () {
 		} else {
 			hitField.val(hitValue).trigger("change");
 		}
-		damageField.val(getCantripDamage(
-			cantrip.name,
-			Math.max(1, getTotalClassLevels()),
-			abilityModifier
-		)).trigger("change");
+		damageField.val(cantrip.rule.buff
+			? "Buff: clubs and quarterstaffs use 1d8 bludgeoning and your spellcasting ability"
+			: getCantripDamage(
+				cantrip.name,
+				Math.max(1, getTotalClassLevels()),
+				abilityModifier
+			)).trigger("change");
 	}
 
 	function refreshCantripAttackChoices(entries) {
@@ -5241,6 +5417,507 @@ $(function () {
 				const fieldIndex = select.name.slice("atkname".length);
 				$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
 					.val("").trigger("change");
+			}
+		});
+		const hasShillelagh = listedCantrips.some(function (cantrip) { return cantrip.name === "Shillelagh"; });
+		$("#page1 #shillelagh-active-label").prop("hidden", !hasShillelagh);
+		if (!hasShillelagh) {
+			$("#page1 [name='shillelagh-active']").prop("checked", false);
+			localStorage.setItem("page1_shillelagh-active", JSON.stringify(false));
+		}
+	}
+
+	function getWeaponFeatureContext() {
+		const context = {
+			monkLevel: 0,
+			kenseiLevel: 0,
+			hexblade: false,
+			pactBlade: false,
+			improvedPactWeapon: false,
+			battleSmith: false,
+		};
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			if (!Number.isInteger(level) || level < 1) {
+				return;
+			}
+			if (className === "Monk") {
+				context.monkLevel = Math.max(context.monkLevel, level);
+				if (subclassName === "Way of the Kensei") {
+					context.kenseiLevel = Math.max(context.kenseiLevel, level);
+				}
+			} else if (className === "Warlock") {
+				context.hexblade = context.hexblade || subclassName === "The Hexblade";
+				context.pactBlade = context.pactBlade
+					|| (featureChoiceSelections["class:Warlock:warlock-pact-boon"] || []).indexOf("Pact of the Blade") !== -1;
+				context.improvedPactWeapon = context.improvedPactWeapon
+					|| (featureChoiceSelections["class:Warlock:warlock-invocations"] || []).indexOf("Improved Pact Weapon") !== -1;
+			} else if (className === "Artificer" && subclassName === "Battle Smith" && level >= 3) {
+				context.battleSmith = true;
+			}
+		});
+		return context;
+	}
+
+	function getWeaponOption(select) {
+		const option = select.selectedOptions[0];
+		return option && option.dataset.damage ? option : null;
+	}
+
+	function getWeaponProperties(option) {
+		try {
+			const properties = JSON.parse(option.dataset.properties || "[]");
+			return Array.isArray(properties) ? properties : [];
+		} catch (error) {
+			console.error("Unable to read weapon properties for " + option.value + ".", error);
+			return [];
+		}
+	}
+
+	function getWeaponAttackControls(select) {
+		let controls = $(select).siblings(".weapon-attack-options");
+		if (controls.length) {
+			return controls;
+		}
+		controls = $("<div>", { class: "weapon-attack-options" }).insertAfter(select);
+		const slot = select.name.slice("atkname".length);
+		[
+			["hex-warrior", "Hex Warrior weapon"],
+			["pact-weapon", "Pact weapon"],
+			["kensei-weapon", "Kensei weapon"],
+			["magic-weapon", "Magic weapon"],
+		].forEach(function (feature) {
+			const name = "atk-" + feature[0] + "-" + slot;
+			const checkbox = $("<input>", {
+				type: "checkbox",
+				name: name,
+				"data-weapon-attack-flag": feature[0],
+			}).prop("checked", localStorage.getItem("page1_" + name) === "true");
+			$("<label>").append(checkbox).append(document.createTextNode(feature[1])).appendTo(controls);
+		});
+		return controls;
+	}
+
+	function getWeaponAttackFlag(select, flag) {
+		return getWeaponAttackControls(select).find("[data-weapon-attack-flag='" + flag + "']").prop("checked");
+	}
+
+	function setWeaponAttackFlag(select, flag, enabled) {
+		const checkbox = getWeaponAttackControls(select).find("[data-weapon-attack-flag='" + flag + "']");
+		checkbox.prop("checked", enabled);
+		localStorage.setItem("page1_" + checkbox.attr("name"), JSON.stringify(enabled));
+	}
+
+	function isKenseiWeapon(option) {
+		const properties = getWeaponProperties(option);
+		return properties.indexOf("Special") === -1
+			&& (properties.indexOf("Heavy") === -1 || option.value === "Longbow");
+	}
+
+	function getWeaponCategory(option) {
+		return option.parentElement.label.indexOf("ranged") !== -1 ? "ranged" : "melee";
+	}
+
+	function isKenseiWeaponSelected(weaponName) {
+		return $("#page1 select[name^='atkname']").toArray().some(function (select) {
+			const option = getWeaponOption(select);
+			return option && option.value === weaponName && getWeaponAttackFlag(select, "kensei-weapon");
+		});
+	}
+
+	function isPactWeapon(option, context) {
+		if (!context.pactBlade || !context.hexblade) {
+			return false;
+		}
+		const isRanged = option.parentElement.label.indexOf("ranged") !== -1;
+		if (!isRanged) {
+			return true;
+		}
+		return context.improvedPactWeapon
+			&& ["Shortbow", "Longbow", "Crossbow, light", "Crossbow, heavy"].indexOf(option.value) !== -1;
+	}
+
+	function getKenseiWeaponLimit(level) {
+		return level >= 17 ? 5 : level >= 11 ? 4 : level >= 6 ? 3 : 2;
+	}
+
+	function isShillelaghActive() {
+		return $("#page1 [name='shillelagh-active']").is(":checked");
+	}
+
+	function getShillelaghAbility() {
+		let selectedAbility = "";
+		$("#page1 select[name^='atkname']").each(function () {
+			const option = this.selectedOptions[0];
+			if (!selectedAbility && option && option.dataset.cantripName === "Shillelagh" && option.dataset.spellcastingAbility) {
+				selectedAbility = option.dataset.spellcastingAbility;
+			}
+		});
+		if (selectedAbility) {
+			return getCantripAbility(selectedAbility);
+		}
+		const shillelagh = getCantripRule("Shillelagh");
+		const entry = getSpellcastingEntries().find(function (candidate) {
+			return cantripCanComeFromEntry(shillelagh, candidate);
+		});
+		return entry ? getCantripAbility(entry.ability) : "Wisdom";
+	}
+
+	function renderWeaponAttackControls(context) {
+		const kenseiWeapons = new Set();
+		const kenseiCategories = new Set();
+		const kenseiLimit = getKenseiWeaponLimit(context.kenseiLevel);
+		$("#page1 select[name^='atkname']").each(function () {
+			getWeaponAttackControls(this);
+			const option = getWeaponOption(this);
+			if (getWeaponAttackFlag(this, "kensei-weapon")) {
+				const category = option ? getWeaponCategory(option) : "";
+				if (context.kenseiLevel >= 3 && option && isKenseiWeapon(option)
+					&& (kenseiWeapons.has(option.value)
+						|| kenseiWeapons.size >= 2
+						|| !kenseiCategories.has(category))
+					&& (kenseiWeapons.has(option.value) || kenseiWeapons.size < kenseiLimit)) {
+					kenseiWeapons.add(option.value);
+					kenseiCategories.add(category);
+				} else {
+					setWeaponAttackFlag(this, "kensei-weapon", false);
+				}
+			}
+		});
+		$("#page1 select[name^='atkname']").each(function () {
+			const select = this;
+			const option = getWeaponOption(select);
+			const properties = option ? getWeaponProperties(option) : [];
+			const controls = getWeaponAttackControls(select);
+			const states = {
+				"hex-warrior": context.hexblade,
+				"pact-weapon": context.pactBlade && context.hexblade,
+				"kensei-weapon": context.kenseiLevel >= 3,
+				"magic-weapon": context.battleSmith,
+			};
+			controls.find("[data-weapon-attack-flag]").each(function () {
+				const flag = this.dataset.weaponAttackFlag;
+				const eligible = !!option && (flag === "hex-warrior"
+					? properties.indexOf("Two-handed") === -1
+					: flag === "pact-weapon"
+						? isPactWeapon(option, context)
+						: flag === "kensei-weapon"
+							? isKenseiWeapon(option)
+							: true);
+				$(this).closest("label").prop("hidden", !states[flag]);
+				$(this).prop("disabled", !states[flag] || !eligible);
+				if (!states[flag] || (this.checked && !eligible)) {
+					setWeaponAttackFlag(select, flag, false);
+				}
+				if (flag === "kensei-weapon" && !this.checked && option && isKenseiWeapon(option)) {
+					const wouldAddWeapon = !kenseiWeapons.has(option.value);
+					const needsOppositeCategory = kenseiWeapons.size < 2
+						&& kenseiCategories.has(getWeaponCategory(option));
+					$(this).prop("disabled", !states[flag] || !eligible
+						|| (wouldAddWeapon && (kenseiWeapons.size >= kenseiLimit || needsOppositeCategory)));
+				}
+			});
+		});
+	}
+
+	function clearAutoAttackValues(select) {
+		const fieldIndex = select.name.slice("atkname".length);
+		$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
+			.val("").trigger("change");
+		delete attackBonusBaseValues["atkbonus" + fieldIndex];
+		localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
+		delete select.dataset.cantripValuesFilled;
+		delete select.dataset.weaponValuesFilled;
+		delete select.dataset.featureAttackValuesFilled;
+	}
+
+	function applyWeaponAttackValues(select, context) {
+		const option = getWeaponOption(select);
+		if (!option) {
+			return;
+		}
+		const properties = getWeaponProperties(option);
+		const weaponAbility = properties.indexOf("Finesse") !== -1
+			|| option.parentElement.label.indexOf("ranged") !== -1
+			? "Dexterity"
+			: "Strength";
+		let ability = weaponAbility;
+		if (isShillelaghActive() && (option.value === "Club" || option.value === "Quarterstaff")) {
+			ability = getShillelaghAbility();
+		} else if (getWeaponAttackFlag(select, "magic-weapon") && context.battleSmith) {
+			ability = "Intelligence";
+		} else if (getWeaponAttackFlag(select, "pact-weapon") && isPactWeapon(option, context)) {
+			ability = "Charisma";
+		} else if (getWeaponAttackFlag(select, "hex-warrior")
+			&& context.hexblade && properties.indexOf("Two-handed") === -1) {
+			ability = "Charisma";
+		} else if ((context.monkLevel >= 1
+			&& ((option.parentElement.label === "Simple melee weapons"
+				&& properties.indexOf("Two-handed") === -1
+				&& properties.indexOf("Heavy") === -1)
+				|| option.value === "Shortsword"))
+			|| (context.kenseiLevel >= 3 && isKenseiWeapon(option)
+				&& isKenseiWeaponSelected(option.value))) {
+			ability = "Dexterity";
+		}
+		const modifier = getCantripAbilityModifier(ability);
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const hitBonus = proficiencyBonus + modifier;
+		const fieldIndex = select.name.slice("atkname".length);
+		$("#page1 [name='atkbonus" + fieldIndex + "']")
+			.val((hitBonus >= 0 ? "+" : "") + hitBonus)
+			.trigger("change");
+		let damage = option.dataset.damage;
+		if (isShillelaghActive() && (option.value === "Club" || option.value === "Quarterstaff")) {
+			damage = "1d8 bludgeoning";
+		}
+		const damageMatch = damage.match(/^(.+?)\s+([a-z]+)$/);
+		if (damageMatch) {
+			const damageModifier = modifier > 0
+				? " + " + modifier
+				: modifier < 0 ? " - " + Math.abs(modifier) : "";
+			damage = damageMatch[1] + damageModifier + " " + damageMatch[2];
+		}
+		$("#page1 [name='atkdamage" + fieldIndex + "']").val(damage).trigger("change");
+		select.dataset.weaponValuesFilled = "true";
+	}
+
+	function refreshWeaponAttackValues() {
+		const context = getWeaponFeatureContext();
+		renderWeaponAttackControls(context);
+		$("#page1 select[name^='atkname']").each(function () {
+			if (!getWeaponOption(this)) {
+				return;
+			}
+			applyWeaponAttackValues(this, context);
+		});
+	}
+
+	function getFeatureAttackDefinitions() {
+		const classes = [];
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			if (className && Number.isInteger(level) && level > 0) {
+				classes.push({
+					name: className,
+					level: level,
+					subclass: $(this).find(".subclass-name-input").val().trim(),
+				});
+			}
+		});
+		const raceInput = $("#page1 [name='race']");
+		const enteredRaceName = raceInput.val().trim().toLowerCase();
+		const raceName = enteredRaceName.split(" (")[0];
+		const raceFeatures = getSelectedRaceRule().features;
+		const proficiencyBonus = Number($("#page1 [name='proficiencybonus']").val()) || 0;
+		const strengthModifier = getCantripAbilityModifier("Strength");
+		const dexterityModifier = getCantripAbilityModifier("Dexterity");
+		const constitutionModifier = getCantripAbilityModifier("Constitution");
+		const wisdomModifier = getCantripAbilityModifier("Wisdom");
+		const characterLevel = Math.max(1, getTotalClassLevels());
+		const definitions = [];
+		const classLevel = function (name) {
+			return classes.reduce(function (level, entry) {
+				return entry.name === name ? Math.max(level, entry.level) : level;
+			}, 0);
+		};
+		const subclassLevel = function (className, subclassName, requiredLevel) {
+			const subclassLevelRequirement = Math.max(requiredLevel, subclassLevels[className] || 1);
+			return classes.reduce(function (level, entry) {
+				return entry.name === className && entry.subclass === subclassName
+					&& entry.level >= subclassLevelRequirement
+					? Math.max(level, entry.level)
+					: level;
+			}, 0);
+		};
+		const raceHasFeature = function (featureName) {
+			return raceFeatures.indexOf(featureName) !== -1;
+		};
+		const formatDamage = function (dice, modifier, damageType) {
+			const modifierText = modifier > 0
+				? " + " + modifier
+				: modifier < 0 ? " - " + Math.abs(modifier) : "";
+			return dice + modifierText + " " + damageType;
+		};
+		const addAttack = function (name, ability, damage, options) {
+			const rule = options || {};
+			const abilityModifier = getCantripAbilityModifier(ability);
+			let hit;
+			if (rule.saveAbility) {
+				hit = "DC " + (8 + proficiencyBonus + abilityModifier
+					+ (Number(characterEffects.spellSaveBonus) || 0))
+					+ " (" + rule.saveAbility.slice(0, 3).toUpperCase() + ")";
+			} else {
+				const attackBonus = proficiencyBonus + abilityModifier
+					+ (rule.spellAttack ? Number(characterEffects.spellAttackBonus) || 0 : 0);
+				hit = (attackBonus >= 0 ? "+" : "") + attackBonus;
+			}
+			definitions.push({ name: name, hit: hit, damage: damage });
+		};
+		const barbarianLevel = subclassLevel("Barbarian", "Path of the Beast", 3);
+		if (barbarianLevel) {
+			const rageBonus = rageActive
+				? barbarianLevel >= 16 ? 4 : barbarianLevel >= 9 ? 3 : 2
+				: 0;
+			const beastDamage = function (dice, damageType) {
+				return formatDamage(dice, strengthModifier + rageBonus, damageType)
+					+ (barbarianLevel >= 6 ? " (magical)" : "");
+			};
+			addAttack("Beast Bite", "Strength", beastDamage("1d8", "piercing"));
+			addAttack("Beast Claws (two attacks)", "Strength", beastDamage("1d6", "slashing"));
+			addAttack("Beast Tail", "Strength", beastDamage("1d8", "piercing"));
+		}
+		const battleragerLevel = subclassLevel("Barbarian", "Path of the Battlerager", 3);
+		if (battleragerLevel && rageActive) {
+			const rageBonus = battleragerLevel >= 16 ? 4 : battleragerLevel >= 9 ? 3 : 2;
+			addAttack("Battlerager Spiked Armor", "Strength",
+				formatDamage("1d4", strengthModifier + rageBonus, "piercing"));
+		}
+		const soulknifeLevel = subclassLevel("Rogue", "Soulknife", 3);
+		if (soulknifeLevel) {
+			addAttack("Soulknife Psychic Blade", "Dexterity",
+				formatDamage("1d6", dexterityModifier, "psychic"));
+			addAttack("Soulknife Psychic Blade (Bonus Action)", "Dexterity",
+				formatDamage("1d4", dexterityModifier, "psychic"));
+		}
+		const starsLevel = subclassLevel("Druid", "Circle of Stars", 2);
+		if (starsLevel) {
+			const dice = starsLevel >= 10 ? "2d8" : "1d8";
+			addAttack("Starry Form: Archer", "Wisdom",
+				formatDamage(dice, wisdomModifier, "radiant"), { spellAttack: true });
+		}
+		const wildfireLevel = subclassLevel("Druid", "Circle of Wildfire", 2);
+		if (wildfireLevel) {
+			const enhancedBond = wildfireLevel >= 6 ? " (Enhanced Bond: +1d8 once per turn)" : "";
+			addAttack("Wildfire Spirit: Flame Seed", "Wisdom",
+				"1d6 + " + proficiencyBonus + " fire" + enhancedBond, { spellAttack: true });
+		}
+		const sporesLevel = subclassLevel("Druid", "Circle of Spores", 2);
+		if (sporesLevel) {
+			const die = sporesLevel >= 14 ? "d10" : sporesLevel >= 10 ? "d8" : sporesLevel >= 6 ? "d6" : "d4";
+			addAttack("Halo of Spores", "Wisdom",
+				"1" + die + " necrotic", { saveAbility: "Constitution" });
+		}
+		const sunSoulLevel = subclassLevel("Monk", "Way of the Sun Soul", 3);
+		if (sunSoulLevel) {
+			const die = classLevel("Monk") >= 11 ? "d6" : "d4";
+			addAttack("Radiant Sun Bolt", "Dexterity",
+				formatDamage("1" + die, dexterityModifier, "radiant"));
+		}
+		if (raceHasFeature("Vampiric Bite")) {
+			addAttack("Dhampir Vampiric Bite", "Constitution",
+				formatDamage("1d4", constitutionModifier, "piercing"));
+		}
+		if (raceHasFeature("Talons")) {
+			addAttack("Aarakocra Talons", "Strength",
+				formatDamage("1d4", strengthModifier, "slashing"));
+		}
+		if (raceName === "centaur" && raceHasFeature("Charge")) {
+			addAttack("Centaur Hooves (Bonus Action)", "Strength",
+				formatDamage("1d4", strengthModifier, "bludgeoning"));
+		}
+		if (raceName === "leonin" && raceHasFeature("Claws")) {
+			addAttack("Leonin Claws", "Strength",
+				formatDamage("1d4", strengthModifier, "slashing"));
+		}
+		if (raceName === "lizardfolk" && raceHasFeature("Bite")) {
+			addAttack("Lizardfolk Bite", "Strength",
+				formatDamage("1d6", strengthModifier, "piercing"));
+			if (raceHasFeature("Hungry Jaws")) {
+				addAttack("Lizardfolk Hungry Jaws (Bonus Action)", "Strength",
+					formatDamage("1d6", strengthModifier, "piercing") + " (gain temporary HP equal to proficiency bonus)");
+			}
+		}
+		if (raceName === "minotaur" && raceHasFeature("Horns")) {
+			const hornDamage = formatDamage("1d6", strengthModifier, "piercing");
+			addAttack("Minotaur Horns", "Strength", hornDamage);
+			if (raceHasFeature("Goring Rush")) {
+				addAttack("Minotaur Goring Rush (Bonus Action)", "Strength", hornDamage);
+			}
+			if (raceHasFeature("Hammering Horns")) {
+				addAttack("Minotaur Hammering Horns", "Strength",
+					"Push target 10 ft. (no damage)", { saveAbility: "Strength" });
+			}
+		}
+		if (raceName === "satyr" && raceHasFeature("Ram")) {
+			addAttack("Satyr Ram", "Strength",
+				formatDamage("1d4", strengthModifier, "bludgeoning"));
+		}
+		if (raceName === "tabaxi" && raceHasFeature("Cat's Claws")) {
+			addAttack("Tabaxi Cat's Claws", "Strength",
+				formatDamage("1d4", strengthModifier, "slashing"));
+		}
+		if (raceName === "tortle" && raceHasFeature("Claws")) {
+			addAttack("Tortle Claws", "Strength",
+				formatDamage("1d4", strengthModifier, "slashing"));
+		}
+		if (raceFeatures.indexOf("Breath Weapon") !== -1) {
+			addAttack("Dragonborn Breath Weapon", "Constitution",
+				proficiencyBonus + "d10 [ancestry damage type]", { saveAbility: "Constitution" });
+		}
+		if (/^longtooth shifter(?:\s|$)/i.test(enteredRaceName)
+			|| /^shifter \(longtooth\)$/i.test(enteredRaceName)) {
+			addAttack("Longtooth Shifter Bite (while shifted)", "Strength",
+				formatDamage("1d6", strengthModifier, "piercing"));
+		}
+		return definitions;
+	}
+
+	function applyFeatureAttackValues(select) {
+		const option = select.selectedOptions[0];
+		if (!option || !option.dataset.featureAttackName) {
+			return;
+		}
+		const definition = getFeatureAttackDefinitions().find(function (attack) {
+			return attack.name === option.dataset.featureAttackName;
+		});
+		if (!definition) {
+			return;
+		}
+		const fieldIndex = select.name.slice("atkname".length);
+		$("#page1 [name='atkbonus" + fieldIndex + "']")
+			.val(definition.hit).trigger("change");
+		$("#page1 [name='atkdamage" + fieldIndex + "']")
+			.val(definition.damage).trigger("change");
+		select.dataset.featureAttackValuesFilled = "true";
+	}
+
+	function refreshFeatureAttackChoices() {
+		const definitions = getFeatureAttackDefinitions();
+		const activeNames = definitions.map(function (definition) { return definition.name; });
+		$("#page1 select[name^='atkname']").each(function () {
+			const select = this;
+			const selectedOption = select.selectedOptions[0];
+			const selectedFeatureName = selectedOption && selectedOption.dataset.featureAttackName
+				? selectedOption.dataset.featureAttackName
+				: "";
+			const savedName = parseSavedAttackName(select.name);
+			const savedFeatureName = otherAttackNames.indexOf(savedName) !== -1 ? savedName : "";
+			const desiredName = selectedFeatureName || savedFeatureName;
+			$(select).find("optgroup[data-feature-attack-options]").remove();
+			if (definitions.length > 0) {
+				const group = document.createElement("optgroup");
+				group.label = "Class and Ancestry Attacks";
+				group.dataset.featureAttackOptions = "true";
+				definitions.forEach(function (definition) {
+					const option = document.createElement("option");
+					option.value = definition.name;
+					option.textContent = definition.name;
+					option.dataset.featureAttackName = definition.name;
+					group.appendChild(option);
+				});
+				select.appendChild(group);
+			}
+			if (desiredName && activeNames.indexOf(desiredName) !== -1) {
+				select.value = desiredName;
+				select.dataset.featureAttackValuesFilled = "true";
+				applyFeatureAttackValues(select);
+			} else if (selectedFeatureName || savedFeatureName) {
+				select.value = "";
+				clearAutoAttackValues(select);
 			}
 		});
 	}
@@ -5374,6 +6051,8 @@ $(function () {
 			renderSpellSlotBoxes(group, "pact:" + entry.className, progression.count, "Pact Magic");
 		});
 		refreshCantripAttackChoices(entries);
+		refreshWeaponAttackValues();
+		refreshFeatureAttackChoices();
 	}
 
 	function resetPactMagicSlots() {
@@ -6431,11 +7110,11 @@ $(function () {
 
 		if (!mentor) {
 			renderMentorSpellcasting(null, mentorType, 0);
-			updateExpertInfusionSlots("", 0);
+			updateInfusedItemSlots("", 0);
 			return;
 		}
 		renderMentorSpellcasting(mentor, mentorType, characterLevel);
-		updateExpertInfusionSlots(mentorType, characterLevel);
+		updateInfusedItemSlots(mentorType, characterLevel);
 
 		const selectedRole = selectedMentorRole;
 		if (mentor.roleOptions) {
@@ -6452,6 +7131,9 @@ $(function () {
 				class: "mentor-role-description",
 				text: mentor.roleOptions[selectedRole] || "Choose a role to see its features.",
 			}).appendTo(roleChoice);
+		}
+		if (mentorType === "Expert") {
+			renderExpertInfusionChoices(characterLevel, roleChoice);
 		}
 
 		for (let level = 1; level <= 20; level++) {
@@ -8327,10 +9009,6 @@ $(function () {
 	$("#page1 [name='charSize']").on("input change", updateRacialFeat);
 
 
-	let magicItemInput = null;
-	let magicItemSuggestionIndex = -1;
-	const magicItemSuggestions = $("<div class='magic-item-suggestions' role='listbox'></div>").appendTo("body");
-
 	function positionMagicItemSuggestions() {
 		if (!magicItemInput) {
 			return;
@@ -8464,17 +9142,62 @@ $(function () {
 	});
 	$("#page1").on("change", "select[name^='atkname']", function () {
 		const option = this.selectedOptions[0];
+		const wasAutoFilled = this.dataset.cantripValuesFilled === "true"
+			|| this.dataset.weaponValuesFilled === "true"
+			|| this.dataset.featureAttackValuesFilled === "true";
 		if (option && option.dataset.cantripName) {
+			if (this.dataset.weaponValuesFilled === "true" || this.dataset.featureAttackValuesFilled === "true") {
+				clearAutoAttackValues(this);
+			}
 			this.dataset.cantripValuesFilled = "true";
+			if (option.dataset.cantripName === "Shillelagh") {
+				$("#page1 [name='shillelagh-active']")
+					.prop("checked", true)
+					.trigger("change");
+			}
 			applyCantripAttackValues(this);
-		} else if (this.dataset.cantripValuesFilled === "true") {
-			const fieldIndex = this.name.slice("atkname".length);
-			$("#page1 [name='atkbonus" + fieldIndex + "'], #page1 [name='atkdamage" + fieldIndex + "']")
-				.val("").trigger("change");
-			delete attackBonusBaseValues["atkbonus" + fieldIndex];
-			localStorage.setItem(attackBonusBaseStorageKey, JSON.stringify(attackBonusBaseValues));
-			delete this.dataset.cantripValuesFilled;
+		} else if (option && option.dataset.featureAttackName) {
+			if (this.dataset.cantripValuesFilled === "true" || this.dataset.weaponValuesFilled === "true") {
+				clearAutoAttackValues(this);
+			}
+			applyFeatureAttackValues(this);
+		} else {
+			if (this.dataset.cantripValuesFilled === "true" || this.dataset.featureAttackValuesFilled === "true") {
+				clearAutoAttackValues(this);
+			}
+			if (getWeaponOption(this)) {
+				refreshWeaponAttackValues();
+			} else if (wasAutoFilled) {
+				clearAutoAttackValues(this);
+			}
 		}
+	});
+	const storedShillelaghActive = localStorage.getItem("page1_shillelagh-active");
+	if (storedShillelaghActive !== null) {
+		try {
+			$("#page1 [name='shillelagh-active']").prop("checked", JSON.parse(storedShillelaghActive) === true);
+		} catch (error) {
+			console.error("Unable to restore Shillelagh state.", error);
+		}
+	}
+	$("#page1").on("change", "#shillelagh-active", function () {
+		localStorage.setItem("page1_shillelagh-active", JSON.stringify(this.checked));
+		refreshWeaponAttackValues();
+	});
+	$("#page1").on("change", "[data-weapon-attack-flag]", function () {
+		const select = $(this).closest("td").find("select[name^='atkname']")[0];
+		if (!select) {
+			return;
+		}
+		const flag = this.dataset.weaponAttackFlag;
+		if (this.checked && (flag === "hex-warrior" || flag === "pact-weapon")) {
+			$("#page1 [data-weapon-attack-flag='" + flag + "']").not(this).each(function () {
+				$(this).prop("checked", false);
+				localStorage.setItem("page1_" + this.name, JSON.stringify(false));
+			});
+		}
+		localStorage.setItem("page1_" + this.name, JSON.stringify(this.checked));
+		refreshWeaponAttackValues();
 	});
 	$("#page1").on("change", ".feature-ability-choice", function () {
 		const choiceKey = $(this).attr("data-ability-choice");
