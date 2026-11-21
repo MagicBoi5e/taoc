@@ -126,58 +126,230 @@ $(function () {
 		});
 	}
 
-	function populateSrdSpellCatalogOptions() {
-		const spells = getSrdSpellCatalog();
-		$("#page1 [data-spell-catalog-level]").each(function () {
-			const level = Number($(this).attr("data-spell-catalog-level"));
-			if (!Number.isInteger(level) || level < 0 || level > 9) {
-				console.error("Unable to populate an SRD spell selector with an invalid level.");
+	const spellAbilityChoicesStorageKey = "page1_spellAbilityChoices";
+	let spellAbilityChoices = {};
+	try {
+		const storedSpellAbilityChoices = JSON.parse(localStorage.getItem(spellAbilityChoicesStorageKey));
+		if (storedSpellAbilityChoices && typeof storedSpellAbilityChoices === "object"
+			&& !Array.isArray(storedSpellAbilityChoices)) {
+			spellAbilityChoices = storedSpellAbilityChoices;
+		}
+	} catch (error) {
+		console.error("Unable to restore spell ability choices.", error);
+	}
+
+	function getActiveSpellSourceClasses() {
+		const sourceClasses = new Set();
+		$("#page1 .class-pair").each(function () {
+			const className = $(this).find(".class-name-input").val().trim();
+			const level = Number($(this).find(".class-level-input").val());
+			const subclassName = $(this).find(".subclass-name-input").val().trim();
+			if (!className || !Number.isInteger(level) || level < 1) {
 				return;
 			}
-			const select = $(this).empty();
-			$("<option>", {
-				value: "",
-				text: level === 0 ? "Add an SRD cantrip" : "Add an SRD spell",
-			}).appendTo(select);
-			spells.filter(function (spell) {
-				return spell.level === level;
-			}).forEach(function (spell) {
-				const sourceClasses = spell.classes.length > 0
-					? " — " + spell.classes.join(", ")
-					: "";
-				$("<option>", {
-					value: spell.name,
-					text: spell.name + sourceClasses,
-				}).appendTo(select);
+			const classRule = classRules[className];
+			if (classRule && classRule.spellcasting) {
+				sourceClasses.add(className);
+			}
+			if (classRule && classRule.subclassSpellcasting && classRule.subclassSpellcasting[subclassName]) {
+				if (subclassName === "Eldritch Knight" || subclassName === "Arcane Trickster") {
+					sourceClasses.add("Wizard");
+				}
+			}
+		});
+		if (selectedMentorRole === "Mage") {
+			sourceClasses.add("Wizard");
+		} else if (selectedMentorRole === "Healer") {
+			sourceClasses.add("Cleric");
+			sourceClasses.add("Druid");
+		} else if (selectedMentorRole === "Prodigy") {
+			sourceClasses.add("Bard");
+			sourceClasses.add("Warlock");
+		}
+		return sourceClasses;
+	}
+
+	function getExplicitlyGrantedSpellNames() {
+		const granted = new Set();
+		const collectValue = function (value) {
+			if (typeof value === "string") {
+				value.split(/\r?\n/).forEach(function (name) {
+					if (name.trim()) {
+						granted.add(name.trim().toLowerCase());
+					}
+				});
+			} else if (Array.isArray(value)) {
+				value.forEach(collectValue);
+			}
+		};
+		Object.keys(featureChoiceSelections || {}).forEach(function (key) {
+			collectValue(featureChoiceSelections[key]);
+		});
+		collectValue(readSelectedTalents());
+		$("#page1 [name^='feat-slot-'], #page1 [name^='boon-slot-'], #page1 [name='race'], #page1 [name='background'], #page1 .talent-slot").each(function () {
+			collectValue($(this).val());
+		});
+		Object.keys(mentorSpellChoices || {}).forEach(function (key) {
+			if (key !== "usedSlots") {
+				collectValue(mentorSpellChoices[key]);
+			}
+		});
+		return granted;
+	}
+
+	function getSpellAbilities(spell) {
+		const sourceClasses = getActiveSpellSourceClasses();
+		const abilityByClass = {
+			Artificer: "Intelligence",
+			Wizard: "Intelligence",
+			Cleric: "Wisdom",
+			Druid: "Wisdom",
+			Ranger: "Wisdom",
+			Bard: "Charisma",
+			Paladin: "Charisma",
+			Sorcerer: "Charisma",
+			Warlock: "Charisma",
+		};
+		const abilities = [];
+		for (let index = 0; index < spell.classes.length; index++) {
+			const className = spell.classes[index];
+			if (sourceClasses.has(className) && abilityByClass[className]) {
+				const ability = abilityByClass[className];
+				if (abilities.indexOf(ability) === -1) {
+					abilities.push(ability);
+				}
+			}
+		}
+		if (abilities.length > 0) {
+			return abilities;
+		}
+		for (let index = 0; index < spell.classes.length; index++) {
+			if (abilityByClass[spell.classes[index]]) {
+				const ability = abilityByClass[spell.classes[index]];
+				if (abilities.indexOf(ability) === -1) {
+					abilities.push(ability);
+				}
+			}
+		}
+		return abilities.length > 0 ? abilities : ["Charisma"];
+	}
+
+	function getSpellAbility(spell) {
+		const abilities = getSpellAbilities(spell);
+		const chosen = spellAbilityChoices[spell.name.toLowerCase()];
+		return abilities.indexOf(chosen) !== -1 ? chosen : abilities[0];
+	}
+
+	function getEligibleSrdSpells(level) {
+		const sourceClasses = getActiveSpellSourceClasses();
+		const grantedNames = getExplicitlyGrantedSpellNames();
+		return getSrdSpellCatalog().filter(function (spell) {
+			if (spell.level !== level) {
+				return false;
+			}
+			if (grantedNames.has(spell.name.toLowerCase())) {
+				return true;
+			}
+			return spell.classes.some(function (className) {
+				return sourceClasses.has(className);
 			});
 		});
 	}
 
-	function addSelectedSrdSpell(level, select) {
-		const spellName = $(select).val();
-		if (!spellName) {
-			return;
+	function renderSpellChoiceRows() {
+		const levelNames = ["Cantrips", "1st-level spells", "2nd-level spells", "3rd-level spells",
+			"4th-level spells", "5th-level spells", "6th-level spells", "7th-level spells",
+			"8th-level spells", "9th-level spells"];
+		const rows = $("#page1 #spell-list-rows").empty();
+		for (let level = 0; level <= 9; level++) {
+			const storage = $("#page1 #spell-list-level-" + level);
+			const savedNames = (storage.val() || "").split(/\r?\n/).map(function (name) {
+				return name.trim();
+			}).filter(function (name) { return !!name; });
+			const eligible = getEligibleSrdSpells(level);
+			const eligibleByName = new Map(eligible.map(function (spell) {
+				return [spell.name.toLowerCase(), spell];
+			}));
+			const validNames = savedNames.filter(function (name) {
+				return eligibleByName.has(name.toLowerCase());
+			}).filter(function (name, index, names) {
+				return names.findIndex(function (candidate) {
+					return candidate.toLowerCase() === name.toLowerCase();
+				}) === index;
+			});
+			storage.val(validNames.join("\n"));
+
+			const row = $("<div>", { class: "spell-list-level-row" }).appendTo(rows);
+			$("<label>", {
+				for: "spell-choice-" + level + "-1",
+				text: levelNames[level],
+			}).appendTo(row);
+			const slots = $("<div>", { class: "spell-choice-slots" }).appendTo(row);
+			const slotCount = validNames.length > 0 && validNames.length % 4 === 0
+				? validNames.length + 4
+				: Math.max(4, Math.ceil(validNames.length / 4) * 4);
+			for (let index = 0; index < slotCount; index++) {
+				const box = $("<div>", { class: "spell-choice-box" }).appendTo(slots);
+				const select = $("<select>", {
+					name: "spell-choice-" + level + "-" + (index + 1),
+					id: "spell-choice-" + level + "-" + (index + 1),
+					"aria-label": levelNames[level] + " slot " + (index + 1),
+				}).appendTo(box);
+				$("<option>", { value: "", text: "—" }).appendTo(select);
+				eligible.forEach(function (spell) {
+					const option = $("<option>", { value: spell.name, text: spell.name }).appendTo(select);
+					if (validNames.indexOf(spell.name) !== -1 && validNames.indexOf(spell.name) !== index) {
+						option.prop("disabled", true);
+					}
+				});
+				const selectedName = validNames[index] || "";
+				if (selectedName) {
+					select.val(selectedName);
+					const spell = eligibleByName.get(selectedName.toLowerCase());
+					if (spell) {
+						const abilities = getSpellAbilities(spell);
+						const ability = getSpellAbility(spell);
+						if (abilities.length > 1) {
+							const abilitySelect = $("<select>", {
+								class: "spell-ability-badge spell-ability-select",
+								"aria-label": spell.name + " spellcasting ability",
+							}).appendTo(box);
+							abilities.forEach(function (abilityOption) {
+								$("<option>", {
+									value: abilityOption,
+									text: abilityOption.charAt(0),
+								}).appendTo(abilitySelect);
+							});
+							abilitySelect.val(ability);
+							abilitySelect.on("change", function () {
+								spellAbilityChoices[spell.name.toLowerCase()] = $(this).val();
+								localStorage.setItem(spellAbilityChoicesStorageKey, JSON.stringify(spellAbilityChoices));
+								renderSpellcasting();
+							});
+						} else {
+							$("<span>", {
+								class: "spell-ability-badge",
+								text: ability.charAt(0),
+								title: ability,
+							}).appendTo(box);
+						}
+					}
+				}
+				if (!selectedName) {
+					$("<span>", { class: "spell-ability-badge", text: "" }).appendTo(box);
+				}
+				select.on("change", function () {
+					const names = [];
+					slots.find("select").each(function () {
+						if ($(this).val()) {
+							names.push($(this).val());
+						}
+					});
+					storage.val(names.join("\n")).trigger("input");
+					renderSpellChoiceRows();
+				});
+			}
 		}
-		const spell = getSrdSpellCatalog().find(function (entry) {
-			return entry.level === level && entry.name === spellName;
-		});
-		if (!spell) {
-			console.error("The selected spell is not in the SRD catalog for level " + level + ".");
-			return;
-		}
-		const spellList = $("#page1 #spell-list-level-" + level);
-		if (spellList.length !== 1) {
-			console.error("Unable to find the spell list for level " + level + ".");
-			return;
-		}
-		const currentSpells = spellList.val().split(/\r?\n/);
-		if (currentSpells.some(function (name) { return name.trim().toLowerCase() === spell.name.toLowerCase(); })) {
-			$(select).val("");
-			return;
-		}
-		const currentValue = spellList.val().trimEnd();
-		spellList.val(currentValue ? currentValue + "\n" + spell.name : spell.name).trigger("input");
-		$(select).val("");
 	}
 
 	const initialSavedAttackNames = {};
@@ -2944,10 +3116,7 @@ $(function () {
 		if (mentorType === "Expert") {
 			availableSources.push("Expert " + expertItemCount + "/4");
 		}
-		$("#page1 #infused-item-limit").text(
-			(availableSources.length ? availableSources.join("; ") + "; " : "")
-				+ "2 borrowed slots always open."
-		);
+		$("#page1 #infused-item-limit").text(availableSources.join("; "));
 	}
 
 	function renderExpertInfusionChoices(mentorLevel, parent) {
@@ -3803,13 +3972,40 @@ $(function () {
 		}
 	});
 	populateAttackChoices(cantrips);
-	populateSrdSpellCatalogOptions();
 	initializeInfusionItemSelects();
 	$("#page1").saveMyForm(
 		{
 			loadInputs: true,
 		}
 	);
+	renderSpellChoiceRows();
+	function alignFeatureColumnWithAttacks() {
+		const main = $("#page1 main");
+		const combatDetails = $("#page1 main .combat-details");
+		const featureColumn = $("#page1 main .feature-choice-column");
+		if (main.length !== 1 || combatDetails.length !== 1 || featureColumn.length !== 1) {
+			return;
+		}
+		const mainRect = main[0].getBoundingClientRect();
+		const combatRect = combatDetails[0].getBoundingClientRect();
+		const height = Math.max(0, combatRect.bottom - mainRect.top);
+		featureColumn.css("height", height + "px");
+	}
+	alignFeatureColumnWithAttacks();
+	$(window).on("resize", alignFeatureColumnWithAttacks);
+	if (typeof ResizeObserver === "function") {
+		const layoutObserver = new ResizeObserver(function () {
+			alignFeatureColumnWithAttacks();
+		});
+		const combatDetails = document.querySelector("#page1 main .combat-details");
+		const main = document.querySelector("#page1 main");
+		if (combatDetails) {
+			layoutObserver.observe(combatDetails);
+		}
+		if (main) {
+			layoutObserver.observe(main);
+		}
+	}
 
 	const subclassLevels = {
 		"Barbarian": 3,
@@ -5375,8 +5571,15 @@ $(function () {
 				group.label = "Cantrips from Spellcasting";
 				group.dataset.cantripOptions = "true";
 				listedCantrips.forEach(function (cantrip) {
+					const catalogSpell = getSrdSpellCatalog().find(function (spell) {
+						return spell.level === 0 && spell.name.toLowerCase() === cantrip.name.toLowerCase();
+					});
+					const chosenAbility = catalogSpell ? getSpellAbility(catalogSpell) : "";
 					entries.forEach(function (entry, entryIndex) {
 						if (!cantripCanComeFromEntry(cantrip, entry)) {
+							return;
+						}
+						if (chosenAbility && entry.ability !== chosenAbility) {
 							return;
 						}
 						const option = document.createElement("option");
@@ -6053,6 +6256,7 @@ $(function () {
 		refreshCantripAttackChoices(entries);
 		refreshWeaponAttackValues();
 		refreshFeatureAttackChoices();
+		renderSpellChoiceRows();
 	}
 
 	function resetPactMagicSlots() {
@@ -9280,24 +9484,11 @@ $(function () {
 		spellSlotUsage[key][index] = $(this).prop("checked");
 		saveSpellSlotUsage();
 	});
-	$("#page1").on("input", ".spell-list-level textarea", function () {
+	$("#page1").on("input", "textarea[name^='spell-list-level-']", function () {
 		localStorage.setItem("page1_" + this.name, JSON.stringify($(this).val()));
 		if (this.name === "spell-list-level-0") {
 			renderSpellcasting();
 		}
-	});
-	$("#page1").on("click", "[data-add-srd-spell]", function () {
-		const level = Number($(this).attr("data-add-srd-spell"));
-		if (!Number.isInteger(level) || level < 0 || level > 9) {
-			console.error("Unable to add an SRD spell: the selected spell level is invalid.");
-			return;
-		}
-		const select = $("#page1 [data-spell-catalog-level='" + level + "']");
-		if (select.length !== 1) {
-			console.error("Unable to add an SRD spell: its catalog selector is missing.");
-			return;
-		}
-		addSelectedSrdSpell(level, select[0]);
 	});
 	$("#page1 #spell-short-rest-button").on("click", resetPactMagicSlots);
 	$("#page1").on("input change", [
