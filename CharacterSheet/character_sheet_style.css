@@ -1434,9 +1434,9 @@ form.charsheet .ability-choice-input {
   min-width: 0;
   min-height: 44px;
   padding: 2px 4px;
-  border: 1px solid #bbb;
+  border: 1px solid #aaa48f;
   border-radius: 2px;
-  background: #eee;
+  background: #1d1d1b;
 }
 form.charsheet .ability-choice-slot:not(.ability-choice-input) {
   display: contents;
@@ -1464,6 +1464,10 @@ form.charsheet .ability-choice-input > select {
   border: 0;
   background: transparent;
   font-size: 10px;
+}
+form.charsheet #feat-slot-01 {
+  background: #1d1d1b;
+  color: #ddd2b4;
 }
 form.charsheet .locked-feat-slot,
 form.charsheet .locked-magic-item-slot {
@@ -1668,10 +1672,10 @@ form.charsheet .fighting-style-choice {
   gap: 4px;
   min-width: 0;
   padding: 5px;
-  border: 1px solid #bbb;
+  border: 1px solid #ddd2b4;
   border-radius: 2px;
-  background: #fff;
-  color: #222;
+  background: #252523;
+  color: #ddd2b4;
   font-size: 10px;
   line-height: 1.3;
 }
