@@ -1592,8 +1592,8 @@ $(function () {
 		let counterText = complete && valid
 			? "Point Buy: " + spent + "/27"
 			: "Point Buy: --/27";
-		if (complete && valid) {
-			counterText += spent <= 27 ? " (" + (27 - spent) + " left)" : " over budget";
+		if (complete && valid && spent > 27) {
+			counterText += " over budget";
 		}
 		$("#point-buy-counter").text(counterText)
 			.toggleClass("over-budget", complete && valid && spent > 27);
@@ -3981,31 +3981,38 @@ $(function () {
 	renderSpellChoiceRows();
 	function alignFeatureColumnWithAttacks() {
 		const main = $("#page1 main");
-		const combatDetails = $("#page1 main .combat-details");
 		const featureColumn = $("#page1 main .feature-choice-column");
-		if (main.length !== 1 || combatDetails.length !== 1 || featureColumn.length !== 1) {
+		const feats = $("#page1 > section.feats-boons");
+		if (main.length !== 1 || feats.length !== 1 || featureColumn.length !== 1) {
 			return;
 		}
 		const mainRect = main[0].getBoundingClientRect();
-		const combatRect = combatDetails[0].getBoundingClientRect();
-		const height = Math.max(0, combatRect.bottom - mainRect.top);
+		const featsRect = feats[0].getBoundingClientRect();
+		const gap = 12;
+		const height = Math.max(240, featsRect.top - mainRect.top - gap);
 		featureColumn.css("height", height + "px");
 	}
 	alignFeatureColumnWithAttacks();
+	setTimeout(alignFeatureColumnWithAttacks, 100);
+	$(window).on("load", alignFeatureColumnWithAttacks);
 	$(window).on("resize", alignFeatureColumnWithAttacks);
-	if (typeof ResizeObserver === "function") {
-		const layoutObserver = new ResizeObserver(function () {
-			alignFeatureColumnWithAttacks();
-		});
-		const combatDetails = document.querySelector("#page1 main .combat-details");
-		const main = document.querySelector("#page1 main");
-		if (combatDetails) {
-			layoutObserver.observe(combatDetails);
+
+	function alignAbilityScoresWithLowerColumn() {
+		const scores = $("#page1 main .scores");
+		const saves = $("#page1 main .saves");
+		const skills = $("#page1 main .skills");
+		if (scores.length !== 1 || saves.length !== 1 || skills.length !== 1) {
+			return;
 		}
-		if (main) {
-			layoutObserver.observe(main);
-		}
+		const top = saves[0].getBoundingClientRect().top;
+		const bottom = skills[0].getBoundingClientRect().bottom;
+		const height = Math.max(420, bottom - top);
+		scores[0].style.height = height + "px";
+		scores[0].style.minHeight = height + "px";
 	}
+	alignAbilityScoresWithLowerColumn();
+	setTimeout(alignAbilityScoresWithLowerColumn, 100);
+	$(window).on("resize", alignAbilityScoresWithLowerColumn);
 
 	const subclassLevels = {
 		"Barbarian": 3,
@@ -5209,7 +5216,8 @@ $(function () {
 			localStorage.setItem("page1_rageActive", "false");
 		}
 
-		$("#page1 .rage-toggle-slot").css("visibility", available ? "visible" : "hidden");
+		$("#page1 .rage-toggle-card").prop("hidden", !available);
+		$("#page1 main section.combat").toggleClass("has-rage-action", available);
 		$("#page1 #rage-toggle")
 			.prop("disabled", !available || (!rageActive && isWearingHeavyArmor()))
 			.attr("aria-pressed", rageActive ? "true" : "false")

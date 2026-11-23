@@ -335,7 +335,7 @@ form.charsheet main > section section.attributes div.scores {
   min-height: 690px;
   background-color: #bbb;
   border-radius: 10px;
-  padding-bottom: 6px;
+  padding-bottom: 26px;
 }
 form.charsheet main > section section.attributes div.scores .point-buy-counter {
   padding: 4px 2px 2px;
@@ -629,10 +629,12 @@ form.charsheet main > section div.passive-perception input {
 }
 form.charsheet main > section div.otherprofs textarea {
   box-sizing: border-box;
-  height: 20em;
+  height: 24em;
   width: 100%;
   border: 0;
   border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  resize: none;
 }
 form.charsheet main > section div.otherprofs .otherprofs-content {
   box-sizing: border-box;
@@ -719,8 +721,79 @@ form.charsheet main section.combat > div.armorclass > div input, form.charsheet 
 form.charsheet main section.combat > div.hp {
   flex-basis: 100%;
 }
+form.charsheet main section.combat > div.hp {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) 96px repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+form.charsheet main section.combat > div.hp > div.regular,
+form.charsheet main section.combat > div.hp > div.temporary {
+  box-sizing: border-box;
+  width: 100%;
+  float: none;
+  margin: 10px 0 5px;
+}
+form.charsheet main section.combat > div.hp > div.temporary {
+  margin-top: 10px;
+}
 form.charsheet main section.combat > div.hp > div.regular {
-  background-color: white;
+  grid-column: 1 / 3;
+}
+form.charsheet main section.combat > div.hp > #long-rest-button {
+  grid-column: 3;
+  justify-self: center;
+  align-self: center;
+  width: 78px;
+  min-height: 62px;
+  border: 1px solid #777368;
+  border-radius: 31px;
+  background:
+    radial-gradient(circle, rgba(185, 163, 106, 0.10) 0 24%, transparent 25%),
+    linear-gradient(145deg, #343430, #1b1b19);
+  color: #f4edda;
+  font-size: 9px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+}
+form.charsheet main section.combat > div.hp > div.temporary {
+  grid-column: 4 / 6;
+}
+form.charsheet main section.combat > div.hp > div.rage-toggle-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 84px;
+  margin: 10px 0 5px;
+  border: 0;
+  background: transparent;
+}
+form.charsheet main section.combat > div.hp > div.rage-toggle-card button {
+  width: 72px;
+  height: 72px;
+  border: 1px solid #777368;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(165, 47, 47, 0.32) 0 24%, transparent 25%),
+    linear-gradient(145deg, #343430, #1b1b19);
+  color: #f4edda;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  text-align: center;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    inset 0 0 12px rgba(185, 163, 106, 0.04);
+}
+form.charsheet main section.combat > div.hp > div.rage-toggle-card button[aria-pressed="true"] {
+  border-color: #d15353;
+  background:
+    radial-gradient(circle, #b72f2f 0 28%, transparent 29%),
+    linear-gradient(145deg, #4a2929, #241919);
+}
+form.charsheet main section.combat > div.hp > div.regular {
+  background-color: #30302d;
   border: 1px solid black;
   margin: 10px;
   margin-bottom: 5px;
@@ -769,7 +842,7 @@ form.charsheet main section.combat > div.hp > div.temporary {
   border-radius: 4px;
   display: flex;
   flex-direction: column-reverse;
-  background-color: white;
+  background-color: #30302d;
   width: 40%;
   float: right;
   
@@ -790,9 +863,48 @@ form.charsheet main section.combat > div.hitdice, form.charsheet main section.co
   flex: 1 50%;
   height: 100px;
 }
+form.charsheet main section.combat > div.rage-toggle-card {
+  flex: 0 0 92px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+}
+form.charsheet main section.combat > div.rage-toggle-card:not([hidden]) {
+  display: flex;
+}
+form.charsheet main section.combat > div.rage-toggle-card[hidden] {
+  display: none;
+}
+form.charsheet main section.combat > div.rage-toggle-card button {
+  width: 72px;
+  height: 72px;
+  border: 1px solid #777368;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(165, 47, 47, 0.32) 0 24%, transparent 25%),
+    linear-gradient(145deg, #343430, #1b1b19);
+  color: #f4edda;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  text-align: center;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    inset 0 0 12px rgba(185, 163, 106, 0.04);
+}
+form.charsheet main section.combat > div.rage-toggle-card button[aria-pressed="true"] {
+  border-color: #d15353;
+  background:
+    radial-gradient(circle, #b72f2f 0 28%, transparent 29%),
+    linear-gradient(145deg, #4a2929, #241919);
+}
 form.charsheet main section.combat > div.hitdice {
   flex: 1 1 calc(100% - 92px);
   min-width: 0;
+}
+form.charsheet main section.combat.has-rage-action > div.hitdice {
+  flex-basis: calc(100% - 184px);
 }
 form.charsheet main section.combat > div.deathsaves {
   flex: 0 0 92px;
@@ -1017,10 +1129,12 @@ form.charsheet main section.equipment > div > div.money ul {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  margin-top: 17px;
 }
 form.charsheet main section.equipment > div > div.money ul > li {
   display: flex;
   align-items: center;
+  padding: 5.75px 0;
 }
 form.charsheet main section.equipment > div > div.money ul > li label {
   border: 1px solid black;
@@ -1080,9 +1194,10 @@ form.charsheet main section.magic-items [name='attunement-slots'] {
 }
 form.charsheet main section.magic-items .attunement-slots-grid {
   display: grid;
-  grid-template-columns: repeat(2, 26px);
+  grid-template-columns: repeat(1, 26px);
   gap: 10px 12px;
   margin-top: 4px;
+  margin-left: 20px;
 }
 form.charsheet main section.magic-items .attunement-slot {
   display: flex;
@@ -1146,7 +1261,7 @@ form.charsheet main section.magic-items .magic-item-category {
 
   min-width: 0;
   padding: 6px;
-  border: 1px solid #bbb;
+  border: 1px solid #ddd2b4;
   border-radius: 4px;
 }
 form.charsheet main section.magic-items .magic-item-category > label {
@@ -1180,13 +1295,20 @@ form.charsheet main section.magic-items .magic-item-slots select {
   width: 100%;
   min-width: 0;
   height: 29px;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd2b4;
   border-radius: 2px;
-  background: #eee;
+  background: #252523;
   font-size: 11px;
+  color: #ddd2b4;
+}
+form.charsheet main section.magic-items .magic-item-slots .locked-magic-item-slot {
+  background: #30302d;
+  border: 1px solid #555;
+  color: #555;
+  cursor: not-allowed;
 }
 form.charsheet section.feats-boons .feat-slots input:read-only {
-  background: #ddd;
+  background: #252523;
   color: #555;
   cursor: not-allowed;
 }
@@ -1347,6 +1469,7 @@ form.charsheet .locked-feat-slot,
 form.charsheet .locked-magic-item-slot {
   background: #ececec;
   color: #666;
+  cursor: not-allowed;
 }
 form.charsheet main section.features .feature-asi-choices {
   display: flex;
@@ -1509,7 +1632,7 @@ form.charsheet main section.features .feature-choice-slot input {
   min-height: 23px;
   padding: 3px;
   border: 1px solid #bbb;
-  background: white;
+  background: #252523;
   font-family: 'Roboto', sans-serif;
   font-size: 10px;
 }
@@ -1686,9 +1809,9 @@ form.charsheet section.feats-boons .feat-boon-slots input {
   min-width: 0;
   height: 30px;
   padding: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #aaa48f;
   border-radius: 2px;
-  background: #eee;
+  background: #1d1d1b;
   font-size: 11px;
 }
 form.charsheet section.feats-boons .feat-boon-slots .ability-choice-input > input {
@@ -1706,9 +1829,9 @@ form.charsheet .feature-description,
 form.charsheet .talent-description {
   box-sizing: border-box;
   padding: 5px;
-  border: 1px solid #bbb;
-  background: #fff;
-  color: #222;
+  border: 1px solid #504f49;
+  background: #1d1d1b;
+  color: #ddd2b4;
   font-size: 10px;
   line-height: 1.3;
   overflow-wrap: anywhere;
@@ -1731,7 +1854,7 @@ form.charsheet section.feats-boons .feats-boons-title {
 form.charsheet section.talents {
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #777268;
   border-radius: 10px;
 }
 form.charsheet section.talents .talent-slots {
@@ -1751,10 +1874,10 @@ form.charsheet section.talents .talent-slot {
   min-width: 0;
   height: 30px;
   padding: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #aaa48f;
   border-radius: 2px;
-  background: #eee;
-  color: black;
+  background: #1d1d1b;
+  color: #ddd2b4;
   font-size: 11px;
 }
 form.charsheet section.talents .talent-entry.has-description .talent-slot {
@@ -1780,7 +1903,7 @@ form.charsheet section.character-level-rewards {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #777268;
   border-radius: 10px;
 }
 form.charsheet section.character-level-rewards > label {
@@ -1794,7 +1917,7 @@ form.charsheet section.mentor-progression {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #777268;
   border-radius: 10px;
 }
 form.charsheet section.mentor-progression[hidden] {
@@ -1813,9 +1936,9 @@ form.charsheet .mentor-role-choice {
   gap: 6px;
   margin-bottom: 8px;
   padding: 6px;
-  border: 1px solid #bbb;
+  border: 1px solid #777268;
   border-radius: 4px;
-  background: #fff;
+  background: #1d1d1b;
   font-size: 10px;
 }
 form.charsheet .mentor-role-choice > select {
@@ -1827,8 +1950,8 @@ form.charsheet .mentor-role-choice .expert-infusion-choice-control {
   grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
   gap: 4px;
   padding: 4px;
-  border-left: 2px solid #bbb;
-  background: #f7f7f7;
+  border-left: 2px solid #1d1d1b;
+  background: #1d1d1b;
 }
 form.charsheet .expert-infusion-choice-control .feature-choice-label {
   grid-column: 1 / -1;
@@ -1932,7 +2055,7 @@ form.charsheet .spellcasting-class-summary,
 form.charsheet .spell-slot-section {
   margin-bottom: 10px;
   padding: 6px;
-  border: 1px solid #bbb;
+  border: 1px solid #777268;
   border-radius: 4px;
 }
 form.charsheet .spellcasting-class-heading,
@@ -2056,7 +2179,7 @@ form.charsheet .spell-choice-slots {
   gap: 3px;
   min-width: 0;
   padding: 4px;
-  background: #fff;
+  background: #1d1d1b;
 }
 form.charsheet .spell-choice-box {
   display: grid;
@@ -2117,8 +2240,9 @@ form.charsheet .character-level-reward {
   font-size: 10px;
 }
 form.charsheet .character-level-reward.locked {
-  background: #f2f2f2;
+  background: #2b2b27c7;
   color: #666;
+  border-color: #666;
 }
 form.charsheet .character-level-reward-heading {
   display: block;
@@ -2160,5 +2284,893 @@ input[type="checkbox"]:checked:after {
 @media (max-width: 840px) {
   body {
     min-width: 824px;
+  }
+}
+
+/* Dark arena theme (style-testing edition) */
+:root {
+  --arena-black: #171716;
+  --arena-charcoal: #252523;
+  --arena-raised: #30302d;
+  --arena-field: #1d1d1b;
+  --arena-line: #777268;
+  --arena-line-soft: #504f49;
+  --arena-parchment: #ddd2b4;
+  --arena-muted: #aaa48f;
+  --arena-crimson: #a52f2f;
+  --arena-crimson-bright: #d15353;
+  --arena-gold: #b9a36a;
+}
+
+body {
+  color: var(--arena-parchment);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(165, 47, 47, 0.10), transparent 28rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.018) 25%, transparent 25%) 0 0 / 18px 18px,
+    #1d1d1b;
+}
+
+form.charsheet {
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #5c5a53;
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.018), transparent 40%),
+    var(--arena-charcoal);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.48),
+    inset 0 0 0 4px #1d1d1b,
+    inset 0 0 0 5px #555249;
+  color: var(--arena-parchment);
+}
+
+form.charsheet label,
+form.charsheet strong,
+form.charsheet th,
+form.charsheet .label,
+form.charsheet .spell-slot-level-label,
+form.charsheet .feature-output-heading,
+form.charsheet .skill-choice-group label {
+  color: var(--arena-parchment);
+  letter-spacing: 0.025em;
+}
+
+form.charsheet input,
+form.charsheet select,
+form.charsheet textarea {
+  color: #ece5d2;
+  background-color: var(--arena-field);
+  border-color: var(--arena-line-soft);
+  caret-color: var(--arena-crimson-bright);
+}
+
+form.charsheet input::placeholder,
+form.charsheet textarea::placeholder {
+  color: #858174;
+  opacity: 1;
+}
+
+form.charsheet input:focus,
+form.charsheet select:focus,
+form.charsheet textarea:focus,
+form.charsheet button:focus-visible {
+  outline: 1px solid var(--arena-crimson-bright);
+  outline-offset: 1px;
+  border-color: var(--arena-crimson-bright);
+}
+
+form.charsheet button {
+  color: #f1ead8;
+  background: linear-gradient(180deg, #3a3935, #262624);
+  border: 1px solid #777368;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+form.charsheet button:hover {
+  border-color: var(--arena-crimson-bright);
+  background: linear-gradient(180deg, #4a3535, #302525);
+}
+
+form.charsheet header section.charname,
+form.charsheet header section.misc,
+form.charsheet main section.combat,
+form.charsheet main section.equipment,
+form.charsheet main section.magic-items,
+form.charsheet main section.features > div,
+form.charsheet main section.attacksandspellcasting,
+form.charsheet main .damage-resistance-bar,
+form.charsheet section.feats-boons,
+form.charsheet section.spellcasting,
+form.charsheet .skill-choice-controls,
+form.charsheet .mentor-progression,
+form.charsheet .mentor-spellcasting-panel,
+form.charsheet .feat-boon-category {
+  color: var(--arena-parchment);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.018), transparent 48%),
+    var(--arena-raised);
+  border-color: var(--arena-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+form.charsheet header section.charname {
+  background:
+    linear-gradient(90deg, rgba(165, 47, 47, 0.16), transparent 60%),
+    var(--arena-raised);
+}
+
+form.charsheet header section.charname input,
+form.charsheet header section.misc input,
+form.charsheet header section.misc select {
+  background: transparent;
+  border-bottom: 1px solid #69675f;
+  color: #eee5cd;
+}
+
+form.charsheet main section.combat {
+  border-radius: 10px;
+  padding: 2px;
+}
+
+form.charsheet main section.combat > div.hp,
+form.charsheet main section.combat > div.hitdice,
+form.charsheet main section.combat > div.deathsaves {
+  color: var(--arena-parchment);
+}
+
+form.charsheet main section.combat > div.hp > div,
+form.charsheet main section.combat > div.hitdice > div,
+form.charsheet main section.combat > div.deathsaves > div,
+form.charsheet main section.attacksandspellcasting > div {
+  border-color: var(--arena-line);
+}
+
+form.charsheet main section.combat > div.hp > div,
+form.charsheet main section.combat > div.hitdice > div,
+form.charsheet main section.combat > div.deathsaves > div {
+  background: var(--arena-field);
+  border: 1px solid var(--arena-line-soft);
+}
+
+form.charsheet main > section section.attributes div.scores {
+  background:
+    linear-gradient(180deg, rgba(165, 47, 47, 0.13), transparent 22%),
+    var(--arena-black);
+  border: 1px solid var(--arena-line);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.38);
+}
+
+form.charsheet main > section section.attributes div.scores ul li {
+  background:
+    linear-gradient(145deg, #343430, #20201e);
+  border: 1px solid #69685f;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 3px #252523;
+}
+
+form.charsheet main > section section.attributes div.scores ul li input,
+form.charsheet main > section section.attributes div.scores ul li div.score input,
+form.charsheet main > section section.attributes div.scores ul li div.modifier input {
+  color: #f1ead8;
+  background: transparent;
+  border-color: #777468;
+}
+
+form.charsheet main > section section.attributes div.scores ul li .score-step-button,
+form.charsheet main > section section.attributes div.scores .long-rest-button,
+form.charsheet main > section section.attributes #rage-toggle {
+  color: #ddd2b4;
+  background: #292927;
+  border-color: #69675f;
+}
+
+form.charsheet main > section section.attributes div.scores .racial-asi-controls,
+form.charsheet main > section section.attributes div.race-features,
+form.charsheet main section.flavor div {
+  background: var(--arena-field);
+  border-color: var(--arena-line-soft);
+  color: var(--arena-parchment);
+}
+
+form.charsheet main section.attacksandspellcasting > div table th {
+  color: var(--arena-muted);
+  border-bottom: 1px solid var(--arena-line-soft);
+}
+
+form.charsheet main section.attacksandspellcasting > div table input,
+form.charsheet main section.attacksandspellcasting > div table select,
+form.charsheet table.items input {
+  background: var(--arena-field);
+  border: 1px solid var(--arena-line-soft);
+  color: #ece5d2;
+}
+
+form.charsheet main section.attacksandspellcasting > div textarea,
+form.charsheet main section.features .features-rendered,
+form.charsheet main section.equipment > div > textarea,
+form.charsheet main section.magic-items textarea {
+  color: #ddd4bc;
+  background: transparent;
+}
+
+form.charsheet main .damage-resistance-bar label,
+form.charsheet main section.attacksandspellcasting > div > label,
+form.charsheet main section.equipment > div > label,
+form.charsheet main section.features > div > label,
+form.charsheet main section.magic-items > div > label,
+form.charsheet section.feats-boons .feat-boon-category > label {
+  color: var(--arena-gold);
+  text-shadow: 0 1px 1px #111;
+}
+
+form.charsheet main section.features > div {
+  background:
+    linear-gradient(180deg, rgba(165, 47, 47, 0.08), transparent 20%),
+    var(--arena-raised);
+  border: 1px solid var(--arena-line);
+}
+
+form.charsheet main section.features .feature-output-entry,
+form.charsheet main section.features .feature-choice-control,
+form.charsheet main section.features .feature-output-detail,
+form.charsheet .character-level-reward,
+form.charsheet .spell-list-level-row,
+form.charsheet .spell-choice-box,
+form.charsheet .spell-slot-group,
+form.charsheet .pact-magic-slot-group,
+form.charsheet .feat-boon-category,
+form.charsheet .mentor-progression-entry,
+form.charsheet .mentor-spell-choice-group,
+form.charsheet .skill-choice-group {
+  background: rgba(29, 29, 27, 0.78);
+  border-color: var(--arena-line-soft);
+}
+
+form.charsheet .spell-list-level-row > label,
+form.charsheet .spell-ability-badge,
+form.charsheet .spell-casting-section-heading,
+form.charsheet .spellcasting-class-heading,
+form.charsheet .spell-slot-section-heading,
+form.charsheet .character-level-reward-heading {
+  background: #252523;
+  border-color: var(--arena-line-soft);
+}
+
+form.charsheet .spell-choice-box select,
+form.charsheet .spell-choice-box select.spell-ability-select {
+  color: #ece5d2;
+  background: var(--arena-field);
+  border-color: var(--arena-line-soft);
+}
+
+form.charsheet section.feats-boons .feat-boon-category {
+  background: var(--arena-field);
+  border-color: var(--arena-line-soft);
+}
+
+form.charsheet section.feats-boons input,
+form.charsheet section.feats-boons select,
+form.charsheet .talent-slot,
+form.charsheet .talent-description,
+form.charsheet .ability-choice-input input {
+  background: var(--arena-field);
+  color: #ddd2b4;
+  border: 1px solid var(--arena-line-soft);
+}
+
+form.charsheet .talent-entry,
+form.charsheet .ability-choice-slot,
+form.charsheet .feat-boon-category {
+  color: var(--arena-parchment);
+}
+
+form.charsheet input[type=checkbox] {
+  accent-color: var(--arena-crimson);
+  filter: none;
+}
+
+form.charsheet .skill-choice-controls {
+  border-top: 2px solid var(--arena-crimson);
+}
+
+form.charsheet .talent-tree-link,
+form.charsheet a.talent-tree-link {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+}
+
+/* Transformative dashboard pass */
+body {
+  padding-top: 70px;
+  background:
+    radial-gradient(ellipse at 50% -12%, rgba(190, 55, 55, 0.20), transparent 36rem),
+    linear-gradient(180deg, #171716 0%, #20201e 100%);
+}
+
+form.charsheet {
+  width: 1180px;
+  max-width: calc(100vw - 32px);
+  padding: 14px;
+  border: 1px solid #716d62;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 28%),
+    #252521;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.58),
+    inset 0 0 0 1px #11110f;
+}
+
+form.charsheet header {
+  position: relative;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid #716d62;
+  border-radius: 13px;
+  background:
+    linear-gradient(120deg, rgba(165, 47, 47, 0.30), transparent 38%),
+    #1b1b19;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+form.charsheet header::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  border: 1px solid rgba(185, 163, 106, 0.18);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 20px rgba(185, 163, 106, 0.025),
+    0 0 0 42px rgba(185, 163, 106, 0.018);
+  pointer-events: none;
+}
+
+form.charsheet header section.charname,
+form.charsheet header section.misc {
+  width: auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+form.charsheet header section.charname {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 128px;
+  padding: 18px 16px 14px;
+  border-right: 1px solid #716d62;
+}
+
+form.charsheet header section.charname label {
+  order: 2;
+  color: #b9a36a;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+form.charsheet header section.charname input[name="charname"] {
+  order: 3;
+  height: 48px;
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid #a52f2f;
+  border-radius: 0;
+  background: transparent;
+  color: #f4edda;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 27px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+form.charsheet header section.charname .character-header-controls {
+  order: 1;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+}
+
+form.charsheet header section.charname .character-header-controls button,
+form.charsheet header section.charname .mentor-toggle {
+  min-height: 28px;
+  border-color: #666258;
+  background: #292925;
+  color: #dcd3bb;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+form.charsheet header section.charname .mentor-type-select {
+  order: 4;
+  margin: 8px 0 0;
+  border: 1px solid #666258;
+  border-radius: 6px;
+  background: #252521;
+}
+
+form.charsheet header section.misc {
+  display: flex;
+  align-items: center;
+  padding: 12px 18px;
+}
+
+form.charsheet header section.misc ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+}
+
+form.charsheet header section.misc ul li,
+form.charsheet header section.misc ul li:nth-child(n) {
+  width: auto;
+  min-height: 52px;
+  padding: 7px 8px;
+  border: 1px solid #514f48;
+  border-radius: 7px;
+  background: rgba(43, 43, 39, 0.78);
+}
+
+form.charsheet header section.misc ul li.class-level {
+  grid-column: 1 / -1;
+  min-height: 68px;
+  border: 0;
+  background: transparent;
+  padding: 4px 0 0;
+}
+
+form.charsheet header section.misc ul li label {
+  color: #aaa48f;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+
+form.charsheet header section.misc ul li input {
+  height: 26px;
+  border: 0;
+  border-bottom: 1px solid #777368;
+  background: transparent;
+  color: #eee5cd;
+  font-size: 15px;
+  text-align: center;
+}
+
+form.charsheet main {
+  display: grid;
+  grid-template-columns: 248px minmax(520px, 1fr) 280px;
+  align-items: start;
+  gap: 12px;
+  height: auto;
+  margin-top: 0;
+}
+
+form.charsheet main > section {
+  width: auto;
+  min-width: 0;
+}
+
+form.charsheet main > section:first-of-type {
+  grid-column: 1;
+}
+
+form.charsheet main > section:nth-of-type(2) {
+  grid-column: 2;
+  min-width: 0;
+}
+
+form.charsheet main > section.feature-choice-column {
+  grid-column: 3;
+  height: auto;
+}
+
+form.charsheet main > section section.attributes div.scores {
+  width: 86px;
+  height: 621.5px;
+  min-height: 420px;
+  border: 1px solid #666258;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(165, 47, 47, 0.24), transparent 18%),
+    #191917;
+}
+
+form.charsheet main > section section.attributes div.scores ul {
+  gap: 5px;
+}
+
+form.charsheet main > section section.attributes div.scores ul li {
+  width: 74px;
+  height: 68px;
+  border: 1px solid #777368;
+  border-radius: 12px 12px 18px 18px;
+  background:
+    linear-gradient(145deg, rgba(185, 163, 106, 0.06), transparent 50%),
+    #2d2d29;
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.32),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.18);
+}
+
+form.charsheet main > section section.attributes div.scores ul li label {
+  color: #b9a36a;
+  padding-top: 4px;
+  font-size: 16px;
+  letter-spacing: 0.09em;
+}
+
+form.charsheet main > section section.attributes div.scores ul li div.score input {
+  color: #f5edda;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+}
+
+form.charsheet main > section section.attributes div.attr-applications {
+  width: 178px;
+  min-width: 178px;
+  margin-left: -28px;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  height: 621.5px;
+}
+
+form.charsheet main > section section.attributes div.attr-applications > div,
+form.charsheet main > section section.attributes div.attr-applications .skills {
+  border: 1px solid #5d5b54;
+  border-radius: 9px;
+  background: #1d1d1b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+form.charsheet main > section section.attributes div.attr-applications .skills {
+  flex: 1 1 0;
+  min-height: 0;
+  height: auto;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+form.charsheet main > section section.attributes div.attr-applications .skills ul {
+  box-sizing: border-box;
+  height: calc(100% - 20px);
+  justify-content: space-between;
+  padding: 6px 8px;
+}
+
+form.charsheet main > section section.attributes div.attr-applications .saves {
+  flex: 0 0 147.5px;
+  height: 147.5px;
+  margin: 0 0 0;
+  box-sizing: border-box;
+}
+
+form.charsheet main > section section.attributes div.attr-applications .skills > .label {
+  height: 20px;
+  line-height: 0px;
+  text-align: center;
+}
+
+form.charsheet main > section section.attributes div.attr-applications .skills ul li {
+  min-height: 22px;
+  border-bottom: 1px solid #3e3d38;
+}
+
+form.charsheet main > section section.attributes div.attr-applications .skills label,
+form.charsheet main > section section.attributes div.attr-applications .skills label .skill{
+  color: #c7bea4;
+  font-size: 8px;
+}
+
+form.charsheet main section.combat {
+  min-height: 250px;
+  padding: 8px;
+  border: 1px solid #666258;
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(165, 47, 47, 0.10), transparent 42%),
+    #20201e;
+}
+
+form.charsheet main section.combat > div.armorclass,
+form.charsheet main section.combat > div.initiative,
+form.charsheet main section.combat > div.speed,
+form.charsheet main section.combat > div.inspiration,
+form.charsheet main section.combat > div.proficiencybonus {
+  flex: 1 1 20%;
+  min-width: 0;
+}
+
+form.charsheet main section.combat > div.armorclass > div,
+form.charsheet main section.combat > div.initiative > div,
+form.charsheet main section.combat > div.speed > div,
+form.charsheet main section.combat > div.inspiration > div,
+form.charsheet main section.combat > div.proficiencybonus > div {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin: 8px 3px 4px;
+}
+
+form.charsheet main section.combat > div.armorclass > div input,
+form.charsheet main section.combat > div.initiative > div input,
+form.charsheet main section.combat > div.speed > div input,
+form.charsheet main section.combat > div.inspiration > div input,
+form.charsheet main section.combat > div.proficiencybonus > div input {
+  box-sizing: border-box;
+  width: 62px;
+  height: 62px;
+  border: 1px solid #777368;
+  border-radius: 50%;
+  background:
+    linear-gradient(145deg, #343430, #1b1b19);
+  color: #f4edda;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    inset 0 0 12px rgba(185, 163, 106, 0.04);
+}
+
+form.charsheet main section.combat > div.inspiration > div input {
+  appearance: none;
+  cursor: pointer;
+  background:
+    radial-gradient(circle, #a52f2f 0 24%, transparent 25%),
+    linear-gradient(145deg, #343430, #1b1b19);
+}
+
+form.charsheet main section.combat > div.armorclass > div label,
+form.charsheet main section.combat > div.initiative > div label,
+form.charsheet main section.combat > div.speed > div label,
+form.charsheet main section.combat > div.inspiration > div label,
+form.charsheet main section.combat > div.proficiencybonus > div label {
+  width: 72px;
+  min-height: 22px;
+  margin-top: -7px;
+  padding: 5px 3px 3px;
+  border: 1px solid #666258;
+  border-radius: 0 0 8px 8px;
+  background: #252523;
+  color: #b9a36a;
+  font-size: 10px;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+form.charsheet main section.combat > div.hp,
+form.charsheet main section.combat > div.hitdice,
+form.charsheet main section.combat > div.deathsaves {
+  border: 0;
+  background: transparent;
+}
+form.charsheet main section.combat > div.hp > div.regular,
+form.charsheet main section.combat > div.hp > div.temporary {
+  width: 100%;
+  max-width: none;
+  margin: 8px 0 5px;
+}
+
+form.charsheet main section.combat > div.hp > div,
+form.charsheet main section.combat > div.hitdice > div,
+form.charsheet main section.combat > div.deathsaves > div {
+  background: #181817;
+  border: 1px solid #5d5b54;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.22);
+}
+
+form.charsheet main .combat-details {
+  width: 100%;
+  min-height: 650px;
+  margin-top: 10px;
+  flex: none;
+}
+
+form.charsheet main .damage-resistance-bar {
+  border: 1px solid #666258;
+  background:
+    linear-gradient(90deg, rgba(165, 47, 47, 0.13), transparent),
+    #1d1d1b;
+  border-radius: 9px;
+}
+
+form.charsheet main .defense-strip {
+  display: grid;
+  grid-template-columns: 178px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+form.charsheet main .defense-strip .armor-options {
+  box-sizing: border-box;
+  min-height: 96px;
+  margin: 0;
+  padding: 7px 8px;
+  border: 1px solid #666258;
+  border-radius: 9px;
+  background:
+    linear-gradient(145deg, rgba(185, 163, 106, 0.04), transparent 38%),
+    #1d1d1b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+form.charsheet main .defense-strip .armor-options > label {
+  color: #b9a36a;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+form.charsheet main .defense-strip .armor-options select {
+  min-height: 26px;
+  border: 1px solid #5d5b54;
+  background: #181817;
+  color: #ece5d2;
+  font-size: 9px;
+}
+
+form.charsheet main .defense-strip .armor-option-bonuses {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+form.charsheet main .defense-strip .armor-misc-label {
+  display: none;
+}
+
+form.charsheet main .defense-strip .armor-options input[type="number"] {
+  width: 34px;
+  min-width: 34px;
+}
+
+form.charsheet main section.attacksandspellcasting {
+  border: 1px solid #666258;
+  border-radius: 12px;
+  flex: 1 1 544px;
+  background:
+    linear-gradient(145deg, rgba(185, 163, 106, 0.04), transparent 38%),
+    #20201e;
+}
+
+form.charsheet main section.attacksandspellcasting > div {
+  margin: 8px;
+}
+
+form.charsheet main section.attacksandspellcasting > div textarea {
+  border: 1px solid #45443f;
+  border-radius: 8px;
+  background: #181817;
+  display: none;
+}
+
+form.charsheet main section.equipment,
+form.charsheet main section.magic-items {
+  width: 860px;
+  margin-left: -260px;
+  border: 1px solid #666258;
+  border-radius: 11px;
+  background: #20201e;
+}
+
+form.charsheet main section.equipment {
+  margin-top: 10px;
+}
+form.charsheet main section.equipment > div {
+  position: relative;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+form.charsheet main section.equipment > div > label {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  left: 10px;
+  flex: none;
+  width: auto;
+}
+form.charsheet main section.equipment > div > div.money {
+  flex: 0 0 58px;
+  margin: 0;
+}
+form.charsheet main section.equipment > div > div[style] {
+  flex: 1 1 0;
+  width: auto !important;
+  margin-left: 0 !important;
+  min-width: 0;
+}
+
+form.charsheet main section.magic-items {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+form.charsheet main .feature-choice-column {
+  border: 1px solid #666258;
+  border-radius: 12px;
+  background: #1d1d1b;
+  overflow: hidden;
+}
+
+form.charsheet main .skill-choice-controls {
+  width: auto;
+  margin: 8px;
+  border: 1px solid #666258;
+  border-top: 3px solid #a52f2f;
+  border-radius: 9px;
+  background: #20201e;
+}
+
+form.charsheet main section.features {
+  min-height: 520px;
+  padding: 8px;
+  border: 0;
+}
+
+form.charsheet main section.features > div {
+  border: 1px solid #666258;
+  border-radius: 9px;
+  background:
+    linear-gradient(180deg, rgba(165, 47, 47, 0.10), transparent 16%),
+    #20201e;
+}
+
+form.charsheet main section.features .features-rendered {
+  background: #181817;
+  border: 1px solid #45443f;
+  border-radius: 7px;
+  scrollbar-color: #777368 #1d1d1b;
+}
+
+form.charsheet main section.features .feature-output-heading {
+  color: #b9a36a;
+  border-bottom: 1px solid #4d4b45;
+  padding-bottom: 3px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+form.charsheet section.feats-boons {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  margin: 12px 0 0;
+  border: 1px solid #666258;
+  border-radius: 12px;
+  background: #1d1d1b;
+}
+
+form.charsheet section.spellcasting,
+form.charsheet section.mentor-progression {
+  border: 1px solid #666258;
+  border-radius: 12px;
+  background: #20201e;
+}
+
+@media (max-width: 1180px) {
+  form.charsheet {
+    width: calc(100vw - 32px);
+  }
+
+  form.charsheet main {
+    grid-template-columns: 248px minmax(440px, 1fr) 260px;
   }
 }

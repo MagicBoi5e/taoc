@@ -181,7 +181,7 @@
           <ul>
             <li>
               <div class="score">
-                <label for="Strengthscore">Strength</label>
+                <label for="Strengthscore">Str</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Strength" data-score-change="-1" aria-label="Decrease Strength">-</button>
                   <input name="Strengthscore" value="8" placeholder="8" />
@@ -194,7 +194,7 @@
             </li>
             <li>
               <div class="score">
-                <label for="Dexterityscore">Dexterity</label>
+                <label for="Dexterityscore">Dex</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Dexterity" data-score-change="-1" aria-label="Decrease Dexterity">-</button>
                   <input name="Dexterityscore" value="8" placeholder="8" />
@@ -207,7 +207,7 @@
             </li>
             <li>
               <div class="score">
-                <label for="Constitutionscore">Constitution</label>
+                <label for="Constitutionscore">Con</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Constitution" data-score-change="-1" aria-label="Decrease Constitution">-</button>
                   <input name="Constitutionscore" value="8" placeholder="8" />
@@ -220,7 +220,7 @@
             </li>
             <li>
               <div class="score">
-                <label for="Wisdomscore">Wisdom</label>
+                <label for="Wisdomscore">Wis</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Wisdom" data-score-change="-1" aria-label="Decrease Wisdom">-</button>
                   <input name="Wisdomscore" value="8" placeholder="8" />
@@ -233,7 +233,7 @@
             </li>
             <li>
               <div class="score">
-                <label for="Intelligencescore">Intelligence</label>
+                <label for="Intelligencescore">Int</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Intelligence" data-score-change="-1" aria-label="Decrease Intelligence">-</button>
                   <input name="Intelligencescore" value="8" placeholder="8" />
@@ -246,7 +246,7 @@
             </li>
             <li>
               <div class="score">
-                <label for="Charismascore">Charisma</label>
+                <label for="Charismascore">Cha</label>
                 <div class="score-value-controls">
                   <button class="score-step-button" type="button" data-score-ability="Charisma" data-score-change="-1" aria-label="Decrease Charisma">-</button>
                   <input name="Charismascore" value="8" placeholder="8" />
@@ -258,24 +258,8 @@
               </div>
             </li>
           </ul>
-          <button id="long-rest-button" class="long-rest-button" type="button">Long Rest</button>
         </div>
         <div class="attr-applications" style="margin-right: -10px;">
-          <div class="rage-toggle-slot">
-            <button id="rage-toggle" type="button" aria-pressed="false">Rage: Off</button>
-          </div>
-          <div class="inspiration box">
-            <div class="label-container">
-              <label for="inspiration">Inspiration</label>
-            </div>
-            <input id="ins1" name="inspiration" type="button" value="wow" style="font-size : 1px;" />
-          </div>
-          <div class="proficiencybonus box">
-            <div class="label-container">
-              <label for="proficiencybonus">Proficiency Bonus</label>
-            </div>
-            <input name="proficiencybonus" placeholder="+2" />
-          </div>
           <div class="saves list-section box">
             <ul>
               <li>
@@ -376,42 +360,6 @@
           <textarea id="otherprofs" name="otherprofs" aria-label="Other Proficiencies and Languages"></textarea>
         </div>
       </div>
-      <div class="armor-options box">
-        <label for="armor-type">Armor Type</label>
-        <select id="armor-type" name="armor-type">
-          <option value="unarmored">No Armor</option>
-          <optgroup label="Light Armor">
-            <option value="padded">Padded Armor</option>
-            <option value="leather">Leather Armor</option>
-            <option value="studded-leather">Studded Leather Armor</option>
-          </optgroup>
-          <optgroup label="Medium Armor">
-            <option value="hide">Hide Armor</option>
-            <option value="chain-shirt">Chain Shirt</option>
-            <option value="scale-mail">Scale Mail</option>
-            <option value="breastplate">Breastplate</option>
-            <option value="half-plate">Half Plate Armor</option>
-          </optgroup>
-          <optgroup label="Heavy Armor">
-            <option value="ring-mail">Ring Mail</option>
-            <option value="chain-mail">Chain Mail</option>
-            <option value="splint">Splint Armor</option>
-            <option value="plate">Plate Armor</option>
-          </optgroup>
-          <optgroup label="Other">
-            <option value="mage-armor">Mage Armor</option>
-            <option value="unarmored-barbarian">Unarmored Defense (Barbarian)</option>
-            <option value="unarmored-monk">Unarmored Defense (Monk)</option>
-          </optgroup>
-        </select>
-        <div class="armor-option-bonuses">
-          <label class="armor-shield-option" for="armor-shield">
-            <input id="armor-shield" name="armor-shield" type="checkbox" /> Shield (+2 AC)
-          </label>
-          <label class="armor-misc-label" for="armor-ac-bonus">Misc. AC bonus</label>
-          <input id="armor-ac-bonus" name="armor-ac-bonus" type="number" step="1" placeholder="0" />
-        </div>
-      </div>
     </section>
     <section>
       <section class="combat">
@@ -430,6 +378,18 @@
             <label for="speed">Speed</label><input name="speed" placeholder="30" type="text" />
           </div>
         </div>
+        <div class="inspiration">
+          <div>
+            <label for="inspiration">Inspiration</label>
+            <input id="ins1" name="inspiration" type="button" value=" " />
+          </div>
+        </div>
+        <div class="proficiencybonus">
+          <div>
+            <label for="proficiencybonus">Proficiency Bonus</label>
+            <input name="proficiencybonus" placeholder="+2" />
+          </div>
+        </div>
         <div class="hp">
           <div class="regular">
             <div class="max">
@@ -439,9 +399,13 @@
               <label for="currenthp">Current Hit Points</label><input name="currenthp" type="text" />
             </div>
           </div>
+          <button id="long-rest-button" class="long-rest-button" type="button">Long Rest</button>
           <div class="temporary">
             <label for="temphp">Temporary Hit Points</label><input name="temphp" type="text" />
           </div>
+        </div>
+        <div class="rage-toggle-card" hidden>
+          <button id="rage-toggle" type="button" aria-pressed="false">Rage: Off</button>
         </div>
         <div class="hitdice">
           <div>
@@ -489,13 +453,51 @@
         </div>
       </section>
       <div class="combat-details">
-        <div class="damage-resistance-bar" aria-live="polite">
-          <label>Resistances and Immunities</label>
-          <div class="defense-details">
-            <div><strong>Damage Resistances:</strong> <span class="damage-resistance-value">None</span></div>
-            <div><strong>Damage Immunities:</strong> <span class="damage-immunity-value">None</span></div>
-            <div><strong>Condition Immunities:</strong> <span class="condition-immunity-value">None</span></div>
-            <div><strong>Advantage vs. Conditions:</strong> <span class="condition-advantage-value">None</span></div>
+        <div class="defense-strip">
+          <div class="armor-options box">
+            <label for="armor-type">Armor Type</label>
+            <select id="armor-type" name="armor-type">
+              <option value="unarmored">No Armor</option>
+              <optgroup label="Light Armor">
+                <option value="padded">Padded Armor</option>
+                <option value="leather">Leather Armor</option>
+                <option value="studded-leather">Studded Leather Armor</option>
+              </optgroup>
+              <optgroup label="Medium Armor">
+                <option value="hide">Hide Armor</option>
+                <option value="chain-shirt">Chain Shirt</option>
+                <option value="scale-mail">Scale Mail</option>
+                <option value="breastplate">Breastplate</option>
+                <option value="half-plate">Half Plate Armor</option>
+              </optgroup>
+              <optgroup label="Heavy Armor">
+                <option value="ring-mail">Ring Mail</option>
+                <option value="chain-mail">Chain Mail</option>
+                <option value="splint">Splint Armor</option>
+                <option value="plate">Plate Armor</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="mage-armor">Mage Armor</option>
+                <option value="unarmored-barbarian">Unarmored Defense (Barbarian)</option>
+                <option value="unarmored-monk">Unarmored Defense (Monk)</option>
+              </optgroup>
+            </select>
+            <div class="armor-option-bonuses">
+              <label class="armor-shield-option" for="armor-shield">
+                <input id="armor-shield" name="armor-shield" type="checkbox" /> Shield (+2 AC)
+              </label>
+              <label class="armor-misc-label" for="armor-ac-bonus">Misc. AC bonus</label>
+              <input id="armor-ac-bonus" name="armor-ac-bonus" type="number" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="damage-resistance-bar" aria-live="polite">
+            <label>Resistances and Immunities</label>
+            <div class="defense-details">
+              <div><strong>Damage Resistances:</strong> <span class="damage-resistance-value">None</span></div>
+              <div><strong>Damage Immunities:</strong> <span class="damage-immunity-value">None</span></div>
+              <div><strong>Condition Immunities:</strong> <span class="condition-immunity-value">None</span></div>
+              <div><strong>Advantage vs. Conditions:</strong> <span class="condition-advantage-value">None</span></div>
+            </div>
           </div>
         </div>
         <section class="attacksandspellcasting">
@@ -597,15 +599,69 @@
                   <input name="atkdamage5" type="text" />
                 </td>
               </tr>
+               <tr>
+                 <td><select name="atkname6" aria-label="Weapon or cantrip 6"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus6" type="text" /></td>
+                 <td><input name="atkdamage6" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname7" aria-label="Weapon or cantrip 7"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus7" type="text" /></td>
+                 <td><input name="atkdamage7" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname8" aria-label="Weapon or cantrip 8"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus8" type="text" /></td>
+                 <td><input name="atkdamage8" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname9" aria-label="Weapon or cantrip 9"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus9" type="text" /></td>
+                 <td><input name="atkdamage9" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname10" aria-label="Weapon or cantrip 10"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus10" type="text" /></td>
+                 <td><input name="atkdamage10" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname11" aria-label="Weapon or cantrip 11"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus11" type="text" /></td>
+                 <td><input name="atkdamage11" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname12" aria-label="Weapon or cantrip 12"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus12" type="text" /></td>
+                 <td><input name="atkdamage12" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname13" aria-label="Weapon or cantrip 13"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus13" type="text" /></td>
+                 <td><input name="atkdamage13" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname14" aria-label="Weapon or cantrip 14"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus14" type="text" /></td>
+                 <td><input name="atkdamage14" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname15" aria-label="Weapon or cantrip 15"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus15" type="text" /></td>
+                 <td><input name="atkdamage15" type="text" /></td>
+               </tr>
+               <tr>
+                 <td><select name="atkname16" aria-label="Weapon or cantrip 16"><option value="">Choose</option></select></td>
+                 <td><input name="atkbonus16" type="text" /></td>
+                 <td><input name="atkdamage16" type="text" /></td>
+               </tr>
             </tbody>
             </table>
-            <textarea></textarea>
           </div>
         </section>
       </div>
       <section class="equipment">
         <div>
-          <label>Equipment</label>
+          <label for="equipment">Equipment</label>
           <div class="money">
             <ul>
               <li>
@@ -753,6 +809,7 @@
                 </tr>
               </tbody>
             </table>
+            <br>
           </div>
 
           <div style="width: 44%; margin-left: 5px">
