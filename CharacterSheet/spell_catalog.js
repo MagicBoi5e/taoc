@@ -19,6 +19,16 @@ window.srdSpellCatalog = [
     ]
   },
   {
+    "name": "Booming Blade",
+    "level": 0,
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard",
+      "Artificer"
+    ]
+  },
+  {
     "name": "Chill Touch",
     "level": 0,
     "classes": [
